@@ -77,10 +77,21 @@ section {
 .attribute {
     display: flex;
     justify-content: space-around;
+    font-size: 1.5rem;
+}
+
+.property {
+    margin-right: 10px;
+    flex: 1;
+}
+
+.value {
+    flex: 1;
+    text-align: end;
 }
 
 .value::before {
-    content: '.........';
+    content: '....';
 }
 
 .hidden {
