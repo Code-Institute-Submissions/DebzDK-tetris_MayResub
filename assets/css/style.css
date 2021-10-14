@@ -91,7 +91,7 @@ section {
 }
 
 .value::before {
-    content: '....';
+    content: '.........';
 }
 
 .hidden {
@@ -101,7 +101,7 @@ section {
 
 /*#region Stats box*/
 #stats {
-    min-width: 135px;
+    width: 175px;
 }
 /*#endregion*/
 
