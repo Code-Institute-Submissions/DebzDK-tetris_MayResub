@@ -75,4 +75,13 @@ section {
     padding: 20px 20px 20px 10px;
     margin-top: 10px;
 }
+
+.attribute {
+    display: flex;
+    justify-content: space-around;
+}
+
+.value::before {
+    content: '.........';
+}
 /*#endregion*/
