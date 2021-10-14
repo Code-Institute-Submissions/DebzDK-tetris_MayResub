@@ -38,7 +38,6 @@ body {
 }
 
 /* Font family for all other text in the webpage is set for consistency */
-h1,
 h2 {
     font-family: 'VT323', 'Times New Roman', Times, serif;
 }
@@ -103,6 +102,32 @@ section {
 /*#region Game area*/
 .full-height {
     height: 100%;
+}
+
+h1 {
+    font-size: 6rem;
+}
+
+#menu {
+    position: absolute;
+    height: 100%;
+    font-family: 'Tetris2';
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-self: center;
+    text-align: center;
+}
+
+.menu-item:before {
+    content: '\2BC8';
+    margin-right: 5px;
+}
+
+.menu-item:hover {
+    display: flex;
+    background-color: white;
+    color: #000;
 }
 
 #block-entrance {
