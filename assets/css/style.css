@@ -34,6 +34,7 @@ body {
     font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
     display: flex;
     justify-content: space-between;
+    padding: 20px 0;
 }
 
 /* Font family for all other text in the webpage is set for consistency */
