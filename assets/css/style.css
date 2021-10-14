@@ -122,6 +122,11 @@ h1 {
 .menu-item:before {
     content: '\2BC8';
     margin-right: 5px;
+    transition: 0.5s all;
+}
+
+.menu-item:hover:before {
+    transform: rotate(90deg);
 }
 
 .menu-item:hover {
