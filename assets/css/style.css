@@ -44,6 +44,7 @@ h2 {
 /*#endregion */
 
 /*#region Initial game state*/
+/*#region All areas*/
 section {
     margin: 0 20px;
 }
@@ -56,8 +57,9 @@ section {
     flex-direction: column;
 }
 
-#stats {
-    min-width: 135px;
+#center {
+    padding-top: 1px;
+    padding-bottom: 1px;
 }
 
 .bordered-box-title {
@@ -69,7 +71,7 @@ section {
 
 .bordered-box {
     border: 5px solid white;
-    padding: 20px 20px 20px 10px;
+    padding: 20px 10px 20px 10px;
     margin-top: 10px;
 }
 
@@ -81,4 +83,34 @@ section {
 .value::before {
     content: '.........';
 }
+/*#endregion*/
+
+/*#region Stats box*/
+#stats {
+    min-width: 135px;
+}
+/*#endregion*/
+
+/*#region Game area*/
+.full-height {
+    height: 100%;
+}
+
+#block-entrance {
+    background-color: #000;
+    position: absolute;
+    top: -7px;
+    width: 290px;
+    height: 10px;
+}
+
+#game {
+    width: 290px;
+}
+
+#tetris {
+    width: inherit;
+    height: inherit;
+}
+/*#endregion*/
 /*#endregion*/
