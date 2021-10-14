@@ -125,6 +125,10 @@ h1 {
     text-align: center;
 }
 
+.menu-item {
+    cursor: pointer;
+}
+
 .menu-item:before {
     content: '\2BC8';
     margin-right: 5px;
@@ -170,6 +174,7 @@ h1 {
     width: 30px;
     text-align: center;
     margin-right: 5px;
+    cursor: pointer;
 }
 
 .control-btn:hover {
