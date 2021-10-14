@@ -130,6 +130,11 @@ section {
     text-align: center;
     margin-right: 5px;
 }
+
+.control-btn:hover {
+    background-color: white;
+    color: #000;
+}
 /*#endregion*/
 
 /*#endregion*/
