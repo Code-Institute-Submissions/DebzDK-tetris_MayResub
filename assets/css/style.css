@@ -88,6 +88,10 @@ section {
 .value::before {
     content: '.........';
 }
+
+.hidden {
+    display: none;
+}
 /*#endregion*/
 
 /*#region Stats box*/
