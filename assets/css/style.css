@@ -197,7 +197,6 @@ button.menu-item {
     margin-right: 5px;
     cursor: pointer;
 }
-
 /*#endregion*/
 
 /*#region Secondary menu */
@@ -225,6 +224,12 @@ button.menu-item {
     height: 280px;
 }
 
+#credits-scroller {
+    position: absolute;
+    animation: rollingCredits 5s linear forwards infinite;
+    animation-iteration-count: 1;
+}
+
 .finer-bordered-box {
     padding: 5px;
     border: 1px solid white;
@@ -239,6 +244,14 @@ button.menu-item {
     z-index: 1;
     margin: -30px -40px;
 }
+
+#exit-btn-blackout {
+    position: absolute;
+    background-color: black;
+    width: 95%;
+    height: 65px;
+    bottom: 0;
+}
 /*#endregion*/
 
 /*#region Animations*/
@@ -246,6 +259,15 @@ button.menu-item {
     50% {
       opacity: 0;
     }
-  }
+}
+                        
+@keyframes rollingCredits {
+    0% {
+      top: 30%;
+    }
+    100% {
+      top: 5%;
+    }
+}
 /*#endregion*/
 /*#endregion*/
