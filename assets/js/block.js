@@ -22,7 +22,7 @@ const BLOCK_TYPES = {
         shape: [[0, 0, 0],
                 [1, 1, 1],
                 [0, 1, 1]],
-        height: 3,
+        height: 2,
         width: 2,
         xOffset: 0,
         yOffset: 1
@@ -31,7 +31,7 @@ const BLOCK_TYPES = {
         shape: [[0, 0, 0],
                 [0, 1, 1],
                 [1, 1, 0]],
-        height: 3,
+        height: 2,
         width: 3,
         xOffset: 0,
         yOffset: 1
