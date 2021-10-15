@@ -77,11 +77,13 @@ function drawBlock() {
         for (let x = 0; x < blockRow.length; x++) {
             let bitInBlock = blockRow[x];
             if (bitInBlock) {
+                board.grid[blockY + y][blockX + x] = 1;
                 TET_GRID.fillRect(blockX + x, blockY + y, 1, 1);
                 TET_GRID.strokeRect(blockX + x, blockY + y, 1, 1);
             }
         }
     }
+    console.table(board.grid);
 }
 //#endregion
 
