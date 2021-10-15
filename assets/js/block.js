@@ -20,7 +20,7 @@ const BLOCK_TYPES = {
     },
     Z: {
         shape: [[0, 0, 0],
-                [1, 1, 1],
+                [1, 1, 0],
                 [0, 1, 1]],
         height: 2,
         width: 2,
