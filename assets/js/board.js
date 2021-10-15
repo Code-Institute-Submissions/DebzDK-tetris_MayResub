@@ -17,7 +17,7 @@ class Board {
      */
     getEmptyBoard() {
         return Array.from(
-            {length: ROWS}, function() { Array(COLS).fill(0) }
+            {length: ROWS}, function() { return Array(COLS).fill(0); }
         );
     }
 }
