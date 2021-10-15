@@ -71,8 +71,8 @@ function drawBlock() {
     blockX = canvasWidth / (2 * BLOCK_SIZE);
     blockY = 0;
 
-    for (let y = 0; y < block.currentBlock.length; y++) {
-        let blockRow = block.currentBlock[y];
+    for (let y = 0; y < block.currentBlock.shape.length; y++) {
+        let blockRow = block.currentBlock.shape[y];
         for (let x = 0; x < blockRow.length; x++) {
             let bitInBlock = blockRow[x];
             if (bitInBlock) {
