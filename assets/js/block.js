@@ -53,7 +53,7 @@ class Block {
      */
     constructor() {
         this.currentBlock = BLOCKS[this.getRandNumber(7)];
-        this.currentColour = COLOURS[this.getRandNumber(6)];
+        this.currentColour = COLOURS[this.getRandNumber(5)];
     }
 
     /**
