@@ -22,29 +22,46 @@ const BLOCK_TYPES = {
         [0, 1, 0],
         [0, 0, 0]]
 };
-const BLOCK_SIZE = 20; // Multiplier for calculating board size
 
+// Multiplier for calculating board size
+const BLOCK_SIZE = 10;
+
+// All possible tetris block shapes
 const BLOCKS = [BLOCK_TYPES.L, BLOCK_TYPES.J,
                 BLOCK_TYPES.Z, BLOCK_TYPES.S,
                 BLOCK_TYPES.SQ,
                 BLOCK_TYPES.I, BLOCK_TYPES.T];
 
+// Chosen colour scheme for the tetris blocks
+const COLOURS = [
+    '#0341AE', // denim blue,
+    '#72CB3B', // lime green
+    '#FFD500', // cyber yellow
+    '#FF971C', // yellow orange colour wheel
+    '#FF3213', // scarlet
+];
+
 // Stores the tetris block represented by the Block object
 let currentBlock = [];
 
+// Store the tetris block colour for the Block object
+let currentColour = '#000000';
+
 class Block {
     /**
-     * Sets the block to be represented by the Block object
+     * Sets the block type and colour to be represent the Block object
      */
     constructor() {
-        currentBlock = BLOCKS[this.getRandNumber()];
+        currentBlock = BLOCKS[this.getRandNumber(7)];
+        currentColour = COLOURS[this.getRandNumber(6)];
     }
 
     /**
-     * 
-     * @returns a random number between 0 and 6;
+     * Returns a random number between 0 and x, not including x
+     * @param {int} x - the upper limit of the desired number range
+     * @returns a random number between 0 and x;
      */
-    getRandNumber(){
-        return Math.floor(Math.random() * 7);
+    getRandNumber(x){
+        return Math.floor(Math.random() * x);
     }
 }
