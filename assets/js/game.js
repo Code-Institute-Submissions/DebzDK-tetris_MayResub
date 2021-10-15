@@ -1,6 +1,6 @@
 // Global variables
 const CANVAS = document.getElementById('tetris');
-const TET_GRID = canvas.getContext('2d');
+const TET_GRID = CANVAS.getContext('2d');
 TET_GRID.canvas.width = COLS * BLOCK_SIZE;
 TET_GRID.canvas.height = ROWS * BLOCK_SIZE;
 TET_GRID.scale(BLOCK_SIZE, BLOCK_SIZE);
@@ -24,6 +24,9 @@ function setupListeners() {
     for (let i = 0; i < menuButtons.length; i++) {
         menuButtons[i].addEventListener('click', function() {
             switch (this.id) {
+                case 'game-play':
+                    startGame();
+                    return;
                 case 'game-controls':
                     setSecondaryMenuTitle('Controls');
                     showSecondaryMenuContent('controls');
