@@ -203,7 +203,7 @@ button.menu-item {
 /*#region Secondary menu */
 #secondary-menu {
     flex-direction: column;
-    background-color: #000000DD;
+    background-color: #000000;
     position: absolute;
     width: 100%;
     left: -15px;
@@ -214,6 +214,17 @@ button.menu-item {
     padding: 10px;
 }
 
+#secondary-menu-controls-content {
+    position: relative;
+    padding: 10px 0;
+    height: 180px;
+}
+
+#secondary-menu-credits-content {
+    position: relative;
+    height: 280px;
+}
+
 .finer-bordered-box {
     padding: 5px;
     border: 1px solid white;
@@ -222,7 +233,11 @@ button.menu-item {
 #exit-btn {
     padding: 5px;
     border-width: 3px;
-    margin: 0 auto;
+    width: 80px;
+    height: 35px;
+    position: absolute;
+    z-index: 1;
+    margin: -30px -40px;
 }
 /*#endregion*/
 

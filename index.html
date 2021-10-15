@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="assets/css/style.css">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     </head>
-    <body>
+    <body onload="setupListeners()">
         <!-- Left game area -->
         <section id="left">
             <!-- Stats area -->
@@ -75,7 +75,7 @@
                         Thanks for playing!
                     </div>
                     <br>
-                    <button id="exit-btn" class="bordered-box control-btn">Exit</button>
+                    <button id="exit-btn" class="bordered-box control-btn" onclick="hideSecondaryMenu()">Exit</button>
                 </div>
             </div>
             <!-- Tetris -->
