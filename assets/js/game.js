@@ -22,7 +22,6 @@ let isGameOver = false;
  */
 function initialiseBoard() {
     board = new Board(TET_GRID);
-    console.table(board.grid);
 
     // Board dimensions setup
     TET_GRID.canvas.width = COLS * BLOCK_SIZE;
