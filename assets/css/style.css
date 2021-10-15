@@ -125,6 +125,16 @@ h1 {
     text-align: center;
 }
 
+button.menu-item {
+    display: block;
+    font-family: 'Tetris2';
+    color: inherit;
+    background-color: inherit;
+    width: 100%;
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
 .menu-item {
     cursor: pointer;
 }
