@@ -183,6 +183,32 @@ h1 {
 }
 /*#endregion*/
 
+/*#region Secondary menu */
+#secondary-menu {
+    flex-direction: column;
+    background-color: #000000DD;
+    position: absolute;
+    width: 100%;
+    left: -15px;
+    transition: 1s ease-in all;
+}
+
+#secondary-menu p {
+    padding: 10px;
+}
+
+.finer-bordered-box {
+    padding: 5px;
+    border: 1px solid white;
+}
+
+#exit-btn {
+    padding: 5px;
+    border-width: 3px;
+    margin: 0 auto;
+}
+/*#endregion*/
+
 /*#region Animations*/
 @keyframes blink {
     50% {
