@@ -42,8 +42,8 @@
                         <h2>Menu</h2>
                         <br>
                         <button id="play" class="menu-item">Play Game</button>
-                        <button id="game-controls" class="menu-item" onclick="viewControls()">Controls</button>
-                        <button id="game-credits" class="menu-item" onclick="viewCredits()">Credits</button>
+                        <button id="game-controls" class="menu-item">Controls</button>
+                        <button id="game-credits" class="menu-item">Credits</button>
                     </div>
                 </div>
                 
@@ -51,14 +51,15 @@
                 <div id="secondary-menu" class="bordered-box hidden">
                     <h2 id="secondary-menu-title"></h2>
 
-                    <div id="secondary-menu-controls-content">
+                    <div id="secondary-menu-controls-content" class="hidden">
                         <p>Up ................ <span class="finer-bordered-box">&#8593;</span></p>
                         <p>Down ........... <span class="finer-bordered-box">&#8595;</span></p>
                         <p>Left ................ <span class="finer-bordered-box">&#8592;</span></p>
                         <p>Right .............. <span class="finer-bordered-box">&#8594;</span></p>
                     </div>
 
-                    <div id="secondary-menu-credits-content"></div>
+                    <div id="secondary-menu-credits-content" class="hidden">
+                    </div>
                     <br>
                     <div id="exit-btn" class="bordered-box control-btn">Exit</div>
                 </div>
