@@ -20,12 +20,13 @@ let isPaused = false;
  */
 function initialiseBoard() {
     board = new Board(TET_GRID);
-    block = new Block();
 
+    // Board dimensions setup
     TET_GRID.canvas.width = COLS * BLOCK_SIZE;
     TET_GRID.canvas.height = ROWS * BLOCK_SIZE;
     TET_GRID.scale(BLOCK_SIZE, BLOCK_SIZE);
-    TET_GRID.fillStyle = block.currentColour;
+
+    // Tetris block border setup
     TET_GRID.strokeStyle = 'white';
     TET_GRID.lineWidth = 0.2;
 
@@ -33,19 +34,37 @@ function initialiseBoard() {
     canvasHeight = TET_GRID.canvas.height;
 }
 
+/**
+ * Initialises game stats
+ */
 function initialiseStats() {
     document.getElementById('score').textContent = 0;
     document.getElementById('level').textContent = 1;
 }
 
+/**
+ * Starts the game
+ */
 function startGame() {
     hideMainMenu();
 
     initialiseBoard();
     initialiseStats();
+
+    setCurrentBlock();
     drawBlock();
 }
 
+function setCurrentBlockAndColour() {
+    block = new Block();
+
+    // Tetris block colour
+    TET_GRID.fillStyle = block.currentColour;
+}
+
+/**
+ * Draws current block object on canvas
+ */
 function drawBlock() {
     blockX = canvasWidth / (2 * BLOCK_SIZE);
     blockY = 0;
@@ -61,7 +80,6 @@ function drawBlock() {
         }
     }
 }
-
 //#endregion
 
 //#region Menu functions
