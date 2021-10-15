@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+@font-face {
+    font-family: 'Tetris2';
+    src: url(../fonts/Tetris2-VP0w.ttf) format('truetype'),
+         url(../fonts/tetris2-vp0w-webfont.woff2) format('woff2'),
+         url(../fonts/tetris2-vp0w-webfont.woff) format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*
+* The below CSS follows a top-down format so that styles are tackled in order of appearance in the webpage.
+* All font-sizes are set in rem for responsiveness and for accessibility.
+*/
+
+/*#region General */
+/* Clears/resets margin, padding, and borders from all HTML elements to eliminate browser inconsistencies*/
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+/* Makes scroll smooth instead of abrupt when clicking internal links/anchors*/
+html {
+    scroll-behavior: smooth;
+}
+
+/* Body background color, font colour, and font family are set for consistency */
+body {
+    background-color: #000;
+    color: #FFF;
+    font-family: 'VT323', monospace;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+button {
+    font-family: 'Tetris2';
+    background-color: #000;
+    color: #FFF;
+}
+
+button:hover {
+    background-color: #FFF;
+    color: #000;
+}
+/*#endregion */
+
+/*#region Initial game state*/
+/*#region All areas*/
+section {
+    margin: 0 20px;
+}
+
+#left,
+#center,
+#right {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+#center {
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+#right {
+    justify-content: space-between;
+}
+
+.bordered-box-title {
+    background-color: #000;
+    padding: 0 5px;
+    position: absolute;
+    left: 15px;
+}
+
+.bordered-box {
+    border: 5px solid white;
+    padding: 20px 10px 20px 10px;
+    margin-top: 10px;
+}
+
+.attribute {
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.5rem;
+}
+
+.property {
+    margin-right: 10px;
+    flex: 1;
+}
+
+.value {
+    flex: 1;
+    text-align: end;
+}
+
+.value::before {
+    content: '.........';
+}
+
+.hidden {
+    display: none;
+}
+/*#endregion*/
+
+/*#region Stats box*/
+#stats {
+    width: 175px;
+}
+/*#endregion*/
+
+/*#region Game area*/
+.full-height {
+    height: 100%;
+}
+
+h1 {
+    font-size: 6rem;
+}
+
+#menu {
+    position: absolute;
+    height: 100%;
+    font-family: 'Tetris2';
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-self: center;
+    text-align: center;
+}
+
+button.menu-item {
+    display: block;
+    width: 100%;
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.menu-item {
+    cursor: pointer;
+}
+
+.menu-item:before {
+    content: '\2BC8';
+    margin-right: 5px;
+    transition: 0.5s all;
+    animation: blink 1s linear infinite;
+}
+
+.menu-item:hover:before {
+    transform: rotate(90deg);
+}
+
+.menu-item:hover {
+    display: flex;
+    background-color: white;
+    color: #000;
+}
+
+#block-entrance {
+    background-color: #000;
+    position: absolute;
+    top: -7px;
+    width: 290px;
+    height: 10px;
+}
+
+#game {
+    width: 290px;
+}
+
+#tetris {
+    width: inherit;
+    height: inherit;
+}
+/*#endregion*/
+
+/*#region Controls*/
+#controls {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.control-btn {
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    margin-right: 5px;
+    cursor: pointer;
+}
+/*#endregion*/
+
+/*#region Secondary menu */
+#secondary-menu {
+    flex-direction: column;
+    background-color: #000000;
+    position: absolute;
+    width: 100%;
+    left: -15px;
+    transition: 1s ease-in all;
+}
+
+#secondary-menu p {
+    padding: 10px;
+}
+
+#secondary-menu-controls-content {
+    position: relative;
+    padding: 10px 0;
+    height: 180px;
+}
+
+#secondary-menu-credits-content {
+    position: relative;
+    height: 280px;
+}
+
+#credits-scroller {
+    position: absolute;
+    animation: rollingCredits 5s linear forwards infinite;
+    animation-iteration-count: 1;
+}
+
+.finer-bordered-box {
+    padding: 5px;
+    border: 1px solid white;
+}
+
+#exit-btn {
+    padding: 5px;
+    border-width: 3px;
+    width: 80px;
+    height: 35px;
+    position: absolute;
+    z-index: 1;
+    margin: -30px -40px;
+}
+
+#exit-btn-blackout {
+    position: absolute;
+    background-color: black;
+    width: 95%;
+    height: 65px;
+    bottom: 0;
+}
+/*#endregion*/
+
+/*#region Animations*/
+@keyframes blink {
+    50% {
+      opacity: 0;
+    }
+}
+                        
+@keyframes rollingCredits {
+    0% {
+      top: 30%;
+    }
+    100% {
+      top: 5%;
+    }
+}
+/*#endregion*/
+/*#endregion*/
