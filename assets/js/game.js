@@ -12,6 +12,8 @@ let blockY;
 
 let isPlaying = false;
 let isPaused = false;
+let isFalling = false;
+let isGameOver = false;
 
 //#region Game functions
 
@@ -20,6 +22,7 @@ let isPaused = false;
  */
 function initialiseBoard() {
     board = new Board(TET_GRID);
+    console.table(board.grid);
 
     // Board dimensions setup
     TET_GRID.canvas.width = COLS * BLOCK_SIZE;
@@ -51,7 +54,7 @@ function startGame() {
     initialiseBoard();
     initialiseStats();
 
-    setCurrentBlock();
+    setCurrentBlockAndColour();
     drawBlock();
 }
 
