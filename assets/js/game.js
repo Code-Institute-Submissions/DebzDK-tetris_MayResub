@@ -57,7 +57,7 @@ function startGame() {
     
     blockX = canvasWidth / (2 * BLOCK_SIZE);
     blockY = 0;
-    
+
     drawBlock();
 
     setInterval(progressGame, 1000);
@@ -73,15 +73,20 @@ function setCurrentBlockAndColour() {
 /**
  * Draws current block object on canvas
  */
-function drawBlock() {
+function drawBlock(clear) {
     for (let y = 0; y < block.currentBlock.shape.length; y++) {
         let blockRow = block.currentBlock.shape[y];
         for (let x = 0; x < blockRow.length; x++) {
             let bitInBlock = blockRow[x];
             if (bitInBlock) {
-                board.grid[blockY + y][blockX + x] = 1;
-                TET_GRID.fillRect(blockX + x, blockY + y, 1, 1);
-                TET_GRID.strokeRect(blockX + x, blockY + y, 1, 1);
+                if (clear) {
+                    board.grid[blockY + y][blockX + x] = 0;
+                    TET_GRID.clearRect(blockX + x - 0.2, blockY + y - 0.2, 1.3, 1.2);
+                } else {
+                    board.grid[blockY + y][blockX + x] = 1;
+                    TET_GRID.fillRect(blockX + x, blockY + y, 1, 1);
+                    TET_GRID.strokeRect(blockX + x, blockY + y, 1, 1);
+                }
             }
         }
     }
@@ -92,6 +97,8 @@ function drawBlock() {
  * Moves the current block down the Tetris game
  */ 
 function moveDn() {
+    drawBlock(true);
+    
     blockY += 1;
 
     drawBlock();
