@@ -19,22 +19,22 @@ const BLOCK_TYPES = {
         yOffset: 0
     },
     Z: {
-        shape: [[1, 1, 0],
-                [0, 1, 1],
-                [0, 0, 0]],
+        shape: [[0, 0, 0],
+                [1, 1, 1],
+                [0, 1, 1]],
         height: 3,
         width: 2,
         xOffset: 0,
-        yOffset: 0
+        yOffset: 1
     },
     S: {
-        shape: [[0, 1, 1],
-                [1, 1, 0],
-                [0, 0, 0]],
+        shape: [[0, 0, 0],
+                [0, 1, 1],
+                [1, 1, 0]],
         height: 3,
         width: 3,
         xOffset: 0,
-        yOffset: 0
+        yOffset: 1
     },
     SQ: {
         shape: [[0, 0, 0],
@@ -55,13 +55,13 @@ const BLOCK_TYPES = {
         yOffset: 0
     },
     T: {
-        shape: [[1, 1, 1],
-                [0, 1, 0],
-                [0, 0, 0]],
+        shape: [[0, 0, 0],
+                [1, 1, 1],
+                [0, 1, 0]],
         height: 2,
         width: 3,
         xOffset: 0,
-        yOffset: 0
+        yOffset: 1
     }
 };
 
