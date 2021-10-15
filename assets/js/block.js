@@ -1,26 +1,68 @@
 // Tetris blocks represented in 3x3 matrixes
 const BLOCK_TYPES = {
-    L: [[1, 0, 0],
-        [1, 0, 0],
-        [1, 1, 0]],
-    J: [[0, 1, 1],
-        [0, 0, 1],
-        [0, 0, 1]],
-    Z: [[1, 1, 0],
-        [0, 1, 0]
-        [0, 1, 1]],
-    S: [[0, 1, 1,
-        [0, 1, 0],
-        [1, 1, 0]]],
-    SQ: [[0, 0, 0],
-        [0, 1, 1],
-        [0, 1, 1]],
-    I: [[1, 0, 0],
-        [1, 0, 0]
-        [1, 0, 0]],
-    T: [[1, 1, 1],
-        [0, 1, 0],
-        [0, 0, 0]]
+    L: {
+        shape: [[1, 0, 0],
+                [1, 0, 0],
+                [1, 1, 0]],
+        height: 3,
+        width: 2,
+        xOffset: 0,
+        yOffset: 0
+    },
+    J: {
+        shape: [[0, 1, 1],
+                [0, 0, 1],
+                [0, 0, 1]],
+        height: 3,
+        width: 2,
+        xOffset: 1,
+        yOffset: 0
+    },
+    Z: {
+        shape: [[1, 1, 0],
+                [0, 1, 1],
+                [0, 0, 0]],
+        height: 3,
+        width: 2,
+        xOffset: 0,
+        yOffset: 0
+    },
+    S: {
+        shape: [[0, 1, 1],
+                [1, 1, 0],
+                [0, 0, 0]],
+        height: 3,
+        width: 3,
+        xOffset: 0,
+        yOffset: 0
+    },
+    SQ: {
+        shape: [[0, 0, 0],
+                [0, 1, 1],
+                [0, 1, 1]],
+        height: 2,
+        width: 2,
+        xOffset: 1,
+        yOffset: 1
+    },
+    I: {
+        shape: [[1, 0, 0],
+                [1, 0, 0],
+                [1, 0, 0]],
+        height: 3,
+        width: 1,
+        xOffset: 0,
+        yOffset: 0
+    },
+    T: {
+        shape: [[1, 1, 1],
+                [0, 1, 0],
+                [0, 0, 0]],
+        height: 2,
+        width: 3,
+        xOffset: 0,
+        yOffset: 0
+    }
 };
 
 // Multiplier for calculating board size
