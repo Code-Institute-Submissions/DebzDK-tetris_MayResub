@@ -38,22 +38,22 @@ const COLOURS = [
     '#72CB3B', // lime green
     '#FFD500', // cyber yellow
     '#FF971C', // yellow orange colour wheel
-    '#FF3213', // scarlet
+    '#FF3213' // scarlet
 ];
 
-// Stores the tetris block represented by the Block object
-let currentBlock = [];
-
-// Store the tetris block colour for the Block object
-let currentColour = '#000000';
-
 class Block {
+    // Stores the tetris block represented by the Block object
+    static currentBlock = [];
+
+    // Stores the tetris block colour
+    static currentColour = '#000000';
+
     /**
      * Sets the block type and colour to be represent the Block object
      */
     constructor() {
-        currentBlock = BLOCKS[this.getRandNumber(7)];
-        currentColour = COLOURS[this.getRandNumber(6)];
+        this.currentBlock = BLOCKS[this.getRandNumber(7)];
+        this.currentColour = COLOURS[this.getRandNumber(6)];
     }
 
     /**
