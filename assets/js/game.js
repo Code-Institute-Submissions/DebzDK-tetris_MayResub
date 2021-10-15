@@ -33,10 +33,16 @@ function initialiseBoard() {
     canvasHeight = TET_GRID.canvas.height;
 }
 
+function initialiseStats() {
+    document.getElementById('score').textContent = 0;
+    document.getElementById('level').textContent = 1;
+}
+
 function startGame() {
     hideMainMenu();
 
     initialiseBoard();
+    initialiseStats();
     drawBlock();
 }
 

@@ -101,10 +101,6 @@ section {
     text-align: end;
 }
 
-.value::before {
-    content: '.........';
-}
-
 .hidden {
     display: none !important;
 }
