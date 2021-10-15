@@ -1,17 +1,62 @@
 // Global variables
 const CANVAS = document.getElementById('tetris');
 const TET_GRID = CANVAS.getContext('2d');
-TET_GRID.canvas.width = COLS * BLOCK_SIZE;
-TET_GRID.canvas.height = ROWS * BLOCK_SIZE;
-TET_GRID.scale(BLOCK_SIZE, BLOCK_SIZE);
+
+let board;
+let block;
+
+let canvasWidth;
+let canvasHeight;
+let blockX;
+let blockY;
 
 let isPlaying = false;
 let isPaused = false;
 
 //#region Game functions
-function startGame() {
-    let board = new Board(TET_GRID);
+
+/**
+ * Initialises the game board
+ */
+function initialiseBoard() {
+    board = new Board(TET_GRID);
+    block = new Block();
+
+    TET_GRID.canvas.width = COLS * BLOCK_SIZE;
+    TET_GRID.canvas.height = ROWS * BLOCK_SIZE;
+    TET_GRID.scale(BLOCK_SIZE, BLOCK_SIZE);
+    TET_GRID.fillStyle = block.currentColour;
+    TET_GRID.strokeStyle = 'white';
+    TET_GRID.lineWidth = 0.2;
+
+    canvasWidth = TET_GRID.canvas.width;
+    canvasHeight = TET_GRID.canvas.height;
 }
+
+function startGame() {
+    hideMainMenu();
+
+    initialiseBoard();
+    drawBlock();
+}
+
+function drawBlock() {
+    blockX = canvasWidth / (2 * BLOCK_SIZE);
+    blockY = 0;
+
+    for (let y = 0; y < block.currentBlock.length; y++) {
+        let blockRow = block.currentBlock[y];
+        for (let x = 0; x < blockRow.length; x++) {
+            let bitInBlock = blockRow[x];
+            if (bitInBlock) {
+                TET_GRID.fillRect(blockX + x, blockY + y, 1, 1);
+                TET_GRID.strokeRect(blockX + x, blockY + y, 1, 1);
+            }
+        }
+    }
+}
+
+//#endregion
 
 //#region Menu functions
 
@@ -26,22 +71,28 @@ function setupListeners() {
             switch (this.id) {
                 case 'game-play':
                     startGame();
-                    return;
                 case 'game-controls':
                     setSecondaryMenuTitle('Controls');
                     showSecondaryMenuContent('controls');
+                    showSecondaryMenu();
                     break;
                 case 'game-credits':
                     setSecondaryMenuTitle('Credits');
                     showSecondaryMenuContent('credits');
+                    showSecondaryMenu();
                     break;
                 default:
                     return;
             }
-
-            showSecondaryMenu();
         });
     }
+}
+
+/**
+ * Hides the main menu
+ */
+ function hideMainMenu() {
+    document.getElementById('menu').className = 'hidden';
 }
 
 /**

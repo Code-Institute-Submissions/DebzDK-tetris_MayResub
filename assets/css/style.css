@@ -106,7 +106,7 @@ section {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 /*#endregion*/
 
@@ -168,7 +168,7 @@ button.menu-item {
 #block-entrance {
     background-color: #000;
     position: absolute;
-    top: -7px;
+    top: -10px;
     width: 290px;
     height: 10px;
 }
