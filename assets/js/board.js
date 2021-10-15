@@ -1,5 +1,5 @@
-const COLS = 20;
-const ROWS = 40;
+const COLS = 30;
+const ROWS = 60;
 
 class Board {
     /**
