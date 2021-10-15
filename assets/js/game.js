@@ -1,3 +1,18 @@
+// Global variables
+const CANVAS = document.getElementById('tetris');
+const TET_GRID = canvas.getContext('2d');
+TET_GRID.canvas.width = COLS * BLOCK_SIZE;
+TET_GRID.canvas.height = ROWS * BLOCK_SIZE;
+TET_GRID.scale(BLOCK_SIZE, BLOCK_SIZE);
+
+let isPlaying = false;
+let isPaused = false;
+
+//#region Game functions
+function startGame() {
+    let board = new Board(TET_GRID);
+}
+
 //#region Menu functions
 
 /**
