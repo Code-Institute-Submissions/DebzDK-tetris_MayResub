@@ -33,6 +33,9 @@ const BLOCKS = [BLOCK_TYPES.L, BLOCK_TYPES.J,
 let currentBlock = [];
 
 class Block {
+    /**
+     * Sets the block to be represented by the Block object
+     */
     constructor() {
         currentBlock = BLOCKS[this.getRandNumber()];
     }
