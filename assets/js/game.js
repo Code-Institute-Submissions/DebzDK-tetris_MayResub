@@ -54,7 +54,13 @@ function startGame() {
     initialiseStats();
 
     setCurrentBlockAndColour();
+    
+    blockX = canvasWidth / (2 * BLOCK_SIZE);
+    blockY = 0;
+    
     drawBlock();
+
+    setInterval(progressGame, 1000);
 }
 
 function setCurrentBlockAndColour() {
@@ -68,9 +74,6 @@ function setCurrentBlockAndColour() {
  * Draws current block object on canvas
  */
 function drawBlock() {
-    blockX = canvasWidth / (2 * BLOCK_SIZE);
-    blockY = 0;
-
     for (let y = 0; y < block.currentBlock.shape.length; y++) {
         let blockRow = block.currentBlock.shape[y];
         for (let x = 0; x < blockRow.length; x++) {
@@ -83,6 +86,22 @@ function drawBlock() {
         }
     }
     console.table(board.grid);
+}
+
+/**
+ * Moves the current block down the Tetris game
+ */ 
+function moveDn() {
+    blockY += 1;
+
+    drawBlock();
+}
+
+/**
+ * Timer function for progressing or ending a game
+ */
+function progressGame() {
+    moveDn();
 }
 //#endregion
 
