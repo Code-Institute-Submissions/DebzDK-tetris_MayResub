@@ -323,24 +323,42 @@ function setupListeners() {
 }
 
 /**
+ * Sets an element's class
+ * @param {string} id - id of element to access
+ * @param {string} classNames - class(es) to set as an existing element's class
+ */
+function setClassesOnElement(id, classNames) {
+    document.getElementById(id).className = classNames;
+}
+
+/**
+ * Appends class(es) to a given element's existing classes
+ * @param {string} id - id of element to access
+ * @param {string} classNames - class names to append to existing element classes
+ */
+function appendClassToElementClassList(id, classNames) {
+    document.getElementById(id).className += ' ' + classNames;
+}
+
+/**
  * Hides the main menu
  */
  function hideMainMenu() {
-    document.getElementById('menu').className = 'hidden';
+    setClassesOnElement('menu', 'hidden');
 }
 
 /**
  * Displays the secondary menu
  */
 function showSecondaryMenu() {
-    document.getElementById('secondary-menu').className = 'bordered-box';
+    setClassesOnElement('secondary-menu', 'bordered-box');
 }
 
 /**
  * Hides the secondary menu and the potential contents being displayed
  */
 function hideSecondaryMenu() {
-    document.getElementById('secondary-menu').className = 'bordered-box hidden';
+    appendClassToElementClassList('secondary-menu', 'hidden');
     hideSecondaryMenuContent('controls');
     hideSecondaryMenuContent('credits');
 }
@@ -359,7 +377,7 @@ function setSecondaryMenuTitle(title) {
  * @param {string} className - The name of the class to set on the element
  */
 function setSecondaryMenuContentClass(contentName, className) {
-    document.getElementById('secondary-menu-' + contentName + '-content').className = className;
+    setClassesOnElement('secondary-menu-' + contentName + '-content', className);
 }
 
 /**
