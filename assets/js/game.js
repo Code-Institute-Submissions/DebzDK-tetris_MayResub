@@ -41,6 +41,7 @@ document.addEventListener('keydown', function(e) {
             if (blockX + block.currentBlock.xOffset + block.currentBlock.width < canvasWidth) {
                 moveRg();
             }
+            break;
         case 'ArrowDown':
             if (gameSpeed !== 100) {
                 setGameSpeed(100);
