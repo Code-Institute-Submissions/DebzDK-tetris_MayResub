@@ -30,7 +30,7 @@ function setGameSpeed(amountInMs) {
     timer = setInterval(progressGame, amountInMs);
 }
 
-// Down arrow key pressed
+// Arrow key pressed
 document.addEventListener('keydown', function(e) {
     switch (e.key) {
         case 'ArrowLeft':
@@ -46,7 +46,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Down arrow key released
+// Arrow key released
 document.addEventListener('keyup', function(e) {
     if (e.key === "ArrowDown" || e.key === "ArrowLeft") setGameSpeed(1000)
 });
