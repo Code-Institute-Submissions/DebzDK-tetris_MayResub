@@ -64,8 +64,7 @@ section {
 }
 
 #center {
-    padding-top: 1px;
-    padding-bottom: 1px;
+    padding: 1px 0 1px 0;
 }
 
 #right {
