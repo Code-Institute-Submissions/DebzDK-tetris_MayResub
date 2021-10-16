@@ -17,6 +17,7 @@ let isPlaying = false;
 let isPaused = false;
 let isFalling = false;
 let isGameOver = false;
+let isTouchingLeftBorder = false;
 
 //#region Game event listeners
 /**
@@ -33,7 +34,9 @@ function setGameSpeed(amountInMs) {
 document.addEventListener('keydown', function(e) {
     switch (e.code) {
         case 'ArrowLeft':
-            moveLf();
+            if (!isTouchingLeftBorder) {
+                moveLf();
+            }
             break;
         case 'ArrowDown':
         default:
@@ -102,6 +105,8 @@ function startGame() {
  */
 function setCurrentBlock() {
     block = new Block();
+
+    isTouchingLeftBorder = false;
 }
 
 /**
@@ -222,6 +227,7 @@ function moveLf() {
             if (bitInBoardRowLeftOfBlock === undefined || (firstBitInBlockRow && bitInBoardRowLeftOfBlock) ||
                     !firstBitInBlockRow && board.grid[blockY + block.currentBlock.yOffset + 1][blockX + block.currentBlock.xOffset - 1]) {
                 isShapeLeft = true;
+                isTouchingLeftBorder = true;
                 break;
             }
         }
