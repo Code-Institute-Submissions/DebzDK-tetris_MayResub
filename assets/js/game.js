@@ -33,12 +33,11 @@ function setGameSpeed(amountInMs) {
 document.addEventListener('keydown', function(e) {
     switch (e.key) {
         case 'ArrowLeft':
-            if (blockX  + block.currentBlock.xOffset > 0) {
+            if (blockX + block.currentBlock.xOffset > 0) {
                 moveLf();
             }
             break;
         case 'ArrowDown':
-        default:
             if (gameSpeed !== 100) {
                 setGameSpeed(100);
             }
