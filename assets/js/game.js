@@ -79,6 +79,7 @@ function initialiseStats() {
  */
 function startGame() {
     hideMainMenu();
+    showGameControls();
 
     initialiseBoard();
     initialiseStats();
@@ -334,10 +335,19 @@ function setClassesOnElement(id, classNames) {
 /**
  * Appends class(es) to a given element's existing classes
  * @param {string} id - id of element to access
- * @param {string} classNames - class names to append to existing element classes
+ * @param {string} classNames - class(es) to append to existing element classes
  */
 function appendClassToElementClassList(id, classNames) {
     document.getElementById(id).className += ' ' + classNames;
+}
+
+/**
+ * Removes a class from a given element's class list
+ * @param {string} id - id of element to access
+ * @param {string} className - class to append to existing element classes
+ */
+function removeClassFromElementClassList(id, className) {
+    document.getElementById(id).classList.remove(className);
 }
 
 /**
@@ -394,5 +404,10 @@ function showSecondaryMenuContent(contentName) {
  */
 function hideSecondaryMenuContent(contentName) {
     setSecondaryMenuContentClass(contentName, 'hidden');
+}
+
+function showGameControls() {
+    removeClassFromElementClassList('pause-game', 'hidden');
+    removeClassFromElementClassList('restart-game', 'hidden');
 }
 //#endregion
