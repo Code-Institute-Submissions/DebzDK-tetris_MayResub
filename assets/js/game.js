@@ -10,10 +10,35 @@ let canvasHeight;
 let blockX;
 let blockY;
 
+let timer;
+let gameSpeed = 1000;
+
 let isPlaying = false;
 let isPaused = false;
 let isFalling = false;
 let isGameOver = false;
+
+//#region Game event listeners
+/**
+ * Sets speed of movement of tetris block
+ * @param {int} amountInMs - time in ms
+ */
+function setGameSpeed(amountInMs) {
+    clearInterval(timer);
+    gameSpeed = amountInMs;
+    timer = setInterval(progressGame, amountInMs);
+}
+
+// Down arrow key pressed
+document.addEventListener('keydown', function(e) {
+    if (e.code === "ArrowDown" && gameSpeed !== 100) setGameSpeed(100)
+});
+
+// Down arrow key released
+document.addEventListener('keyup', function(e) {
+    if (e.code === "ArrowDown") setGameSpeed(1000)
+});
+//#endregion
 
 //#region Game functions
 
@@ -60,7 +85,7 @@ function startGame() {
     setCurrentBlockColour();
     drawBlock();
 
-    setInterval(progressGame, 1000);
+    timer = setInterval(progressGame, gameSpeed);
 }
 
 /**
