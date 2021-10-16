@@ -53,21 +53,37 @@ function startGame() {
     initialiseBoard();
     initialiseStats();
 
-    setCurrentBlockAndColour();
+    setCurrentBlock();
     
-    blockX = canvasWidth / (2 * BLOCK_SIZE);
-    blockY = 0;
+    setBlockStartPosition();
 
+    setCurrentBlockColour();
     drawBlock();
 
     setInterval(progressGame, 1000);
 }
 
-function setCurrentBlockAndColour() {
+/**
+ * Assigns new block object to global variable
+ */
+function setCurrentBlock() {
     block = new Block();
+}
 
+/**
+ * Assigns canvas fill colour for block
+ */
+function setCurrentBlockColour() {
     // Tetris block colour
     TET_GRID.fillStyle = block.currentColour;
+}
+
+/**
+ * Assigns values to the variables for the current block's (X,Y) pos
+ */
+function setBlockStartPosition() {
+    blockX = canvasWidth / (2 * BLOCK_SIZE);
+    blockY = 0;
 }
 
 /**
@@ -81,7 +97,8 @@ function drawBlock(clear) {
             if (bitInBlock) {
                 if (clear) {
                     board.grid[blockY + y][blockX + x] = 0;
-                    TET_GRID.clearRect(blockX + x - 0.2, blockY + y - 0.2, 1.3, 1.2);
+                    TET_GRID.clearRect(blockX + x - 0.1, blockY + y - 0.2, 1.2, 1.2);
+                    setCurrentBlockColour();
                 } else {
                     board.grid[blockY + y][blockX + x] = 1;
                     TET_GRID.fillRect(blockX + x, blockY + y, 1, 1);
@@ -90,18 +107,55 @@ function drawBlock(clear) {
             }
         }
     }
-    console.table(board.grid);
 }
 
 /**
- * Moves the current block down the Tetris game
+ * Moves the current block down the Tetris game if no existing shape is below the current shape
+ * or the bottom of the grid has been reached
  */ 
 function moveDn() {
-    drawBlock(true);
-    
-    blockY += 1;
+    // Holds the height of the current block
+    let height = block.currentBlock.height;
 
-    drawBlock();
+    // Holds the width of the current block
+    let width = block.currentBlock.width;
+
+    // Used to indicate whether a block is below the current block
+    let isShapeBelow = false;
+
+    /**
+     * Loops through the width of the bottom row of the current block and determines if there's a block sitting below the current block
+     * or checks if an empty cell of a the bottom row of a block corresponds to an occupied block of the board
+     */
+    for (let x = block.currentBlock.xOffset; x <= width; x++) {
+        if (!isShapeBelow) {
+            let rowOfBlockBits = block.currentBlock.shape[height - 1 + block.currentBlock.yOffset];
+            let bitInBlockRow = rowOfBlockBits[x];
+            let rowOfBoardBitsBelowBlock = board.grid[blockY + height + block.currentBlock.yOffset];
+            let bitInBoardRowBelowBlock;
+
+            if (rowOfBoardBitsBelowBlock) {
+                bitInBoardRowBelowBlock = rowOfBoardBitsBelowBlock[blockX + x];
+            }
+            
+            if ((bitInBlockRow && (rowOfBoardBitsBelowBlock === undefined || bitInBoardRowBelowBlock)) ||
+                    !bitInBlockRow && board.grid[blockY + block.currentBlock.yOffset + 1][blockX + x]) {
+                isShapeBelow = true;
+                break;
+            }
+        }
+    }
+
+    if (!isShapeBelow) {
+        drawBlock(true);
+        
+        blockY += 1;
+
+        drawBlock();
+    } else {
+        setBlockStartPosition();
+        setCurrentBlock();
+    }
 }
 
 /**
