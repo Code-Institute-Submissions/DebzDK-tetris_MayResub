@@ -37,6 +37,10 @@ document.addEventListener('keydown', function(e) {
                 moveLf();
             }
             break;
+        case 'ArrowRight':
+            if (blockX + block.currentBlock.xOffset + block.currentBlock.width < canvasWidth) {
+                moveRg();
+            }
         case 'ArrowDown':
             if (gameSpeed !== 100) {
                 setGameSpeed(100);
@@ -46,7 +50,7 @@ document.addEventListener('keydown', function(e) {
 
 // Arrow key released
 document.addEventListener('keyup', function(e) {
-    if (e.key === "ArrowDown" || e.key === "ArrowLeft") setGameSpeed(1000)
+    if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(1000)
 });
 //#endregion
 
@@ -221,7 +225,7 @@ function moveLf() {
             }
             
             if (bitInBoardRowLeftOfBlock === undefined || (firstBitInBlockRow && bitInBoardRowLeftOfBlock) ||
-                    !firstBitInBlockRow && board.grid[blockY + block.currentBlock.yOffset + 1][blockX + block.currentBlock.xOffset - 1]) {
+                    !firstBitInBlockRow && board.grid[blockY + block.currentBlock.yOffset + y][blockX + block.currentBlock.xOffset - 1]) {
                 isShapeLeft = true;
                 break;
             }
@@ -237,6 +241,48 @@ function moveLf() {
     }
 }
 
+/**
+ * Moves the current block right if no existing block is on the right the current block
+ * or the right side of the grid has been reached
+ */ 
+ function moveRg() {
+    // Holds the height of the current block
+    let height = block.currentBlock.height;
+
+    // Used to indicate whether a block is on the right side of the current block
+    let isShapeRight = false;
+
+    /**
+     * Loops through the last bit of the each row of the current block and determines if there's a block sitting on the right side
+     * or checks if an empty last cell of a row of a block corresponds to an occupied block of the board
+     */
+     for (let y = block.currentBlock.yOffset; y <= height - 1 + block.currentBlock.yOffset; y++) {
+        if (!isShapeRight) {
+            let rowOfBlockBits = block.currentBlock.shape[y];
+            let firstBitInBlockRow = rowOfBlockBits[2];
+            let rowOfBoardBitsRightOfBlock = board.grid[blockY + y];
+            let bitInBoardRowRightOfBlock;
+
+            if (rowOfBoardBitsRightOfBlock) {
+                bitInBoardRowRightOfBlock = rowOfBoardBitsRightOfBlock[blockX + block.currentBlock.xOffset + block.currentBlock.width];
+            }
+            
+            if (bitInBoardRowRightOfBlock === undefined || (firstBitInBlockRow && bitInBoardRowRightOfBlock) ||
+                    !firstBitInBlockRow && board.grid[blockY + block.currentBlock.yOffset + y][blockX + block.currentBlock.xOffset + block.currentBlock.width]) {
+                isShapeRight = true;
+                break;
+            }
+        }
+    }
+
+    if (!isShapeRight) {
+        drawBlock(true);
+
+        blockX += 1;
+
+        drawBlock();
+    }
+}
 
 /**
  * Timer function for progressing or ending a game
