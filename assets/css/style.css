@@ -64,8 +64,7 @@ section {
 }
 
 #center {
-    padding-top: 1px;
-    padding-bottom: 1px;
+    padding: 1px 0 1px 0;
 }
 
 #right {
@@ -101,12 +100,8 @@ section {
     text-align: end;
 }
 
-.value::before {
-    content: '.........';
-}
-
 .hidden {
-    display: none;
+    display: none !important;
 }
 /*#endregion*/
 
@@ -168,13 +163,13 @@ button.menu-item {
 #block-entrance {
     background-color: #000;
     position: absolute;
-    top: -7px;
-    width: 290px;
+    top: -10px;
+    width: 300px;
     height: 10px;
 }
 
 #game {
-    width: 290px;
+    width: 300px;
 }
 
 #tetris {
