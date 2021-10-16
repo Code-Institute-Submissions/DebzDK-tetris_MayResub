@@ -32,7 +32,7 @@ function setGameSpeed(amountInMs) {
 
 // Down arrow key pressed
 document.addEventListener('keydown', function(e) {
-    switch (e.code) {
+    switch (e.key) {
         case 'ArrowLeft':
             if (!isTouchingLeftBorder) {
                 moveLf();
@@ -48,7 +48,7 @@ document.addEventListener('keydown', function(e) {
 
 // Down arrow key released
 document.addEventListener('keyup', function(e) {
-    if (e.code === "ArrowDown" || e.code === "ArrowLeft") setGameSpeed(1000)
+    if (e.key === "ArrowDown" || e.key === "ArrowLeft") setGameSpeed(1000)
 });
 //#endregion
 
