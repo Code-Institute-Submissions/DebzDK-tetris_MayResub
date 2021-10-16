@@ -19,16 +19,6 @@ let isFalling = false;
 let isGameOver = false;
 
 //#region Game event listeners
-/**
- * Sets speed of movement of tetris block
- * @param {int} amountInMs - time in ms
- */
-function setGameSpeed(amountInMs) {
-    clearInterval(timer);
-    gameSpeed = amountInMs;
-    timer = setInterval(progressGame, amountInMs);
-}
-
 // Arrow key pressed
 document.addEventListener('keydown', function(e) {
     switch (e.key) {
@@ -101,6 +91,16 @@ function startGame() {
     drawBlock();
 
     timer = setInterval(progressGame, gameSpeed);
+}
+
+/**
+ * Sets speed of movement of tetris block
+ * @param {int} amountInMs - time in ms
+ */
+ function setGameSpeed(amountInMs) {
+    clearInterval(timer);
+    gameSpeed = amountInMs;
+    timer = setInterval(progressGame, amountInMs);
 }
 
 /**
@@ -197,7 +197,6 @@ function moveDn() {
         setCurrentBlock();
     }
 }
-
 
 /**
  * Moves the current block left if no existing block is on the left the current block
