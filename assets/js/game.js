@@ -85,6 +85,7 @@ function initialiseStats(withPlaceholder) {
  * Starts the game
  */
 function startGame() {
+    isPlaying = true;
     isGameOver = false;
 
     hideMenuAreas();
@@ -372,6 +373,13 @@ function displaySettings() {
     showMenuArea();
     setSecondaryMenuTitle('Settings');
     showSecondaryMenuContent('settings');
+
+    if (isPlaying) {
+        removeClassFromElementClassList('quit-game', 'hidden');
+    } else {
+        addClassToElementClassList('quit-game', 'hidden');
+    }
+
     showSecondaryMenu();
 }
 
@@ -525,11 +533,13 @@ function hideSecondaryMenu() {
     addClassToElementClassList('exit-btn-blackout', 'hidden');
     setSecondaryMenuTitle('');
 
-    if (isPaused) {
+    if (isPaused && isPlaying) {
         resumeGame();
     } else if (isGameOver) {
         showMainMenu();
         initialiseStats(true);
+    } else if (!isPlaying) {
+        showMainMenu();
     }
 }
 
