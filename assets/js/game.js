@@ -302,6 +302,10 @@ function pauseGame() {
     addClassToElementClassList('exit-btn', 'hidden');
     addClassToElementClassList('exit-btn-blackout', 'hidden');
     removeClassFromElementClassList('menu', 'hidden');
+    
+    showSecondaryMenu();
+    showSecondaryMenuContent('status');
+    setGameStatus('paused');
 
     clearInterval(timer);
 }
@@ -361,9 +365,6 @@ function setupListeners() {
             switch (this.id) {
                 case 'pause-game':
                     pauseGame();
-                    showSecondaryMenu();
-                    showSecondaryMenuContent('status');
-                    setGameStatus('paused');
                     break;
                 case 'resume-game':
                     resumeGame();
