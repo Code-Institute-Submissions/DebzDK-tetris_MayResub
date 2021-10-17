@@ -492,11 +492,6 @@ function hideMainMenu() {
     setStyleOnElement('main-menu', 'visibility', 'hidden');
 }
 
-function returnToMainMenu() {
-    showMainMenu();
-    initialiseStats(true);
-}
-
 /**
  * Displays main and secondary menus
  */
@@ -533,7 +528,8 @@ function hideSecondaryMenu() {
     if (isPaused) {
         resumeGame();
     } else if (isGameOver) {
-        returnToMainMenu();
+        showMainMenu();
+        initialiseStats(true);
     }
 }
 
