@@ -79,6 +79,7 @@ function initialiseStats() {
  */
 function startGame() {
     hideMainMenu();
+    hideSecondaryMenu();
     showGameControls();
 
     initialiseBoard();
@@ -291,6 +292,36 @@ function moveLf() {
 function progressGame() {
     moveDn();
 }
+
+/**
+ * Pauses game and updates game controls
+ */
+function pauseGame() {
+    removeClassFromElementClassList('resume-game', 'hidden');
+    addClassToElementClassList('pause-game', 'hidden');
+    addClassToElementClassList('exit-btn', 'hidden');
+    addClassToElementClassList('exit-btn-blackout', 'hidden');
+    removeClassFromElementClassList('menu', 'hidden');
+
+    clearInterval(timer);
+}
+
+/**
+ * Resumes game and updates game controls
+ */
+function resumeGame() {
+    hideSecondaryMenu();
+    addClassToElementClassList('resume-game', 'hidden');
+    removeClassFromElementClassList('pause-game', 'hidden');
+    removeClassFromElementClassList('exit-btn', 'hidden');
+    removeClassFromElementClassList('exit-btn-blackout', 'hidden');
+
+    timer = setInterval(progressGame, gameSpeed);
+}
+
+function setGameStatus(status) {
+    document.getElementById('game-status').textContent = status.toUpperCase();
+}
 //#endregion
 
 //#region Menu functions
@@ -306,6 +337,7 @@ function setupListeners() {
             switch (this.id) {
                 case 'game-play':
                     startGame();
+                    break;
                 case 'game-controls':
                     setSecondaryMenuTitle('Controls');
                     showSecondaryMenuContent('controls');
@@ -315,6 +347,26 @@ function setupListeners() {
                     setSecondaryMenuTitle('Credits');
                     showSecondaryMenuContent('credits');
                     showSecondaryMenu();
+                    break;
+                default:
+                    return;
+            }
+        });
+    }
+
+    let gameControlButtons = document.getElementsByClassName('control-btn');
+    
+    for (let i = 0; i < gameControlButtons.length; i++) {
+        gameControlButtons[i].addEventListener('click', function() {
+            switch (this.id) {
+                case 'pause-game':
+                    pauseGame();
+                    showSecondaryMenu();
+                    showSecondaryMenuContent('status');
+                    setGameStatus('paused');
+                    break;
+                case 'resume-game':
+                    resumeGame();
                     break;
                 default:
                     return;
@@ -333,12 +385,12 @@ function setClassesOnElement(id, classNames) {
 }
 
 /**
- * Appends class(es) to a given element's existing classes
+ * Adds a class to a given element's class list
  * @param {string} id - id of element to access
- * @param {string} classNames - class(es) to append to existing element classes
+ * @param {string} className - class to append to existing element classes
  */
-function appendClassToElementClassList(id, classNames) {
-    document.getElementById(id).className += ' ' + classNames;
+ function addClassToElementClassList(id, className) {
+    document.getElementById(id).classList.add(className);
 }
 
 /**
@@ -351,16 +403,28 @@ function removeClassFromElementClassList(id, className) {
 }
 
 /**
+ * Assigns style rule to element
+ * @param {string} id - id of desired element to style
+ * @param {string} prop - name of style property to modify
+ * @param {string} value - value of style property to set
+ */
+function setStyleOnElement(id, prop, value) {
+    document.getElementById(id).style[prop] = value;
+}
+
+/**
  * Hides the main menu
  */
  function hideMainMenu() {
     setClassesOnElement('menu', 'hidden');
+    setStyleOnElement('main-menu', 'visibility', 'hidden');
 }
 
 /**
  * Displays the secondary menu
  */
 function showSecondaryMenu() {
+    setClassesOnElement('secondary-menu-title', 'hidden');
     setClassesOnElement('secondary-menu', 'bordered-box');
 }
 
@@ -368,9 +432,11 @@ function showSecondaryMenu() {
  * Hides the secondary menu and the potential contents being displayed
  */
 function hideSecondaryMenu() {
-    appendClassToElementClassList('secondary-menu', 'hidden');
+    addClassToElementClassList('secondary-menu', 'hidden');
+    addClassToElementClassList('secondary-menu-title', 'hidden');
     hideSecondaryMenuContent('controls');
     hideSecondaryMenuContent('credits');
+    setSecondaryMenuTitle('');
 }
 
 /**
@@ -406,6 +472,9 @@ function hideSecondaryMenuContent(contentName) {
     setSecondaryMenuContentClass(contentName, 'hidden');
 }
 
+/**
+ * Displays game controls
+ */
 function showGameControls() {
     removeClassFromElementClassList('pause-game', 'hidden');
     removeClassFromElementClassList('restart-game', 'hidden');

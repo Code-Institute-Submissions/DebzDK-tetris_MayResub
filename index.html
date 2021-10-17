@@ -79,6 +79,12 @@
                             Thanks for playing!
                         </div>
                     </div>
+
+                    <!-- Game status -->
+                    <div id="secondary-menu-status-content" class="hidden">
+                        <p><strong>GAME <span id="game-status"></span></strong></p>
+                    </div>
+
                     <br>
                     <button id="exit-btn" class="bordered-box control-btn" onclick="hideSecondaryMenu()">Exit</button>
                     <div id="exit-btn-blackout"></div>
@@ -105,6 +111,9 @@
             <div id="controls">
                 <button id="pause-game" class="bordered-box control-btn hidden">
                     <i class="fas fa-pause"></i>
+                </button>
+                <button id="resume-game" class="bordered-box control-btn hidden">
+                    <i class="fas fa-play"></i>
                 </button>
                 <button id="restart-game" class="bordered-box control-btn hidden">
                     <i class="fas fa-redo-alt"></i>
