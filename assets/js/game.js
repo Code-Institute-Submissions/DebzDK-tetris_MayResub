@@ -12,6 +12,7 @@ let blockY;
 
 let timer;
 let gameSpeed = 1000;
+let statPlaceholder = '.........';
 
 let isPlaying = false;
 let isPaused = false;
@@ -69,16 +70,23 @@ function initialiseBoard() {
 /**
  * Initialises game stats
  */
-function initialiseStats() {
-    document.getElementById('score').textContent = 0;
-    document.getElementById('level').textContent = 1;
+function initialiseStats(withPlaceholder) {
+    if (withPlaceholder) {
+        document.getElementById('score').textContent = statPlaceholder;
+        document.getElementById('level').textContent = statPlaceholder;
+    } else {
+        document.getElementById('score').textContent = 0;
+        document.getElementById('level').textContent = 1;
+    }
 }
 
 /**
  * Starts the game
  */
 function startGame() {
-    hideMainMenu();
+    isGameOver = false;
+    
+    hideMenuAreas();
     hideSecondaryMenu();
     showGameControls();
 
@@ -93,6 +101,20 @@ function startGame() {
     drawBlock();
 
     timer = setInterval(progressGame, gameSpeed);
+}
+
+function endGame() {
+    isPaused = false;
+    isGameOver = true;
+
+    TET_GRID.clearRect(0, 0, canvasWidth, canvasWidth);
+
+    showMenuArea();
+    setSecondaryMenuTitle('');
+    showSecondaryMenuContent('status');
+    hideSecondaryMenuContent('settings');
+    setGameStatus('over');
+    showSecondaryMenu();
 }
 
 /**
@@ -294,9 +316,9 @@ function progressGame() {
 }
 
 /**
- * Pauses game and updates game controls
+ * Updates pause game control and menu display
  */
-function pauseGame() {
+function showPausedGameScreen() {
     removeClassFromElementClassList('resume-game', 'hidden');
     addClassToElementClassList('pause-game', 'hidden');
     addClassToElementClassList('exit-btn', 'hidden');
@@ -306,23 +328,49 @@ function pauseGame() {
     showSecondaryMenu();
     showSecondaryMenuContent('status');
     setGameStatus('paused');
-
-    clearInterval(timer);
 }
 
 /**
- * Resumes game and updates game controls
+ * Updates resume game control and menu display
  */
-function resumeGame() {
+function hidePausedGameScreen() {
     hideSecondaryMenu();
     addClassToElementClassList('resume-game', 'hidden');
     removeClassFromElementClassList('pause-game', 'hidden');
     removeClassFromElementClassList('exit-btn', 'hidden');
-    removeClassFromElementClassList('exit-btn-blackout', 'hidden');
-
-    timer = setInterval(progressGame, gameSpeed);
 }
 
+/**
+ * Pauses game 
+ */
+function pauseGame() {
+    clearInterval(timer);
+    isPaused = true;
+}
+
+/**
+ * Resumes game
+ */
+function resumeGame() {
+    timer = setInterval(progressGame, gameSpeed);
+    isPaused = false;
+}
+
+/**
+ * Displays settings menu
+ */
+function displaySettings() {
+    hideMainMenu();
+    showMenuArea();
+    setSecondaryMenuTitle('Settings');
+    showSecondaryMenuContent('settings');
+    showSecondaryMenu();
+}
+
+/**
+ * Sets the game status in caps
+ * @param {string} status - the current status of the game
+ */
 function setGameStatus(status) {
     document.getElementById('game-status').textContent = status.toUpperCase();
 }
@@ -350,7 +398,11 @@ function setupListeners() {
                 case 'game-credits':
                     setSecondaryMenuTitle('Credits');
                     showSecondaryMenuContent('credits');
+                    removeClassToElementClassList('exit-btn-blackout', 'hidden');
                     showSecondaryMenu();
+                    break;
+                case 'quit-game':
+                    endGame();
                     break;
                 default:
                     return;
@@ -365,9 +417,15 @@ function setupListeners() {
             switch (this.id) {
                 case 'pause-game':
                     pauseGame();
+                    showPausedGameScreen();
                     break;
                 case 'resume-game':
                     resumeGame();
+                    hidePausedGameScreen();
+                    break;
+                case 'settings':
+                    pauseGame();
+                    displaySettings();
                     break;
                 default:
                     return;
@@ -414,18 +472,43 @@ function setStyleOnElement(id, prop, value) {
 }
 
 /**
- * Hides the main menu
+ * Displays main menu
  */
- function hideMainMenu() {
-    setClassesOnElement('menu', 'hidden');
+function showMainMenu() {
+    setStyleOnElement('main-menu', 'visibility', 'visible');
+}
+
+/**
+ * Hides main menu
+ */
+function hideMainMenu() {
     setStyleOnElement('main-menu', 'visibility', 'hidden');
+}
+
+function returnToMainMenu() {
+    showMainMenu();
+    initialiseStats(true);
+}
+
+/**
+ * Displays main and secondary menus
+ */
+function showMenuArea() {
+    removeClassFromElementClassList('menu', 'hidden');
+}
+
+/**
+ * Hides the main and secondary menus
+ */
+ function hideMenuAreas() {
+    addClassToElementClassList('menu', 'hidden');
 }
 
 /**
  * Displays the secondary menu
  */
 function showSecondaryMenu() {
-    setClassesOnElement('secondary-menu-title', 'hidden');
+    removeClassFromElementClassList('secondary-menu-title', 'hidden');
     setClassesOnElement('secondary-menu', 'bordered-box');
 }
 
@@ -437,7 +520,14 @@ function hideSecondaryMenu() {
     addClassToElementClassList('secondary-menu-title', 'hidden');
     hideSecondaryMenuContent('controls');
     hideSecondaryMenuContent('credits');
+    addClassToElementClassList('exit-btn-blackout', 'hidden');
     setSecondaryMenuTitle('');
+
+    if (isPaused) {
+        resumeGame();
+    } else if (isGameOver) {
+        returnToMainMenu();
+    }
 }
 
 /**
