@@ -1,4 +1,4 @@
-// Global variables
+//#region Global variables
 const CANVAS = document.getElementById('tetris');
 const TET_GRID = CANVAS.getContext('2d');
 
@@ -18,6 +18,7 @@ let isPlaying = false;
 let isPaused = false;
 let isFalling = false;
 let isGameOver = false;
+//#endregion
 
 //#region Game event listeners
 // Arrow key pressed
@@ -47,7 +48,6 @@ document.addEventListener('keyup', function(e) {
 //#endregion
 
 //#region Game functions
-
 /**
  * Initialises the game board
  */
@@ -68,7 +68,8 @@ function initialiseBoard() {
 }
 
 /**
- * Initialises game stats
+ * Initialises the game stats
+ * @param {boolean} withPlaceholder - if stats should be initialised with placeholder value
  */
 function initialiseStats(withPlaceholder) {
     if (withPlaceholder) {
@@ -85,7 +86,7 @@ function initialiseStats(withPlaceholder) {
  */
 function startGame() {
     isGameOver = false;
-    
+
     hideMenuAreas();
     hideSecondaryMenu();
     showGameControls();
@@ -103,12 +104,18 @@ function startGame() {
     timer = setInterval(progressGame, gameSpeed);
 }
 
+/**
+ * Ends the game
+ */
 function endGame() {
+    // set game flags
     isPaused = false;
     isGameOver = true;
 
+    // clear tetris grid
     TET_GRID.clearRect(0, 0, canvasWidth, canvasWidth);
 
+    // hides settings screen and shows game over message
     showMenuArea();
     setSecondaryMenuTitle('');
     showSecondaryMenuContent('status');
@@ -152,6 +159,7 @@ function setBlockStartPosition() {
 
 /**
  * Draws current block object on canvas
+ * @param {boolean} clear - if block should be cleared/removed from board
  */
 function drawBlock(clear) {
     for (let y = 0; y < block.currentBlock.shape.length; y++) {
@@ -377,7 +385,6 @@ function setGameStatus(status) {
 //#endregion
 
 //#region Menu functions
-
 /**
  * Adds listeners to all of the menu buttons, executing as appropriate for each button
  */
