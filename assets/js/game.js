@@ -269,12 +269,36 @@ function checkForFullRow() {
 
         if (bitCount == COLS) {
             numOfLinesCleared++;
+            shiftRowsDown(row);
             redrawBoard();
         }
     }
     if (numOfLinesCleared > 0) {
         incrementScore(numOfLinesCleared);
         updateScore();
+    }
+}
+
+/**
+ * Clears specified row from board
+ * @param {int} rowIndex 
+ */
+function clearRowFromBoard(rowIndex) {
+    for (let y = 0; y < COLS; y++){
+        board.grid[rowIndex][y] = 0;
+    }
+}
+
+/**
+ * Shifts rows down from specified start point
+ * @param {int} rowIndex 
+ */
+function shiftRowsDown(rowIndex) {
+    clearRowFromBoard(rowIndex);
+    for (let y = rowIndex; y > 0; y--){
+        for (let x = 0; x < COLS; x++){
+            board.grid[y][x] = board.grid[y-1][x];
+        }
     }
 }
 
