@@ -131,6 +131,10 @@ h1 {
     text-align: center;
 }
 
+#main-menu-options {
+    height: 125px;
+}
+
 button.menu-item {
     display: block;
     width: 100%;
