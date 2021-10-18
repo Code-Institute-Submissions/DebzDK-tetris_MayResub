@@ -225,7 +225,7 @@ function drawBlock(clear) {
                     TET_GRID.clearRect(blockX + x - 0.1, blockY + y - 0.1, 1.2, 1.2);
                     setCurrentBlockColour();
                 } else {
-                    board.grid[blockY + y][blockX + x] = 1;
+                    board.grid[blockY + y][blockX + x] = COLOURS.indexOf(block.currentColour) + 1;
                     drawRect(blockX + x, blockY + y, 1, 1);
                 }
             }
@@ -245,6 +245,7 @@ function redrawBoard() {
             let bitInRow = row[x];
 
             if (bitInRow) {
+                TET_GRID.fillStyle = COLOURS[bitInRow - 1];
                 drawRect(x, y, 1, 1);
                 drawRect(x, y, 1, 1);
             }
