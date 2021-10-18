@@ -448,7 +448,7 @@ function setupListeners() {
             }
         });
     }
-    
+
     menuButtons[0].focus();
 }
 
@@ -581,6 +581,7 @@ function hideSecondaryMenu() {
     if (isPaused && isPlaying) {
         resumeGame();
     } else if (isGameOver) {
+        hideSecondaryMenuContent('status');
         showMainMenu();
         initialiseStats(true);
     } else if (!isPlaying) {
