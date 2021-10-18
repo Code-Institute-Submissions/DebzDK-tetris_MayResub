@@ -14,6 +14,10 @@ let timer;
 let gameSpeed = 1000;
 let statPlaceholder = '.........';
 
+let currentScore = 0;
+let baseScorePerLinesCleared = [40, 100, 300, 1200];
+let level = 0;
+
 let isPlaying = false;
 let isPaused = false;
 let isFalling = false;
@@ -85,18 +89,35 @@ function initialiseBoard() {
  */
 function initialiseStats(withPlaceholder) {
     if (withPlaceholder) {
+        updateScore(statPlaceholder);
         document.getElementById('score').textContent = statPlaceholder;
         document.getElementById('level').textContent = statPlaceholder;
     } else {
-        document.getElementById('score').textContent = 0;
-        document.getElementById('level').textContent = 1;
+        updateScore();
+        document.getElementById('level').textContent = level;
     }
 }
 
 /**
- * Clears tetris board
+ * Updates score value in stats box with current score
  */
-function clearBoard() {
+function updateScore() {
+    document.getElementById('score').textContent = currentScore;
+}
+
+/**
+ * Increments score variable
+ */
+function incrementScore(numOfLinesCleared) {
+    let baseScore = baseScorePerLinesCleared[numOfLinesCleared - 1] || baseScorePerLinesCleared[4];
+
+    currentScore += baseScore * (level + 1);
+}
+
+/**
+ * Clears canvas
+ */
+function clearCanvas() {
     TET_GRID.clearRect(0, 0, canvasWidth, canvasWidth);
 }
 
@@ -133,7 +154,7 @@ function endGame() {
     isGameOver = true;
     isPlaying = false;
 
-    clearBoard();
+    clearCanvas();
 
     // hides settings screen and shows game over message
     showMenuArea();
@@ -178,6 +199,18 @@ function setBlockStartPosition() {
 }
 
 /**
+ * Draws shape with given properties on canvas
+ * @param {int} x - x coord
+ * @param {int} y - y coord
+ * @param {int} width - width of rectangle
+ * @param {int} height - height of rectangle
+ */
+function drawRect(x, y, width, height) {
+    TET_GRID.fillRect(x, y, width, height);
+    TET_GRID.strokeRect(x, y, width, height);
+}
+
+/**
  * Draws current block object on canvas
  * @param {boolean} clear - if block should be cleared/removed from board
  */
@@ -192,11 +225,79 @@ function drawBlock(clear) {
                     TET_GRID.clearRect(blockX + x - 0.1, blockY + y - 0.1, 1.2, 1.2);
                     setCurrentBlockColour();
                 } else {
-                    board.grid[blockY + y][blockX + x] = 1;
-                    TET_GRID.fillRect(blockX + x, blockY + y, 1, 1);
-                    TET_GRID.strokeRect(blockX + x, blockY + y, 1, 1);
+                    board.grid[blockY + y][blockX + x] = COLOURS.indexOf(block.currentColour) + 1;
+                    drawRect(blockX + x, blockY + y, 1, 1);
                 }
             }
+        }
+    }
+}
+
+/**
+ * Clears and redraws canvas
+ */
+function redrawBoard() {
+    clearCanvas();
+
+    for (let y = 0; y < board.grid.length; y++) {
+        let row = board.grid[y];
+        for (let x = 0; x < row.length; x++) {
+            let bitInRow = row[x];
+
+            if (bitInRow) {
+                TET_GRID.fillStyle = COLOURS[bitInRow - 1];
+                drawRect(x, y, 1, 1);
+                drawRect(x, y, 1, 1);
+            }
+        }
+    }
+}
+
+/**
+ * Checks for full row in board, increments score and updates board if found
+ */
+function checkForFullRow() {
+    let numOfLinesCleared = 0;
+
+    for (let row = 0; row < ROWS; row++){
+        let bitCount = 0;
+        for (let col = 0; col < COLS; col++){
+            if (board.grid[row][col]){
+                bitCount++;
+            }
+        }
+
+        if (bitCount == COLS) {
+            numOfLinesCleared++;
+            shiftRowsDown(row);
+            redrawBoard();
+        }
+    }
+    if (numOfLinesCleared > 0) {
+        incrementScore(numOfLinesCleared);
+        updateScore();
+    }
+}
+
+/**
+ * Clears specified row from board
+ * @param {int} rowIndex 
+ */
+function clearRowFromBoard(rowIndex) {
+    for (let y = 0; y < COLS; y++){
+        board.grid[rowIndex][y] = 0;
+    }
+}
+
+/**
+ * Shifts rows down from specified start point
+ * @param {int} rowIndex 
+ */
+function shiftRowsDown(rowIndex) {
+    clearRowFromBoard(rowIndex);
+    for (let y = rowIndex; y > 0; y--){
+        for (let x = 0; x < COLS; x++){
+            board.grid[y][x] = board.grid[y-1][x];
         }
     }
 }
@@ -245,6 +346,7 @@ function moveDn() {
 
         drawBlock();
     } else {
+        checkForFullRow();
         setBlockStartPosition();
         setCurrentBlock();
     }
@@ -447,7 +549,7 @@ function setupListeners() {
                     hidePausedGameScreen();
                     break;
                 case 'restart-game':
-                    clearBoard();
+                    clearCanvas();
                     startGame();
                     break;
                 case 'settings':
