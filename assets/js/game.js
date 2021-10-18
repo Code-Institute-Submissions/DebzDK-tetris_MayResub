@@ -124,6 +124,7 @@ function endGame() {
     // set game flags
     isPaused = false;
     isGameOver = true;
+    isPlaying = false;
 
     // clear tetris grid
     TET_GRID.clearRect(0, 0, canvasWidth, canvasWidth);
