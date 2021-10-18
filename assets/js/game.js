@@ -94,6 +94,13 @@ function initialiseStats(withPlaceholder) {
 }
 
 /**
+ * Clears tetris board
+ */
+function clearBoard() {
+    TET_GRID.clearRect(0, 0, canvasWidth, canvasWidth);
+}
+
+/**
  * Starts the game
  */
 function startGame() {
@@ -126,8 +133,7 @@ function endGame() {
     isGameOver = true;
     isPlaying = false;
 
-    // clear tetris grid
-    TET_GRID.clearRect(0, 0, canvasWidth, canvasWidth);
+    clearBoard();
 
     // hides settings screen and shows game over message
     showMenuArea();
@@ -439,6 +445,10 @@ function setupListeners() {
                 case 'resume-game':
                     resumeGame();
                     hidePausedGameScreen();
+                    break;
+                case 'restart-game':
+                    clearBoard();
+                    startGame();
                     break;
                 case 'settings':
                     pauseGame();
