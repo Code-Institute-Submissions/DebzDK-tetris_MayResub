@@ -594,6 +594,7 @@ function hideSecondaryMenu() {
     } else if (isGameOver) {
         hideSecondaryMenuContent('status');
         showMainMenu();
+        cycleThroughMenu('#main-menu-options', 'game-play');
         initialiseStats(true);
     } else if (!isPlaying) {
         showMainMenu();
