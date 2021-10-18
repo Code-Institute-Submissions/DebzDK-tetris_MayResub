@@ -23,27 +23,35 @@ let isGameOver = false;
 //#region Game event listeners
 // Arrow key pressed
 document.addEventListener('keydown', function(e) {
-    switch (e.key) {
-        case 'ArrowLeft':
-            if (blockX + block.currentBlock.xOffset > 0) {
-                moveLf();
-            }
-            break;
-        case 'ArrowRight':
-            if (blockX + block.currentBlock.xOffset + block.currentBlock.width < canvasWidth) {
-                moveRg();
-            }
-            break;
-        case 'ArrowDown':
-            if (gameSpeed !== 100) {
-                setGameSpeed(100);
-            }
+    if (isPlaying) {
+        switch (e.key) {
+            case 'ArrowLeft':
+                if (blockX + block.currentBlock.xOffset > 0) {
+                    moveLf();
+                }
+                break;
+            case 'ArrowRight':
+                if (blockX + block.currentBlock.xOffset + block.currentBlock.width < canvasWidth) {
+                    moveRg();
+                }
+                break;
+            case 'ArrowDown':
+                if (gameSpeed !== 100) {
+                    setGameSpeed(100);
+                }
+        }
+    } else {
+        if (e.key === 'ArrowDown') {
+            cycleThroughMenu();
+        }
     }
 });
 
 // Arrow key released
 document.addEventListener('keyup', function(e) {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(1000)
+    if (isPlaying) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(1000)
+    }
 });
 //#endregion
 
@@ -399,6 +407,8 @@ function setGameStatus(status) {
 function setupListeners() {
     let menuButtons = document.getElementsByClassName('menu-item');
 
+    menuButtons[0].focus();
+
     for (let i = 0; i < menuButtons.length; i++) {
         menuButtons[i].addEventListener('click', function() {
             switch (this.id) {
@@ -424,7 +434,13 @@ function setupListeners() {
             }
         });
         menuButtons[i].addEventListener('mouseover', function() {
+            removeClassFromAllElementsWithClass('active', 'active');
             addClassToElementClassList(this.id, 'active');
+            this.focus();
+        });
+        menuButtons[i].addEventListener('mouseout', function() {
+            removeClassFromElementClassList(this.id, 'active');
+            this.blur();
         });
     }
 
@@ -453,14 +469,6 @@ function setupListeners() {
 }
 
 /**
- * Removes the 'active' class from a given element
- * @param {string} elementID - id of element to manipulate
- */
-function makeInactive(elementID) {
-    removeClassFromElementClassList(elementID, 'active');
-}
-
-/**
  * Sets an element's class
  * @param {string} id - id of element to access
  * @param {string} classNames - class(es) to set as an existing element's class
@@ -485,6 +493,19 @@ function setClassesOnElement(id, classNames) {
  */
 function removeClassFromElementClassList(id, className) {
     document.getElementById(id).classList.remove(className);
+}
+
+/**
+ * Removes class from elements with a specific class
+ * @param {string} elementClass - name of class to search for elements
+ * @param {string} classToRemove - name of class to remove from elements
+ */
+function removeClassFromAllElementsWithClass(elementClass, classToRemove) {
+    let elementsWithClass = document.getElementsByClassName(elementClass);
+
+    for (let i = 0; i < elementsWithClass.length; i++) {
+        elementsWithClass[i].classList.remove(classToRemove);
+    }
 }
 
 /**
@@ -585,6 +606,23 @@ function showSecondaryMenuContent(contentName) {
  */
 function hideSecondaryMenuContent(contentName) {
     setSecondaryMenuContentClass(contentName, 'hidden');
+}
+
+function cycleThroughMenu() {
+    let activeMenuItem = document.getElementsByClassName('active')[0];
+
+    if (activeMenuItem) {
+        removeClassFromElementClassList(activeMenuItem.id, 'active');
+        if (activeMenuItem.nextElementSibling) {
+            addClassToElementClassList(activeMenuItem.nextElementSibling.id, 'active');
+            activeMenuItem.nextElementSibling.focus();
+        }
+    }
+    if ((!activeMenuItem && !isPaused) || (activeMenuItem && !activeMenuItem.nextElementSibling)) {
+        let firstMenuButton = document.getElementById('game-play');
+        addClassToElementClassList(firstMenuButton.id, 'active');
+        firstMenuButton.focus();
+    }
 }
 
 /**
