@@ -45,6 +45,8 @@ document.addEventListener('keydown', function(e) {
             cycleThroughMenu();
         } else if (e.key === 'ArrowUp') {
             cycleThroughMenu(true);
+        } else if (e.key === 'Enter') {
+            processMenuOption(e.target.id);
         }
     }
 });
@@ -409,31 +411,9 @@ function setGameStatus(status) {
 function setupListeners() {
     let menuButtons = document.getElementsByClassName('menu-item');
 
-    menuButtons[0].focus();
-
     for (let i = 0; i < menuButtons.length; i++) {
         menuButtons[i].addEventListener('click', function() {
-            switch (this.id) {
-                case 'game-play':
-                    startGame();
-                    break;
-                case 'game-controls':
-                    setSecondaryMenuTitle('Controls');
-                    showSecondaryMenuContent('controls');
-                    showSecondaryMenu();
-                    break;
-                case 'game-credits':
-                    setSecondaryMenuTitle('Credits');
-                    showSecondaryMenuContent('credits');
-                    removeClassToElementClassList('exit-btn-blackout', 'hidden');
-                    showSecondaryMenu();
-                    break;
-                case 'quit-game':
-                    endGame();
-                    break;
-                default:
-                    return;
-            }
+            processMenuOption(this.id);
         });
         menuButtons[i].addEventListener('mouseover', function() {
             removeClassFromAllElementsWithClass('active', 'active');
@@ -468,6 +448,37 @@ function setupListeners() {
             }
         });
     }
+    
+    menuButtons[0].focus();
+}
+
+/**
+ * Carries out the tasks associated with the selected menu option
+ * @param {string} id - id of element
+ * @returns nothing - used to stop further
+ */
+function processMenuOption(id) {
+    switch (id) {
+        case 'game-play':
+            startGame();
+            break;
+        case 'game-controls':
+            setSecondaryMenuTitle('Controls');
+            showSecondaryMenuContent('controls');
+            showSecondaryMenu();
+            break;
+        case 'game-credits':
+            setSecondaryMenuTitle('Credits');
+            showSecondaryMenuContent('credits');
+            removeClassToElementClassList('exit-btn-blackout', 'hidden');
+            showSecondaryMenu();
+            break;
+        case 'quit-game':
+            endGame();
+            break;
+        default:
+            return;
+    }    
 }
 
 /**
