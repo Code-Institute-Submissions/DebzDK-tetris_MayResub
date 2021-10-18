@@ -43,6 +43,8 @@ document.addEventListener('keydown', function(e) {
     } else {
         if (e.key === 'ArrowDown') {
             cycleThroughMenu();
+        } else if (e.key === 'ArrowUp') {
+            cycleThroughMenu(true);
         }
     }
 });
@@ -608,20 +610,25 @@ function hideSecondaryMenuContent(contentName) {
     setSecondaryMenuContentClass(contentName, 'hidden');
 }
 
-function cycleThroughMenu() {
+function cycleThroughMenu(reverseOrder) {
     let activeMenuItem = document.getElementsByClassName('active')[0];
+    let siblingPropertyName = reverseOrder ? 'previousElementSibling' : 'nextElementSibling';
+    let hasSibling = false;
 
     if (activeMenuItem) {
         removeClassFromElementClassList(activeMenuItem.id, 'active');
-        if (activeMenuItem.nextElementSibling) {
-            addClassToElementClassList(activeMenuItem.nextElementSibling.id, 'active');
-            activeMenuItem.nextElementSibling.focus();
+        let menuItemToMakeActive = activeMenuItem[siblingPropertyName];
+        if (menuItemToMakeActive && menuItemToMakeActive.className === 'menu-item') {
+            addClassToElementClassList(activeMenuItem[siblingPropertyName].id, 'active');
+            activeMenuItem[siblingPropertyName].focus();
+            hasSibling = true;
         }
     }
-    if ((!activeMenuItem && !isPaused) || (activeMenuItem && !activeMenuItem.nextElementSibling)) {
-        let firstMenuButton = document.getElementById('game-play');
-        addClassToElementClassList(firstMenuButton.id, 'active');
-        firstMenuButton.focus();
+    if ((!activeMenuItem && !isPaused) || (activeMenuItem && !hasSibling)) {
+        let nextMenuButtonID = reverseOrder ? 'game-credits' : 'game-play';
+        let nextMenuButton = document.getElementById(nextMenuButtonID);
+        addClassToElementClassList(nextMenuButton.id, 'active');
+        nextMenuButton.focus();
     }
 }
 
