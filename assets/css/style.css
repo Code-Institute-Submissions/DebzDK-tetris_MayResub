@@ -143,18 +143,18 @@ button.menu-item {
     cursor: pointer;
 }
 
-.menu-item:before {
+.menu-item.active:before {
     content: '\2BC8';
     margin-right: 5px;
     transition: 0.5s all;
     animation: blink 1s linear infinite;
 }
 
-.menu-item:hover:before {
+.menu-item.active:hover:before {
     transform: rotate(90deg);
 }
 
-.menu-item:hover {
+.menu-item:hover, .menu-item.active {
     display: flex;
     background-color: white;
     color: #000;

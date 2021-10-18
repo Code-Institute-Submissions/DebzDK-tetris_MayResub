@@ -423,6 +423,9 @@ function setupListeners() {
                     return;
             }
         });
+        menuButtons[i].addEventListener('mouseover', function() {
+            addClassToElementClassList(this.id, 'active');
+        });
     }
 
     let gameControlButtons = document.getElementsByClassName('control-btn');
@@ -447,6 +450,14 @@ function setupListeners() {
             }
         });
     }
+}
+
+/**
+ * Removes the 'active' class from a given element
+ * @param {string} elementID - id of element to manipulate
+ */
+function makeInactive(elementID) {
+    removeClassFromElementClassList(elementID, 'active');
 }
 
 /**
