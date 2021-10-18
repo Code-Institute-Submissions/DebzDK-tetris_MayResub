@@ -42,11 +42,6 @@ button {
     background-color: #000;
     color: #FFF;
 }
-
-button:hover {
-    background-color: #FFF;
-    color: #000;
-}
 /*#endregion */
 
 /*#region Initial game state*/
@@ -131,6 +126,10 @@ h1 {
     text-align: center;
 }
 
+#main-menu-options {
+    height: 125px;
+}
+
 button.menu-item {
     display: block;
     width: 100%;
@@ -143,18 +142,13 @@ button.menu-item {
     cursor: pointer;
 }
 
-.menu-item:before {
+.menu-item.active:before {
     content: '\2BC8';
-    margin-right: 5px;
-    transition: 0.5s all;
+    margin: 0 5px;
     animation: blink 1s linear infinite;
 }
 
-.menu-item:hover:before {
-    transform: rotate(90deg);
-}
-
-.menu-item:hover {
+.menu-item.active {
     display: flex;
     background-color: white;
     color: #000;
@@ -191,6 +185,11 @@ button.menu-item {
     text-align: center;
     margin-right: 5px;
     cursor: pointer;
+}
+
+.control-btn:hover {
+    background-color: #FFF;
+    color: #000;
 }
 /*#endregion*/
 

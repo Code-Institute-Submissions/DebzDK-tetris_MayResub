@@ -39,10 +39,10 @@
                 <div id="main-menu">
                     <h1>Tetris</h1>
 
-                    <div class="bordered-box">
+                    <div id="main-menu-options" class="bordered-box">
                         <h2>Menu</h2>
                         <br>
-                        <button id="game-play" class="menu-item">Play Game</button>
+                        <button id="game-play" class="menu-item active">Play Game</button>
                         <button id="game-controls" class="menu-item">Controls</button>
                         <button id="game-credits" class="menu-item">Credits</button>
                     </div>
@@ -79,6 +79,21 @@
                             Thanks for playing!
                         </div>
                     </div>
+
+                    <!-- Game status -->
+                    <div id="secondary-menu-status-content" class="hidden">
+                        <p><strong>GAME <span id="game-status"></span></strong></p>
+                        <br>
+                    </div>
+
+                    <!-- Game settings -->
+                    <div id="secondary-menu-settings-content" class="hidden">
+                        <br>
+                        <button id="quit-game" class="menu-item active hidden">Quit</button>
+                        <br>
+                        <br>
+                    </div>
+
                     <br>
                     <button id="exit-btn" class="bordered-box control-btn" onclick="hideSecondaryMenu()">Exit</button>
                     <div id="exit-btn-blackout"></div>
@@ -105,6 +120,9 @@
             <div id="controls">
                 <button id="pause-game" class="bordered-box control-btn hidden">
                     <i class="fas fa-pause"></i>
+                </button>
+                <button id="resume-game" class="bordered-box control-btn hidden">
+                    <i class="fas fa-play"></i>
                 </button>
                 <button id="restart-game" class="bordered-box control-btn hidden">
                     <i class="fas fa-redo-alt"></i>

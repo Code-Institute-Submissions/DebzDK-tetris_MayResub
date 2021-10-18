@@ -1,4 +1,4 @@
-// Global variables
+//#region Global variables
 const CANVAS = document.getElementById('tetris');
 const TET_GRID = CANVAS.getContext('2d');
 
@@ -12,41 +12,54 @@ let blockY;
 
 let timer;
 let gameSpeed = 1000;
+let statPlaceholder = '.........';
 
 let isPlaying = false;
 let isPaused = false;
 let isFalling = false;
 let isGameOver = false;
+//#endregion
 
 //#region Game event listeners
 // Arrow key pressed
 document.addEventListener('keydown', function(e) {
-    switch (e.key) {
-        case 'ArrowLeft':
-            if (blockX + block.currentBlock.xOffset > 0) {
-                moveLf();
-            }
-            break;
-        case 'ArrowRight':
-            if (blockX + block.currentBlock.xOffset + block.currentBlock.width < canvasWidth) {
-                moveRg();
-            }
-            break;
-        case 'ArrowDown':
-            if (gameSpeed !== 100) {
-                setGameSpeed(100);
-            }
+    if (isPlaying) {
+        switch (e.key) {
+            case 'ArrowLeft':
+                if (blockX + block.currentBlock.xOffset > 0) {
+                    moveLf();
+                }
+                break;
+            case 'ArrowRight':
+                if (blockX + block.currentBlock.xOffset + block.currentBlock.width < canvasWidth) {
+                    moveRg();
+                }
+                break;
+            case 'ArrowDown':
+                if (gameSpeed !== 100) {
+                    setGameSpeed(100);
+                }
+        }
+    } else {
+        if (e.key === 'ArrowDown') {
+            cycleThroughMenu('#main-menu-options', 'game-play');
+        } else if (e.key === 'ArrowUp') {
+            cycleThroughMenu('#main-menu-options', 'game-credits', true);
+        } else if (e.key === 'Enter') {
+            processMenuOption(e.target.id);
+        }
     }
 });
 
 // Arrow key released
 document.addEventListener('keyup', function(e) {
-    if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(1000)
+    if (isPlaying) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(1000)
+    }
 });
 //#endregion
 
 //#region Game functions
-
 /**
  * Initialises the game board
  */
@@ -67,18 +80,36 @@ function initialiseBoard() {
 }
 
 /**
- * Initialises game stats
+ * Initialises the game stats
+ * @param {boolean} withPlaceholder - if stats should be initialised with placeholder value
  */
-function initialiseStats() {
-    document.getElementById('score').textContent = 0;
-    document.getElementById('level').textContent = 1;
+function initialiseStats(withPlaceholder) {
+    if (withPlaceholder) {
+        document.getElementById('score').textContent = statPlaceholder;
+        document.getElementById('level').textContent = statPlaceholder;
+    } else {
+        document.getElementById('score').textContent = 0;
+        document.getElementById('level').textContent = 1;
+    }
+}
+
+/**
+ * Clears tetris board
+ */
+function clearBoard() {
+    TET_GRID.clearRect(0, 0, canvasWidth, canvasWidth);
 }
 
 /**
  * Starts the game
  */
 function startGame() {
-    hideMainMenu();
+    isPlaying = true;
+    isGameOver = false;
+
+    hideMenuAreas();
+    hideSecondaryMenu();
+    showGameControls();
 
     initialiseBoard();
     initialiseStats();
@@ -91,6 +122,26 @@ function startGame() {
     drawBlock();
 
     timer = setInterval(progressGame, gameSpeed);
+}
+
+/**
+ * Ends the game
+ */
+function endGame() {
+    // set game flags
+    isPaused = false;
+    isGameOver = true;
+    isPlaying = false;
+
+    clearBoard();
+
+    // hides settings screen and shows game over message
+    showMenuArea();
+    setSecondaryMenuTitle('');
+    showSecondaryMenuContent('status');
+    hideSecondaryMenuContent('settings');
+    setGameStatus('over');
+    showSecondaryMenu();
 }
 
 /**
@@ -128,6 +179,7 @@ function setBlockStartPosition() {
 
 /**
  * Draws current block object on canvas
+ * @param {boolean} clear - if block should be cleared/removed from board
  */
 function drawBlock(clear) {
     for (let y = 0; y < block.currentBlock.shape.length; y++) {
@@ -290,10 +342,76 @@ function moveLf() {
 function progressGame() {
     moveDn();
 }
+
+/**
+ * Updates pause game control and menu display
+ */
+function showPausedGameScreen() {
+    removeClassFromElementClassList('resume-game', 'hidden');
+    addClassToElementClassList('pause-game', 'hidden');
+    addClassToElementClassList('exit-btn', 'hidden');
+    addClassToElementClassList('exit-btn-blackout', 'hidden');
+    removeClassFromElementClassList('menu', 'hidden');
+    
+    showSecondaryMenu();
+    showSecondaryMenuContent('status');
+    setGameStatus('paused');
+}
+
+/**
+ * Updates resume game control and menu display
+ */
+function hidePausedGameScreen() {
+    hideSecondaryMenu();
+    addClassToElementClassList('resume-game', 'hidden');
+    removeClassFromElementClassList('pause-game', 'hidden');
+    removeClassFromElementClassList('exit-btn', 'hidden');
+}
+
+/**
+ * Pauses game 
+ */
+function pauseGame() {
+    clearInterval(timer);
+    isPaused = true;
+}
+
+/**
+ * Resumes game
+ */
+function resumeGame() {
+    timer = setInterval(progressGame, gameSpeed);
+    isPaused = false;
+}
+
+/**
+ * Displays settings menu
+ */
+function displaySettings() {
+    hideMainMenu();
+    showMenuArea();
+    setSecondaryMenuTitle('Settings');
+    showSecondaryMenuContent('settings');
+
+    if (isPlaying) {
+        removeClassFromElementClassList('quit-game', 'hidden');
+    } else {
+        addClassToElementClassList('quit-game', 'hidden');
+    }
+
+    showSecondaryMenu();
+}
+
+/**
+ * Sets the game status in caps
+ * @param {string} status - the current status of the game
+ */
+function setGameStatus(status) {
+    document.getElementById('game-status').textContent = status.toUpperCase();
+}
 //#endregion
 
 //#region Menu functions
-
 /**
  * Adds listeners to all of the menu buttons, executing as appropriate for each button
  */
@@ -302,47 +420,185 @@ function setupListeners() {
 
     for (let i = 0; i < menuButtons.length; i++) {
         menuButtons[i].addEventListener('click', function() {
+            processMenuOption(this.id);
+        });
+        menuButtons[i].addEventListener('mouseover', function() {
+            removeClassFromAllElementsWithClass('#main-menu-options .active', 'active');
+            addClassToElementClassList(this.id, 'active');
+            this.focus();
+        });
+        menuButtons[i].addEventListener('mouseout', function() {
+            removeClassFromElementClassList(this.id, 'active');
+            this.blur();
+        });
+    }
+
+    let gameControlButtons = document.getElementsByClassName('control-btn');
+    
+    for (let i = 0; i < gameControlButtons.length; i++) {
+        gameControlButtons[i].addEventListener('click', function() {
             switch (this.id) {
-                case 'game-play':
-                    startGame();
-                case 'game-controls':
-                    setSecondaryMenuTitle('Controls');
-                    showSecondaryMenuContent('controls');
-                    showSecondaryMenu();
+                case 'pause-game':
+                    pauseGame();
+                    showPausedGameScreen();
                     break;
-                case 'game-credits':
-                    setSecondaryMenuTitle('Credits');
-                    showSecondaryMenuContent('credits');
-                    showSecondaryMenu();
+                case 'resume-game':
+                    resumeGame();
+                    hidePausedGameScreen();
+                    break;
+                case 'restart-game':
+                    clearBoard();
+                    startGame();
+                    break;
+                case 'settings':
+                    pauseGame();
+                    displaySettings();
                     break;
                 default:
                     return;
             }
         });
     }
+
+    menuButtons[0].focus();
 }
 
 /**
- * Hides the main menu
+ * Carries out the tasks associated with the selected menu option
+ * @param {string} id - id of element
+ * @returns nothing - used to stop further
  */
- function hideMainMenu() {
-    document.getElementById('menu').className = 'hidden';
+function processMenuOption(id) {
+    switch (id) {
+        case 'game-play':
+            startGame();
+            break;
+        case 'game-controls':
+            setSecondaryMenuTitle('Controls');
+            showSecondaryMenuContent('controls');
+            showSecondaryMenu();
+            break;
+        case 'game-credits':
+            setSecondaryMenuTitle('Credits');
+            showSecondaryMenuContent('credits');
+            removeClassToElementClassList('exit-btn-blackout', 'hidden');
+            showSecondaryMenu();
+            break;
+        case 'quit-game':
+            endGame();
+            break;
+        default:
+            return;
+    }    
+}
+
+/**
+ * Sets an element's class
+ * @param {string} id - id of element to access
+ * @param {string} classNames - class(es) to set as an existing element's class
+ */
+function setClassesOnElement(id, classNames) {
+    document.getElementById(id).className = classNames;
+}
+
+/**
+ * Adds a class to a given element's class list
+ * @param {string} id - id of element to access
+ * @param {string} className - class to append to existing element classes
+ */
+ function addClassToElementClassList(id, className) {
+    document.getElementById(id).classList.add(className);
+}
+
+/**
+ * Removes a class from a given element's class list
+ * @param {string} id - id of element to access
+ * @param {string} className - class to append to existing element classes
+ */
+function removeClassFromElementClassList(id, className) {
+    document.getElementById(id).classList.remove(className);
+}
+
+/**
+ * Removes class from elements with a specific class
+ * @param {string} elementClass - name of class to search for elements
+ * @param {string} classToRemove - name of class to remove from elements
+ */
+function removeClassFromAllElementsWithClass(elementClass, classToRemove) {
+    let elementsWithClass = document.querySelectorAll(elementClass);
+
+    for (let i = 0; i < elementsWithClass.length; i++) {
+        elementsWithClass[i].classList.remove(classToRemove);
+    }
+}
+
+/**
+ * Assigns style rule to element
+ * @param {string} id - id of desired element to style
+ * @param {string} prop - name of style property to modify
+ * @param {string} value - value of style property to set
+ */
+function setStyleOnElement(id, prop, value) {
+    document.getElementById(id).style[prop] = value;
+}
+
+/**
+ * Displays main menu
+ */
+function showMainMenu() {
+    setStyleOnElement('main-menu', 'visibility', 'visible');
+}
+
+/**
+ * Hides main menu
+ */
+function hideMainMenu() {
+    setStyleOnElement('main-menu', 'visibility', 'hidden');
+}
+
+/**
+ * Displays main and secondary menus
+ */
+function showMenuArea() {
+    removeClassFromElementClassList('menu', 'hidden');
+}
+
+/**
+ * Hides the main and secondary menus
+ */
+ function hideMenuAreas() {
+    addClassToElementClassList('menu', 'hidden');
 }
 
 /**
  * Displays the secondary menu
  */
 function showSecondaryMenu() {
-    document.getElementById('secondary-menu').className = 'bordered-box';
+    removeClassFromElementClassList('secondary-menu-title', 'hidden');
+    setClassesOnElement('secondary-menu', 'bordered-box');
 }
 
 /**
  * Hides the secondary menu and the potential contents being displayed
  */
 function hideSecondaryMenu() {
-    document.getElementById('secondary-menu').className = 'bordered-box hidden';
+    addClassToElementClassList('secondary-menu', 'hidden');
+    addClassToElementClassList('secondary-menu-title', 'hidden');
     hideSecondaryMenuContent('controls');
     hideSecondaryMenuContent('credits');
+    addClassToElementClassList('exit-btn-blackout', 'hidden');
+    setSecondaryMenuTitle('');
+
+    if (isPaused && isPlaying) {
+        resumeGame();
+    } else if (isGameOver) {
+        hideSecondaryMenuContent('status');
+        showMainMenu();
+        cycleThroughMenu('#main-menu-options', 'game-play');
+        initialiseStats(true);
+    } else if (!isPlaying) {
+        showMainMenu();
+    }
 }
 
 /**
@@ -359,7 +615,7 @@ function setSecondaryMenuTitle(title) {
  * @param {string} className - The name of the class to set on the element
  */
 function setSecondaryMenuContentClass(contentName, className) {
-    document.getElementById('secondary-menu-' + contentName + '-content').className = className;
+    setClassesOnElement('secondary-menu-' + contentName + '-content', className);
 }
 
 /**
@@ -376,5 +632,40 @@ function showSecondaryMenuContent(contentName) {
  */
 function hideSecondaryMenuContent(contentName) {
     setSecondaryMenuContentClass(contentName, 'hidden');
+}
+
+/**
+ * Manipulates DOM to give appearance of cycling through menu options
+ * @param {string} menuOptionsContainerID - id of element containing menu options
+ * @param {*} defaultButtonID - id of button to default to if none are active or end of menu is reached
+ * @param {*} reverseOrder - if menu should be traversed in reverse order
+ */
+function cycleThroughMenu(menuOptionsContainerID, defaultButtonID, reverseOrder) {
+    let activeMenuItem = document.querySelectorAll(menuOptionsContainerID + ' .active')[0];
+    let siblingPropertyName = reverseOrder ? 'previousElementSibling' : 'nextElementSibling';
+    let hasSibling = false;
+
+    if (activeMenuItem) {
+        removeClassFromElementClassList(activeMenuItem.id, 'active');
+        let menuItemToMakeActive = activeMenuItem[siblingPropertyName];
+        if (menuItemToMakeActive && menuItemToMakeActive.className === 'menu-item') {
+            addClassToElementClassList(activeMenuItem[siblingPropertyName].id, 'active');
+            activeMenuItem[siblingPropertyName].focus();
+            hasSibling = true;
+        }
+    }
+    if ((!activeMenuItem && !isPaused) || (activeMenuItem && !hasSibling)) {
+        let nextMenuButton = document.getElementById(defaultButtonID);
+        addClassToElementClassList(nextMenuButton.id, 'active');
+        nextMenuButton.focus();
+    }
+}
+
+/**
+ * Displays game controls
+ */
+function showGameControls() {
+    removeClassFromElementClassList('pause-game', 'hidden');
+    removeClassFromElementClassList('restart-game', 'hidden');
 }
 //#endregion
