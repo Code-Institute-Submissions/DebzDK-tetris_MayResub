@@ -481,7 +481,7 @@ function processMenuOption(id) {
         case 'game-credits':
             setSecondaryMenuTitle('Credits');
             showSecondaryMenuContent('credits');
-            removeClassToElementClassList('exit-btn-blackout', 'hidden');
+            removeClassFromElementClassList('exit-btn-blackout', 'hidden');
             showSecondaryMenu();
             break;
         case 'quit-game':
