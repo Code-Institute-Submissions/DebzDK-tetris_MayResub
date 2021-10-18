@@ -42,9 +42,9 @@ document.addEventListener('keydown', function(e) {
         }
     } else {
         if (e.key === 'ArrowDown') {
-            cycleThroughMenu();
+            cycleThroughMenu('#main-menu-options', 'game-play');
         } else if (e.key === 'ArrowUp') {
-            cycleThroughMenu(true);
+            cycleThroughMenu('#main-menu-options', 'game-credits', true);
         } else if (e.key === 'Enter') {
             processMenuOption(e.target.id);
         }
@@ -633,8 +633,14 @@ function hideSecondaryMenuContent(contentName) {
     setSecondaryMenuContentClass(contentName, 'hidden');
 }
 
-function cycleThroughMenu(reverseOrder) {
-    let activeMenuItem = document.getElementsByClassName('active')[0];
+/**
+ * Manipulates DOM to give appearance of cycling through menu options
+ * @param {string} menuOptionsContainerID - id of element containing menu options
+ * @param {*} defaultButtonID - id of button to default to if none are active or end of menu is reached
+ * @param {*} reverseOrder - if menu should be traversed in reverse order
+ */
+function cycleThroughMenu(menuOptionsContainerID, defaultButtonID, reverseOrder) {
+    let activeMenuItem = document.querySelectorAll(menuOptionsContainerID + ' .active')[0];
     let siblingPropertyName = reverseOrder ? 'previousElementSibling' : 'nextElementSibling';
     let hasSibling = false;
 
@@ -648,8 +654,7 @@ function cycleThroughMenu(reverseOrder) {
         }
     }
     if ((!activeMenuItem && !isPaused) || (activeMenuItem && !hasSibling)) {
-        let nextMenuButtonID = reverseOrder ? 'game-credits' : 'game-play';
-        let nextMenuButton = document.getElementById(nextMenuButtonID);
+        let nextMenuButton = document.getElementById(defaultButtonID);
         addClassToElementClassList(nextMenuButton.id, 'active');
         nextMenuButton.focus();
     }
