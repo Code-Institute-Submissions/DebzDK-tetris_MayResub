@@ -423,7 +423,7 @@ function setupListeners() {
             processMenuOption(this.id);
         });
         menuButtons[i].addEventListener('mouseover', function() {
-            removeClassFromAllElementsWithClass('active', 'active');
+            removeClassFromAllElementsWithClass('#main-menu-options .active', 'active');
             addClassToElementClassList(this.id, 'active');
             this.focus();
         });
@@ -525,7 +525,7 @@ function removeClassFromElementClassList(id, className) {
  * @param {string} classToRemove - name of class to remove from elements
  */
 function removeClassFromAllElementsWithClass(elementClass, classToRemove) {
-    let elementsWithClass = document.getElementsByClassName(elementClass);
+    let elementsWithClass = document.querySelectorAll(elementClass);
 
     for (let i = 0; i < elementsWithClass.length; i++) {
         elementsWithClass[i].classList.remove(classToRemove);
