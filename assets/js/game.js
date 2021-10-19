@@ -144,12 +144,13 @@ function startGame() {
  * Ends the game
  */
 function endGame() {
+    clearInterval(timer);
+    clearCanvas();
+
     // set game flags
     isPaused = false;
     isGameOver = true;
     isPlaying = false;
-
-    clearCanvas();
 
     // hides settings screen and shows game over message
     showMenuArea();
