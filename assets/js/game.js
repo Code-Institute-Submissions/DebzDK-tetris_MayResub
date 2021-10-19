@@ -135,12 +135,7 @@ function startGame() {
     initialiseBoard();
     initialiseStats();
 
-    setCurrentBlock();
-    
-    setBlockStartPosition();
-
-    setCurrentBlockColour();
-    drawBlock();
+    placeNewBlockOnBoard();
 
     timer = setInterval(progressGame, gameSpeed);
 }
@@ -166,6 +161,22 @@ function endGame() {
 }
 
 /**
+ * Checks if the game should be over based on the state of the Tetris board
+ * @returns true if there's a block in the center of the board or if the current block couldn't be moved if placed
+ */
+function checkGameOver() {
+    let lastRowToCheck = block.currentBlock.height + block.currentBlock.yOffset;
+    for (let x = 0; x < block.currentBlock.shape.length; x++) {
+        for (let y = 0; y < lastRowToCheck; y++) {
+            if (block.currentBlock.shape[x][y] && board.grid[y][blockX + x]) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/**
  * Sets speed of movement of tetris block
  * @param {int} amountInMs - time in ms
  */
@@ -173,6 +184,19 @@ function endGame() {
     clearInterval(timer);
     gameSpeed = amountInMs;
     timer = setInterval(progressGame, amountInMs);
+}
+
+/**
+ * Draws new block at the top of the board if placing it won't result in 'Game Over'
+ */
+function placeNewBlockOnBoard() {
+    setCurrentBlock();
+    setCurrentBlockColour();
+    setBlockStartPosition();
+    isGameOver = checkGameOver();
+    if (!isGameOver) {
+        drawBlock();
+    }
 }
 
 /**
@@ -347,8 +371,7 @@ function moveDn() {
         drawBlock();
     } else {
         checkForFullRow();
-        setBlockStartPosition();
-        setCurrentBlock();
+        placeNewBlockOnBoard();
     }
 }
 
@@ -442,7 +465,11 @@ function moveLf() {
  * Timer function for progressing or ending a game
  */
 function progressGame() {
-    moveDn();
+    if (isGameOver) {
+        endGame();
+    } else {
+        moveDn();
+    }
 }
 
 /**
