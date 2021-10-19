@@ -129,6 +129,7 @@ function startGame() {
     isGameOver = false;
 
     hideMenuAreas();
+    hideMainMenu();
     hideSecondaryMenu();
     showGameControls();
 
