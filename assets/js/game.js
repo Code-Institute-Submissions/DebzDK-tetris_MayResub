@@ -218,7 +218,7 @@ function setCurrentBlockColour() {
  * Assigns values to the variables for the current block's (X,Y) pos
  */
 function setBlockStartPosition() {
-    blockX = canvasWidth / (2 * BLOCK_SIZE);
+    blockX = (canvasWidth / (2 * BLOCK_SIZE)) - block.currentBlock.xOffset;
     blockY = 0;
 }
 
