@@ -826,7 +826,7 @@ function toggleSoundSetting() {
  */
 function setAudio() {
     if (!musicPlayer) {
-        musicPlayer = new Audio('../sounds/tetris-gameboy-02.mp3');
+        musicPlayer = new Audio('../assets/sounds/tetris-gameboy-02.mp3');
     }
 }
 
