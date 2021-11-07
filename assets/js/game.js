@@ -484,6 +484,7 @@ function progressGame() {
 function showPausedGameScreen() {
     removeClassFromElementClassList('resume-game', 'hidden');
     addClassToElementClassList('pause-game', 'hidden');
+    addClassToElementClassList('game-sounds', 'hidden');
     addClassToElementClassList('exit-btn', 'hidden');
     addClassToElementClassList('exit-btn-blackout', 'hidden');
     removeClassFromElementClassList('menu', 'hidden');
@@ -500,6 +501,7 @@ function hidePausedGameScreen() {
     hideSecondaryMenu();
     addClassToElementClassList('resume-game', 'hidden');
     removeClassFromElementClassList('pause-game', 'hidden');
+    removeClassFromElementClassList('game-sounds', 'hidden');
     removeClassFromElementClassList('exit-btn', 'hidden');
 }
 
