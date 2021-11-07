@@ -11,6 +11,7 @@ let blockX;
 let blockY;
 
 let timer;
+let musicPlayer;
 let gameSpeed = 1000;
 let statPlaceholder = '.........';
 
