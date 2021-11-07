@@ -814,6 +814,7 @@ function toggleSoundSetting() {
         pauseAudio();
     } else {
         isSoundOn = true;
+        setAudio();
         playAudio();
     }
     
@@ -824,7 +825,9 @@ function toggleSoundSetting() {
  * Loads the audio player
  */
 function setAudio() {
-    musicPlayer = new Audio('../sounds/tetris-gameboy-02.mp3');
+    if (!musicPlayer) {
+        musicPlayer = new Audio('../sounds/tetris-gameboy-02.mp3');
+    }
 }
 
 /**
