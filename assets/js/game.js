@@ -140,6 +140,10 @@ function startGame() {
 
     placeNewBlockOnBoard();
 
+    if (isSoundOn) {
+        playAudio();
+    }
+
     timer = setInterval(progressGame, gameSpeed);
 }
 
@@ -811,11 +815,12 @@ function showGameControls() {
 function toggleSoundSetting() {
     if (isSoundOn) {
         isSoundOn = false;
-        pauseAudio();
+        if (isPlaying) {
+            pauseAudio();
+        }
     } else {
         isSoundOn = true;
         setAudio();
-        playAudio();
     }
     
     document.getElementById('sound-setting').textContent = isSoundOn ? 'ON' : 'OFF';
