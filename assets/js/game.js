@@ -22,6 +22,7 @@ let isPlaying = false;
 let isPaused = false;
 let isFalling = false;
 let isGameOver = false;
+let isSoundOn = false;
 //#endregion
 
 //#region Game event listeners
@@ -615,6 +616,9 @@ function processMenuOption(id) {
             removeClassFromElementClassList('exit-btn-blackout', 'hidden');
             showSecondaryMenu();
             break;
+        case 'game-sounds':
+            toggleSoundSetting();
+            break;
         case 'quit-game':
             endGame();
             break;
@@ -798,5 +802,41 @@ function cycleThroughMenu(menuOptionsContainerID, defaultButtonID, reverseOrder)
 function showGameControls() {
     removeClassFromElementClassList('pause-game', 'hidden');
     removeClassFromElementClassList('restart-game', 'hidden');
+}
+
+/**
+ * Toggles sound setting between 'ON' and 'OFF'
+ */
+function toggleSoundSetting() {
+    if (isSoundOn) {
+        isSoundOn = false;
+        pauseAudio();
+    } else {
+        isSoundOn = true;
+        playAudio();
+    }
+    
+    document.getElementById('sound-setting').textContent = isSoundOn ? 'ON' : 'OFF';
+}
+
+/**
+ * Loads the audio player
+ */
+function setAudio() {
+    musicPlayer = new Audio('../sounds/tetris-gameboy-02.mp3');
+}
+
+/**
+ * Starts the audio player
+ */
+function playAudio() {
+    musicPlayer.play();
+}
+
+/**
+ * Pauses the audio player
+ */
+function pauseAudio() {
+    musicPlayer.pause();
 }
 //#endregion
