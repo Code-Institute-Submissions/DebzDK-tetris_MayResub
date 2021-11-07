@@ -140,9 +140,7 @@ function startGame() {
 
     placeNewBlockOnBoard();
 
-    if (isSoundOn) {
-        playAudio();
-    }
+    playAudio();
 
     timer = setInterval(progressGame, gameSpeed);
 }
@@ -509,6 +507,7 @@ function hidePausedGameScreen() {
  * Pauses game 
  */
 function pauseGame() {
+    pauseAudio();
     clearInterval(timer);
     isPaused = true;
 }
@@ -517,6 +516,7 @@ function pauseGame() {
  * Resumes game
  */
 function resumeGame() {
+    playAudio();
     timer = setInterval(progressGame, gameSpeed);
     isPaused = false;
 }
@@ -839,13 +839,17 @@ function setAudio() {
  * Starts the audio player
  */
 function playAudio() {
-    musicPlayer.play();
+    if (isSoundOn) {
+        musicPlayer.play();
+    }
 }
 
 /**
  * Pauses the audio player
  */
 function pauseAudio() {
-    musicPlayer.pause();
+    if (isSoundOn) {
+        musicPlayer.pause();
+    }
 }
 //#endregion
