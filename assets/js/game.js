@@ -157,6 +157,9 @@ function endGame() {
     isGameOver = true;
     isPlaying = false;
 
+    setAudio('../assets/sounds/game-over.mp3');
+    playAudio();
+
     // hides settings screen and shows game over message
     showMenuArea();
     setSecondaryMenuTitle('');
@@ -822,7 +825,7 @@ function toggleSoundSetting() {
         }
     } else {
         isSoundOn = true;
-        setAudio();
+        setAudio('../assets/sounds/tetris-gameboy-02.mp3');
     }
     
     document.getElementById('sound-setting').textContent = isSoundOn ? 'ON' : 'OFF';
@@ -831,9 +834,9 @@ function toggleSoundSetting() {
 /**
  * Loads the audio player
  */
-function setAudio() {
-    if (!musicPlayer) {
-        musicPlayer = new Audio('../assets/sounds/tetris-gameboy-02.mp3');
+function setAudio(trackPath) {
+    if (!musicPlayer || musicPlayer.outerHTML.indexOf(trackPath) === -1) {
+        musicPlayer = new Audio(trackPath);
     }
 }
 
