@@ -163,5 +163,12 @@ class Block {
             return this.pluck(value, arr);
         }).bind(this));
     }
+
+    /**
+     * Rotates the current tetris block clockwise and updates width, height, and offset properties
+     */
+    rotateBlockClockwise() {
+        this.currentBlock.shape = this.composeRotatedShape(this.flip.bind(this), this.reverse.bind(this))(this.currentBlock.shape);
+    }
     //#endregion
 }
