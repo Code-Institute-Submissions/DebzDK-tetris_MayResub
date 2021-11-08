@@ -546,9 +546,9 @@ function moveLf() {
  * Timer function for progressing or ending a game
  */
 function progressGame() {
-    if (isGameOver) {
+    if (isGameOver && isPlaying) {
         endGame();
-    } else {
+    } else if (isPlaying && !isPaused) {
         moveDn();
     }
 }
