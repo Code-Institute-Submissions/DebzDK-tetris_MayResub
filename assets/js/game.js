@@ -26,6 +26,7 @@ let gameOverTrackPath = soundFolderPath + 'game-over.mp3';
 let currentScore = 0;
 let baseScorePerLinesCleared = [40, 100, 300, 1200];
 let level = 0;
+let scoreKey = 'port-2-tet-highScores';
 
 let isPlaying = false;
 let isPaused = false;
@@ -138,6 +139,60 @@ function incrementScore(numOfLinesCleared) {
     let baseScore = baseScorePerLinesCleared[numOfLinesCleared - 1] || baseScorePerLinesCleared[4];
 
     currentScore += baseScore * (level + 1);
+}
+
+/**
+ * Stores score as highscore in local storage to persist value
+ */
+function storeHighScore(playerName) {
+    if (currentScore > 0) {
+        let leaderBoard = getHighScores();
+        let playerEntryIndex = getIndexOfHighScoreForPlayer(playerName);
+
+        if (playerEntryIndex > -1) {
+            let playerEntry = leaderBoard[playerEntryIndex];
+            if (playerEntry.score < currentScore) {
+                leaderBoard[playerEntryIndex].score = currentScore;
+            }
+        } else {
+            leaderBoard.push({ player: playerName, score: currentScore });
+        }
+
+        localStorage.setItem(scoreKey, JSON.stringify(leaderBoard));
+    }
+}
+
+/**
+ * Retrieves highscores from local storage
+ * @returns array - array of objects containing high score information
+ */
+function getHighScores() {
+    let highScores = localStorage.getItem(scoreKey);
+    if (highScores) {
+        highScores = JSON.parse(highScores);
+    } else {
+        highScores = [];
+    }
+
+    return highScores;
+}
+
+/**
+ * Retrieves the index of a given player's highscore entry
+ * @param {string} playerName - Name of player
+ * @returns int - index of a given player's highscore entry or -1 if it doesn't exist
+ */
+function getIndexOfHighScoreForPlayer(playerName) {
+    let highScores = getHighScores();
+
+    for (let i = 0; i < highScores.length; i++) {
+        let userScorePair = highScores[i];
+        if (userScorePair.player === playerName) {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 /**
