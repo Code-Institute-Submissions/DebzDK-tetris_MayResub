@@ -155,8 +155,33 @@ function storeHighScore() {
             if (playerEntry.score < currentScore) {
                 leaderBoard[playerEntryIndex].score = currentScore;
             }
+
+            let indexToInsertInto = playerEntryIndex;
+            while (indexToInsertInto - 1 > -1) {
+                indexToInsertInto--;
+                let entryAbovePlayer = leaderBoard[indexToInsertInto];
+
+                if (entryAbovePlayer.score > currentScore) {
+                    break;
+                }
+            }
+
+            if (indexToInsertInto !== playerEntryIndex) {
+                leaderBoard.splice(indexToInsertInto, 0, leaderBoard[playerEntryIndex]);
+                leaderBoard.splice(playerEntryIndex + 1, 1);
+            }
         } else {
-            leaderBoard.push({ player: playerName, score: currentScore });
+            let currentNumOfLeaderBoardEntries = leaderBoard.length;
+            for (let i = 0; i < currentNumOfLeaderBoardEntries; i++) {
+                let entry = leaderBoard[i];
+
+                if (entry.score < currentScore ||
+                    (entry.score === currentScore && entry.player.toLowerCase() > playerName.toLowerCase())) {
+                    leaderBoard.splice(i, 0, { player: playerName, score: currentScore });
+                } else {
+                    leaderBoard.push({ player: playerName, score: currentScore });
+                }
+            }
         }
 
         localStorage.setItem(scoreKey, JSON.stringify(leaderBoard));
