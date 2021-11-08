@@ -106,6 +106,26 @@ class Block {
     getRandNumber(x){
         return Math.floor(Math.random() * x);
     }
+
+    calculateOffset(axis) {
+        let offset = 0;
+        let numOfEmptyBits = 0;
+
+        for (let col = 0; col < 3; col++) {
+            for (let row = 0; row < 3; row++) {
+                let bit = axis === 'x' ? this.currentBlock.shape[row][col] : this.currentBlock.shape[col][row];
+                if (!bit) {
+                    numOfEmptyBits++;
+                }
+            }
+            if (numOfEmptyBits === 3) {
+                offset++;
+            }
+            numOfEmptyBits = 0;
+        }
+
+        return offset;
+    }
     
     //#region Rotation logic
     // sourced from https://www.youtube.com/watch?v=iAGokSQQxI8&t=1590s
@@ -169,6 +189,12 @@ class Block {
      */
     rotateBlockClockwise() {
         this.currentBlock.shape = this.composeRotatedShape(this.flip.bind(this), this.reverse.bind(this))(this.currentBlock.shape);
+        this.currentBlock.xOffset = this.calculateOffset('x');
+        this.currentBlock.yOffset = this.calculateOffset('y');
+
+        let tempHeight = this.currentBlock.height;
+        this.currentBlock.height = this.currentBlock.width;
+        this.currentBlock.width = tempHeight;
     }
     //#endregion
 }
