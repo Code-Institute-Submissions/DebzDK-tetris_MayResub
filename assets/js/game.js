@@ -950,7 +950,7 @@ function setAudio(trackPath, callback) {
  * Starts the audio player
  */
 function playAudio() {
-    if (isSoundOn && musicPlayer.currentTime === 0) {
+    if (isSoundOn && (musicPlayer.currentTime === 0 || musicPlayer.paused)) {
         musicPlayer.play();
     }
 }
