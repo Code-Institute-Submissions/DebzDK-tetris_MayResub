@@ -23,7 +23,7 @@ const BLOCK_TYPES = {
                 [1, 1, 0],
                 [0, 1, 1]],
         height: 2,
-        width: 2,
+        width: 3,
         xOffset: 0,
         yOffset: 1
     },
