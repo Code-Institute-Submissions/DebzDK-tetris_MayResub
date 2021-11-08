@@ -585,6 +585,7 @@ function hidePausedGameScreen() {
  */
 function pauseGame() {
     pauseAudio();
+    toggleMenuButtonVisibility('quit-game');
     clearInterval(timer);
     isPaused = true;
 }
@@ -599,19 +600,26 @@ function resumeGame() {
 }
 
 /**
+ * Toggle element visibility
+ */
+function toggleMenuButtonVisibility(elementID) {
+    if (isPlaying) {
+        removeClassFromElementClassList(elementID, 'hidden');
+    } else {
+        addClassToElementClassList(elementID, 'hidden');
+    }
+}
+
+/**
  * Displays settings menu
  */
 function displaySettings() {
     hideMainMenu();
     showMenuArea();
+    
     setSecondaryMenuTitle('Settings');
     showSecondaryMenuContent('settings');
-
-    if (isPlaying) {
-        removeClassFromElementClassList('quit-game', 'hidden');
-    } else {
-        addClassToElementClassList('quit-game', 'hidden');
-    }
+    toggleMenuButtonVisibility('quit-game');
 
     showSecondaryMenu();
 }
@@ -702,6 +710,9 @@ function processMenuOption(id) {
             toggleSoundSetting();
             break;
         case 'quit-game':
+            if (isPaused) {
+                hidePausedGameScreen();
+            }
             endGame();
             break;
         default:
