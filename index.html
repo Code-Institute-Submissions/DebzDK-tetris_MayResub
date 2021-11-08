@@ -84,6 +84,14 @@
                     <div id="secondary-menu-status-content" class="hidden">
                         <p><strong>GAME <span id="game-status"></span></strong></p>
                         <br>
+                        <form id="score-submission" onsubmit="return storeHighScore()" class="hidden">
+                            <label for="player">ENTER NAME:</label>
+                            <input id="player" type="text" minlength="3" maxlength="4" aria-label="Enter player name for highscore (minimum 3 characters required)" placeholder="_ _ _ _" required>
+                            <button type="submit" class="finer-bordered-box control-btn">Submit</button>
+                            <br>
+                            <br>
+                            <br>
+                        </form>
                     </div>
 
                     <!-- Game settings -->

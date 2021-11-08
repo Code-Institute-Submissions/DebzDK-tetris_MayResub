@@ -171,6 +171,10 @@ button.menu-item {
     height: inherit;
 }
 
+#player {
+    text-align: center;
+}
+
 #preview {
     width: 200px;
     height: 210px;

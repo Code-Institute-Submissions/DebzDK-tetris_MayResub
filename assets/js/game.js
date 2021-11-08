@@ -160,6 +160,9 @@ function storeHighScore(playerName) {
 
         localStorage.setItem(scoreKey, JSON.stringify(leaderBoard));
     }
+    hideSecondaryMenu();
+
+    return false;
 }
 
 /**
@@ -255,6 +258,7 @@ function endGame() {
     showSecondaryMenuContent('status');
     hideSecondaryMenuContent('settings');
     setGameStatus('over');
+    showHighScoreEntryForm();
     showSecondaryMenu();
 }
 
@@ -1026,5 +1030,13 @@ function resetAudio() {
     if (isSoundOn && musicPlayer.outerHTML.indexOf(tetrisTrackPath) === -1) {
         setAudio(tetrisTrackPath, audioTimeUpdateCallback);
     }
+}
+
+/**
+ * Displays form for highscore entry
+ */
+function showHighScoreEntryForm() {
+    removeClassFromElementClassList('score-submission', 'hidden');
+    addClassToElementClassList('exit-btn', 'hidden');
 }
 //#endregion
