@@ -582,6 +582,7 @@ function showPausedGameScreen() {
  */
 function hidePausedGameScreen() {
     hideSecondaryMenu();
+    hideSecondaryMenuContent('status');
     addClassToElementClassList('resume-game', 'hidden');
     removeClassFromElementClassList('pause-game', 'hidden');
     removeClassFromElementClassList('game-sounds', 'hidden');
