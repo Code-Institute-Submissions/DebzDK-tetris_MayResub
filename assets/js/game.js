@@ -1057,7 +1057,7 @@ function setLeaderBoardHTML() {
 
     for (let i = 0; i < leaderBoard.length; i++) {
         let entry = leaderBoard[i];
-        leaderBoardHTML += '<li>' + entry.player + '........' + entry.score + '</li>';
+        leaderBoardHTML += '<li>' + entry.player + ' ........ ' + entry.score + '</li>';
     }
 
     leaderBoardHTML += "</ol>";
