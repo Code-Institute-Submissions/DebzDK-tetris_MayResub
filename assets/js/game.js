@@ -141,10 +141,17 @@ function incrementScore(numOfLinesCleared) {
 }
 
 /**
+ * Clears game canvas
+ */
+function clearGameCanvas() {
+    TET_GRID.clearRect(0, 0, canvasWidth, canvasWidth);
+}
+
+/**
  * Clears canvas
  */
-function clearCanvas() {
-    TET_GRID.clearRect(0, 0, canvasWidth, canvasWidth);
+function clearPreviewCanvas() {
+    PRE_TET_GRID.clearRect(0, 0, COLS * 5, COLS * 5);
 }
 
 /**
@@ -176,7 +183,8 @@ function startGame() {
  */
 function endGame() {
     clearInterval(timer);
-    clearCanvas();
+    clearGameCanvas();
+    clearPreviewCanvas();
 
     // set game flags
     isPaused = false;
@@ -342,7 +350,7 @@ function drawPreview(clear) {
  * Clears and redraws canvas
  */
 function redrawBoard() {
-    clearCanvas();
+    clearGameCanvas();
 
     for (let y = 0; y < board.grid.length; y++) {
         let row = board.grid[y];
@@ -669,7 +677,7 @@ function setupListeners() {
                     hidePausedGameScreen();
                     break;
                 case 'restart-game':
-                    clearCanvas();
+                    clearGameCanvas();
                     startGame();
                     break;
                 case 'settings':
