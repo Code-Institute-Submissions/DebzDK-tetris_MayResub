@@ -144,9 +144,10 @@ function incrementScore(numOfLinesCleared) {
 /**
  * Stores score as highscore in local storage to persist value
  */
-function storeHighScore(playerName) {
+function storeHighScore() {
     if (currentScore > 0) {
         let leaderBoard = getHighScores();
+        let playerName = document.getElementById('player').value;
         let playerEntryIndex = getIndexOfHighScoreForPlayer(playerName);
 
         if (playerEntryIndex > -1) {
@@ -774,6 +775,12 @@ function processMenuOption(id) {
             removeClassFromElementClassList('exit-btn-blackout', 'hidden');
             showSecondaryMenu();
             break;
+        case 'game-leaderboard':
+            setSecondaryMenuTitle('Leaderboard');
+            showSecondaryMenuContent('leaderboard');
+            setLeaderBoardHTML();
+            showSecondaryMenu();
+            break;
         case 'game-sounds':
             toggleSoundSetting();
             break;
@@ -882,6 +889,7 @@ function hideSecondaryMenu() {
     addClassToElementClassList('secondary-menu-title', 'hidden');
     hideSecondaryMenuContent('controls');
     hideSecondaryMenuContent('credits');
+    hideSecondaryMenuContent('leaderboard');
     addClassToElementClassList('exit-btn-blackout', 'hidden');
     setSecondaryMenuTitle('');
 
@@ -1038,5 +1046,21 @@ function resetAudio() {
 function showHighScoreEntryForm() {
     removeClassFromElementClassList('score-submission', 'hidden');
     addClassToElementClassList('exit-btn', 'hidden');
+}
+
+/**
+ * Generates and sets HTML for stored leaderboard values
+ */
+function setLeaderBoardHTML() {
+    let leaderBoardHTML = '<ol>';
+    let leaderBoard = getHighScores();
+
+    for (let i = 0; i < leaderBoard.length; i++) {
+        let entry = leaderBoard[i];
+        leaderBoardHTML += '<li>' + entry.player + '........' + entry.score + '</li>';
+    }
+
+    leaderBoardHTML += "</ol>";
+    document.getElementById('scores').innerHTML = leaderBoardHTML;
 }
 //#endregion
