@@ -830,18 +830,32 @@ function toggleSoundSetting() {
         }
     } else {
         isSoundOn = true;
-        setAudio(tetrisTrackPath);
+        setAudio(tetrisTrackPath, audioTimeUpdateCallback);
     }
     
     document.getElementById('sound-setting').textContent = isSoundOn ? 'ON' : 'OFF';
 }
 
 /**
+ * Forces audio loop from desired point
+ */
+function audioTimeUpdateCallback() {
+    if (this.currentTime >= 77) {
+        this.currentTime = 0;
+        this.play();
+    }
+}
+
+/**
  * Loads the audio player
  */
-function setAudio(trackPath) {
+function setAudio(trackPath, callback) {
     if (!musicPlayer || musicPlayer.outerHTML.indexOf(trackPath) === -1) {
         musicPlayer = new Audio(trackPath);
+        musicPlayer.removeEventListener("timeupdate", audioTimeUpdateCallback);
+        if (callback) {
+            musicPlayer.addEventListener("timeupdate", callback);
+        }
     }
 }
 
@@ -868,7 +882,7 @@ function pauseAudio() {
  */
 function resetAudio() {
     if (isSoundOn && musicPlayer.outerHTML.indexOf(tetrisTrackPath) === -1) {
-        setAudio(tetrisTrackPath);
+        setAudio(tetrisTrackPath, audioTimeUpdateCallback);
     }
 }
 //#endregion
