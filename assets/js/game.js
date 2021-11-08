@@ -719,9 +719,6 @@ function processMenuOption(id) {
             toggleSoundSetting();
             break;
         case 'quit-game':
-            if (isPaused) {
-                hidePausedGameScreen();
-            }
             endGame();
             break;
         default:
