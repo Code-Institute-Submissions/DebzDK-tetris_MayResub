@@ -11,9 +11,13 @@ let blockX;
 let blockY;
 
 let timer;
-let musicPlayer;
 let gameSpeed = 1000;
 let statPlaceholder = '.........';
+
+let musicPlayer;
+let soundFolderPath = '../assets/sounds/';
+let tetrisTrackPath = soundFolderPath + 'tetris-gameboy-02.mp3';
+let gameOverTrackPath = soundFolderPath + 'game-over.mp3';
 
 let currentScore = 0;
 let baseScorePerLinesCleared = [40, 100, 300, 1200];
@@ -140,6 +144,7 @@ function startGame() {
 
     placeNewBlockOnBoard();
 
+    resetAudio();
     playAudio();
 
     timer = setInterval(progressGame, gameSpeed);
@@ -157,7 +162,7 @@ function endGame() {
     isGameOver = true;
     isPlaying = false;
 
-    setAudio('../assets/sounds/game-over.mp3');
+    setAudio(gameOverTrackPath);
     playAudio();
 
     // hides settings screen and shows game over message
@@ -825,7 +830,7 @@ function toggleSoundSetting() {
         }
     } else {
         isSoundOn = true;
-        setAudio('../assets/sounds/tetris-gameboy-02.mp3');
+        setAudio(tetrisTrackPath);
     }
     
     document.getElementById('sound-setting').textContent = isSoundOn ? 'ON' : 'OFF';
@@ -855,6 +860,15 @@ function playAudio() {
 function pauseAudio() {
     if (isSoundOn) {
         musicPlayer.pause();
+    }
+}
+
+/**
+ * Resets music player by loading it with tetris track if not already set
+ */
+function resetAudio() {
+    if (isSoundOn && musicPlayer.outerHTML.indexOf(tetrisTrackPath) === -1) {
+        setAudio(tetrisTrackPath);
     }
 }
 //#endregion
