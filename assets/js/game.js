@@ -50,6 +50,11 @@ document.addEventListener('keydown', function(e) {
                     moveRg();
                 }
                 break;
+            case 'ArrowUp':
+                drawBlock(true);
+                block.rotateBlockClockwise();
+                drawBlock();
+                break;
             case 'ArrowDown':
                 if (gameSpeed !== 100) {
                     setGameSpeed(100);

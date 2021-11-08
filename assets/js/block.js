@@ -23,7 +23,7 @@ const BLOCK_TYPES = {
                 [1, 1, 0],
                 [0, 1, 1]],
         height: 2,
-        width: 2,
+        width: 3,
         xOffset: 0,
         yOffset: 1
     },
@@ -106,4 +106,96 @@ class Block {
     getRandNumber(x){
         return Math.floor(Math.random() * x);
     }
+
+    calculateOffset(axis) {
+        let offset = 0;
+        let numOfEmptyBits = 0;
+
+        for (let col = 0; col < 3; col++) {
+            for (let row = 0; row < 3; row++) {
+                let bit = axis === 'x' ? this.currentBlock.shape[row][col] : this.currentBlock.shape[col][row];
+                if (!bit) {
+                    numOfEmptyBits++;
+                }
+            }
+            if (numOfEmptyBits === 3) {
+                offset++;
+            } else {
+                break;
+            }
+        }
+
+        return offset;
+    }
+    
+    //#region Rotation logic
+    // sourced from https://www.youtube.com/watch?v=iAGokSQQxI8&t=1590s
+    composeRotatedShape(fn1, fn2) {
+        return function(arr) {
+            return fn1(fn2(arr));
+        };
+    }
+
+    /**
+     * Creates a copy of and reverses a given array
+     * @param {int[][]} arr - 2D array (the current tetris block object representation)
+     * @returns int[][] - array of reversed values
+     */
+    reverse(arr) {
+        return [...arr].reverse();
+    }
+
+    /**
+     * Creates an array filled with the indexes of the current values within a given array
+     * @param {int[][]} arr - 2D array (the current tetris block object representation)
+     * @returns int[] - an array filled with indexes
+     */
+    getIndexesFromRange(arr) {
+        return [...arr.keys()];
+    }
+
+    /**
+     * Retrieves the value at a given index of an array
+     * @param {int} index - The index/key of the desired value to get from a given array
+     * @returns int - value at given index
+     */
+    getValueAtIndex(index) {
+        return function(arr) {
+            return arr[index];
+        };
+    }
+
+    /**
+     * Plucks out part of array based on index in data (concept from Ruby-on-rails)
+     * @param {int} index - index/key of desired value
+     * @param {int[][]} arr - 2D array
+     * @returns 
+     */
+    pluck(index, arr) {
+        return arr.map(this.getValueAtIndex(index));
+    }
+
+    /**
+     * Flips the reversed array of the current tetris block and sets the result as the current block
+     * @param {int[][]} arr - 2D array (the tetris block representation)
+     */
+    flip(arr) {
+        return this.getIndexesFromRange(arr).map((function(value) {
+            return this.pluck(value, arr);
+        }).bind(this));
+    }
+
+    /**
+     * Rotates the current tetris block clockwise and updates width, height, and offset properties
+     */
+    rotateBlockClockwise() {
+        this.currentBlock.shape = this.composeRotatedShape(this.flip.bind(this), this.reverse.bind(this))(this.currentBlock.shape);
+        this.currentBlock.xOffset = this.calculateOffset('x');
+        this.currentBlock.yOffset = this.calculateOffset('y');
+
+        let tempHeight = this.currentBlock.height;
+        this.currentBlock.height = this.currentBlock.width;
+        this.currentBlock.width = tempHeight;
+    }
+    //#endregion
 }
