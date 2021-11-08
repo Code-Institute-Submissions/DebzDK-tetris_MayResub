@@ -14,6 +14,11 @@ let timer;
 let gameSpeed = 1000;
 let statPlaceholder = '.........';
 
+let musicPlayer;
+let soundFolderPath = '../assets/sounds/';
+let tetrisTrackPath = soundFolderPath + 'tetris-gameboy-02.mp3';
+let gameOverTrackPath = soundFolderPath + 'game-over.mp3';
+
 let currentScore = 0;
 let baseScorePerLinesCleared = [40, 100, 300, 1200];
 let level = 0;
@@ -22,6 +27,7 @@ let isPlaying = false;
 let isPaused = false;
 let isFalling = false;
 let isGameOver = false;
+let isSoundOn = false;
 //#endregion
 
 //#region Game event listeners
@@ -138,6 +144,9 @@ function startGame() {
 
     placeNewBlockOnBoard();
 
+    resetAudio();
+    playAudio();
+
     timer = setInterval(progressGame, gameSpeed);
 }
 
@@ -152,6 +161,9 @@ function endGame() {
     isPaused = false;
     isGameOver = true;
     isPlaying = false;
+
+    setAudio(gameOverTrackPath);
+    playAudio();
 
     // hides settings screen and shows game over message
     showMenuArea();
@@ -480,6 +492,7 @@ function progressGame() {
 function showPausedGameScreen() {
     removeClassFromElementClassList('resume-game', 'hidden');
     addClassToElementClassList('pause-game', 'hidden');
+    addClassToElementClassList('game-sounds', 'hidden');
     addClassToElementClassList('exit-btn', 'hidden');
     addClassToElementClassList('exit-btn-blackout', 'hidden');
     removeClassFromElementClassList('menu', 'hidden');
@@ -496,6 +509,7 @@ function hidePausedGameScreen() {
     hideSecondaryMenu();
     addClassToElementClassList('resume-game', 'hidden');
     removeClassFromElementClassList('pause-game', 'hidden');
+    removeClassFromElementClassList('game-sounds', 'hidden');
     removeClassFromElementClassList('exit-btn', 'hidden');
 }
 
@@ -503,6 +517,7 @@ function hidePausedGameScreen() {
  * Pauses game 
  */
 function pauseGame() {
+    pauseAudio();
     clearInterval(timer);
     isPaused = true;
 }
@@ -511,6 +526,7 @@ function pauseGame() {
  * Resumes game
  */
 function resumeGame() {
+    playAudio();
     timer = setInterval(progressGame, gameSpeed);
     isPaused = false;
 }
@@ -614,6 +630,9 @@ function processMenuOption(id) {
             showSecondaryMenuContent('credits');
             removeClassFromElementClassList('exit-btn-blackout', 'hidden');
             showSecondaryMenu();
+            break;
+        case 'game-sounds':
+            toggleSoundSetting();
             break;
         case 'quit-game':
             endGame();
@@ -798,5 +817,72 @@ function cycleThroughMenu(menuOptionsContainerID, defaultButtonID, reverseOrder)
 function showGameControls() {
     removeClassFromElementClassList('pause-game', 'hidden');
     removeClassFromElementClassList('restart-game', 'hidden');
+}
+
+/**
+ * Toggles sound setting between 'ON' and 'OFF'
+ */
+function toggleSoundSetting() {
+    if (isSoundOn) {
+        isSoundOn = false;
+        if (isPlaying) {
+            pauseAudio();
+        }
+    } else {
+        isSoundOn = true;
+        setAudio(tetrisTrackPath, audioTimeUpdateCallback);
+    }
+    
+    document.getElementById('sound-setting').textContent = isSoundOn ? 'ON' : 'OFF';
+}
+
+/**
+ * Forces audio loop from desired point
+ */
+function audioTimeUpdateCallback() {
+    if (this.currentTime >= 77) {
+        this.currentTime = 0;
+        this.play();
+    }
+}
+
+/**
+ * Loads the audio player
+ */
+function setAudio(trackPath, callback) {
+    if (!musicPlayer || musicPlayer.outerHTML.indexOf(trackPath) === -1) {
+        musicPlayer = new Audio(trackPath);
+        musicPlayer.removeEventListener("timeupdate", audioTimeUpdateCallback);
+        if (callback) {
+            musicPlayer.addEventListener("timeupdate", callback);
+        }
+    }
+}
+
+/**
+ * Starts the audio player
+ */
+function playAudio() {
+    if (isSoundOn) {
+        musicPlayer.play();
+    }
+}
+
+/**
+ * Pauses the audio player
+ */
+function pauseAudio() {
+    if (isSoundOn) {
+        musicPlayer.pause();
+    }
+}
+
+/**
+ * Resets music player by loading it with tetris track if not already set
+ */
+function resetAudio() {
+    if (isSoundOn && musicPlayer.outerHTML.indexOf(tetrisTrackPath) === -1) {
+        setAudio(tetrisTrackPath, audioTimeUpdateCallback);
+    }
 }
 //#endregion
