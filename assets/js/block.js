@@ -120,8 +120,9 @@ class Block {
             }
             if (numOfEmptyBits === 3) {
                 offset++;
+            } else {
+                break;
             }
-            numOfEmptyBits = 0;
         }
 
         return offset;
