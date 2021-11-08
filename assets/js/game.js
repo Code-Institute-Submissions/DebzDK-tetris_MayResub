@@ -1,9 +1,13 @@
 //#region Global variables
 const CANVAS = document.getElementById('tetris');
+const PREVIEW_CANVAS = document.getElementById('preview-block');
 const TET_GRID = CANVAS.getContext('2d');
+const PRE_TET_GRID = PREVIEW_CANVAS.getContext('2d');
 
 let board;
+let nextBlockPreview;
 let block;
+let nextBlock;
 
 let canvasWidth;
 let canvasHeight;
@@ -90,6 +94,22 @@ function initialiseBoard() {
 }
 
 /**
+ * Initialises the next block preview canvas
+ */
+function initialiseNextBlockPreview() {
+    nextBlockPreview = new Board(PRE_TET_GRID);
+
+    // Board dimensions setup
+    PRE_TET_GRID.canvas.width = COLS * 5;
+    PRE_TET_GRID.canvas.height = COLS * 5;
+    PRE_TET_GRID.scale(30, 30);
+
+    // Tetris block border setup
+    PRE_TET_GRID.strokeStyle = 'white';
+    PRE_TET_GRID.lineWidth = 0.2;
+}
+
+/**
  * Initialises the game stats
  * @param {boolean} withPlaceholder - if stats should be initialised with placeholder value
  */
@@ -140,6 +160,7 @@ function startGame() {
     showGameControls();
 
     initialiseBoard();
+    initialiseNextBlockPreview();
     initialiseStats();
 
     placeNewBlockOnBoard();
@@ -204,12 +225,21 @@ function checkGameOver() {
  * Draws new block at the top of the board if placing it won't result in 'Game Over'
  */
 function placeNewBlockOnBoard() {
-    setCurrentBlock();
+    if (nextBlock) {
+        block = nextBlock;
+        drawPreview(true);
+        setNextBlock();
+    } else {
+        setCurrentBlock();
+        setNextBlock();
+    }
     setCurrentBlockColour();
+    setNextBlockColour();
     setBlockStartPosition();
     isGameOver = checkGameOver();
     if (!isGameOver) {
         drawBlock();
+        drawPreview();
     }
 }
 
@@ -221,11 +251,27 @@ function setCurrentBlock() {
 }
 
 /**
- * Assigns canvas fill colour for block
+ * Assigns new next block object to global variable
+ */
+function setNextBlock() {
+    nextBlock = new Block();
+}
+
+/**
+ * Assigns canvas fill colour for current block
  */
 function setCurrentBlockColour() {
     // Tetris block colour
     TET_GRID.fillStyle = block.currentColour;
+    PRE_TET_GRID.fillStyle = nextBlock.currentColour;
+}
+
+/**
+ * Assigns canvas fill colour for next block
+ */
+function setNextBlockColour() {
+    // Tetris block colour
+    PRE_TET_GRID.fillStyle = nextBlock.currentColour;
 }
 
 /**
@@ -238,14 +284,15 @@ function setBlockStartPosition() {
 
 /**
  * Draws shape with given properties on canvas
+ * @param {CanvasRenderingContext2D} ctx - canvas context
  * @param {int} x - x coord
  * @param {int} y - y coord
  * @param {int} width - width of rectangle
  * @param {int} height - height of rectangle
  */
-function drawRect(x, y, width, height) {
-    TET_GRID.fillRect(x, y, width, height);
-    TET_GRID.strokeRect(x, y, width, height);
+function drawRect(ctx, x, y, width, height) {
+    ctx.fillRect(x, y, width, height);
+    ctx.strokeRect(x, y, width, height);
 }
 
 /**
@@ -264,7 +311,27 @@ function drawBlock(clear) {
                     setCurrentBlockColour();
                 } else {
                     board.grid[blockY + y][blockX + x] = COLOURS.indexOf(block.currentColour) + 1;
-                    drawRect(blockX + x, blockY + y, 1, 1);
+                    drawRect(TET_GRID, blockX + x, blockY + y, 1, 1);
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Draws next block object on preview canvas
+ * @param {boolean} clear - if block should be cleared/removed from preview
+ */
+function drawPreview(clear) {
+    if (clear) {
+        PRE_TET_GRID.clearRect(0, 0, COLS * 5, COLS * 5);
+    } else {
+        for (let y = 0; y < nextBlock.currentBlock.shape.length; y++) {
+            let blockRow = nextBlock.currentBlock.shape[y];
+            for (let x = 0; x < blockRow.length; x++) {
+                let bitInBlock = blockRow[x];
+                if (bitInBlock) {
+                    drawRect(PRE_TET_GRID, x + 1, y + 0.5, 1, 1);
                 }
             }
         }
@@ -284,8 +351,8 @@ function redrawBoard() {
 
             if (bitInRow) {
                 TET_GRID.fillStyle = COLOURS[bitInRow - 1];
-                drawRect(x, y, 1, 1);
-                drawRect(x, y, 1, 1);
+                drawRect(TET_GRID, x, y, 1, 1);
+                drawRect(TET_GRID, x, y, 1, 1);
             }
         }
     }
