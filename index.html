@@ -45,6 +45,7 @@
                         <button id="game-play" class="menu-item active">Play Game</button>
                         <button id="game-controls" class="menu-item">Controls</button>
                         <button id="game-credits" class="menu-item">Credits</button>
+                        <button id="game-leaderboard" class="menu-item">View Leaderboard</button>
                     </div>
                 </div>
                 
@@ -84,6 +85,20 @@
                     <div id="secondary-menu-status-content" class="hidden">
                         <p><strong>GAME <span id="game-status"></span></strong></p>
                         <br>
+                        <form id="score-submission" onsubmit="return storeHighScore()" class="hidden">
+                            <label for="player">ENTER NAME:</label>
+                            <input id="player" type="text" minlength="3" maxlength="4" aria-label="Enter player name for highscore (minimum 3 characters required)" placeholder="_ _ _ _" required>
+                            <button type="submit" class="finer-bordered-box control-btn">Submit</button>
+                            <br>
+                            <br>
+                            <br>
+                        </form>
+                    </div>
+                    
+                    <!-- Game leaderboard -->
+                    <div id="secondary-menu-leaderboard-content" class="hidden">
+                        <br>
+                        <div id="scores"></div>
                     </div>
 
                     <!-- Game settings -->

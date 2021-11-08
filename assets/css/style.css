@@ -127,7 +127,7 @@ h1 {
 }
 
 #main-menu-options {
-    height: 125px;
+    height: 145px;
 }
 
 button.menu-item {
@@ -171,6 +171,10 @@ button.menu-item {
     height: inherit;
 }
 
+#player {
+    text-align: center;
+}
+
 #preview {
     width: 200px;
     height: 210px;
@@ -205,6 +209,7 @@ button.menu-item {
     background-color: #000000;
     position: absolute;
     width: 100%;
+    height: auto;
     left: -15px;
     transition: 1s ease-in all;
 }
@@ -228,6 +233,13 @@ button.menu-item {
     position: absolute;
     animation: rollingCredits 5s linear forwards infinite;
     animation-iteration-count: 1;
+}
+
+#scores {
+    height: 95px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 .finer-bordered-box {
