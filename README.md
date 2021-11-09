@@ -3,6 +3,8 @@
 This is a single page site that allows people to play yet another remake of the classic Tetris game.
 The site is targeted toward people who enjoy games, like Tetris. This site will be useful for people who are interested in having a taste of nostalgia or who have never played Tetris before and stumble across this version.
 
+![Screenshot of main menu of game](documentation/screenshots/website/am-i-responsive.png)
+
 ## Design
 
 ### Wireframes
