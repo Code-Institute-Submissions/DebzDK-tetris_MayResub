@@ -232,7 +232,7 @@ function getIndexOfHighScoreForPlayer(playerName) {
  * Clears game canvas
  */
 function clearGameCanvas() {
-    TET_GRID.clearRect(0, 0, canvasWidth, canvasWidth);
+    TET_GRID.clearRect(0, 0, canvasWidth, canvasHeight);
 }
 
 /**
