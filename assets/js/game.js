@@ -7,7 +7,6 @@ const TET_GRID = CANVAS.getContext('2d');
 const PRE_TET_GRID = PREVIEW_CANVAS.getContext('2d');
 
 let board;
-let nextBlockPreview;
 let block;
 let nextBlock;
 
@@ -105,8 +104,6 @@ function initialiseBoard() {
  * Initialises the next block preview canvas
  */
 function initialiseNextBlockPreview() {
-    nextBlockPreview = new Board(PRE_TET_GRID);
-
     // Board dimensions setup
     PRE_TET_GRID.canvas.width = COLS * 5;
     PRE_TET_GRID.canvas.height = COLS * 5;
