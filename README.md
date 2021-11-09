@@ -291,7 +291,7 @@ The rest of the code is based on my prior attempt at a Tetris game that I comple
 
 Purpose | Credit | Source
 ------------ | ------------- | -------------
-Logo | [Vitaly Gorbachev](https://www.flaticon.com/authors/vitaly-gorbachev) | [Flat icon](https://www.flaticon.com/free-icon/tetris_824380)
+Favicon | [Vitaly Gorbachev](https://www.flaticon.com/authors/vitaly-gorbachev) | [Flat icon](https://www.flaticon.com/free-icon/tetris_824380)
 Tetris music | [Downloads Khinsider](https://downloads.khinsider.com/) | [Tetris Gameboy 2 music](https://downloads.khinsider.com/game-soundtracks/album/tetris-gameboy-rip/tetris-gameboy-02.mp3)
 Tetris gameover sound effect | [101 Soundboards](https://www.101soundboards.com/) | [Game Over sound effect](https://www.101soundboards.com/sounds/20902-game-over)
 
