@@ -166,6 +166,20 @@ Here are the specific game features.
 
 ## Languages and technologies used
 
+* Languages
+    * [HTML5](https://en.wikipedia.org/wiki/HTML5) - used to create and structure webpages using semantic (meaningful) markup
+    * [CSS3](https://en.wikipedia.org/wiki/CSS) - used Cascading Style Sheets to style HTML
+        * [Flexbox](https://en.wikipedia.org/wiki/CSS_Flexible_Box_Layout) - used instead of `float` property for responsive web design
+* Technologies
+    * [Autoprefixer](https://autoprefixer.github.io/) - used to automatically add vendor prefixes for browser compatibility
+    * [Trello](https://trello.com/) - used to document planning/design and development project progress and steps
+    * [Git](https://git-scm.com/) - used for version control
+    * [GitHub](https://github.com/) - used for internet hosting and version control through use of Git
+    * [Gitpod](https://gitpod.io/) - used as online IDE for software development
+        * The terminal was used to create branchs to work on before merging into the main branch. These branches have been preserved for the sake of the assessment, otherwise they would have been deleted after use.
+
+        TO-DO: Add screenshot of branches
+
 ## Testing
 
 ### Validator testing
