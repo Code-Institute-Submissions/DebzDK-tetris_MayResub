@@ -172,9 +172,12 @@ button.menu-item {
 }
 
 #preview {
+    text-align: center;
+}
+
+#preview-block {
     width: 200px;
     height: 210px;
-    text-align: center;
 }
 /*#endregion*/
 
