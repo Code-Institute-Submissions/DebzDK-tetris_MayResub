@@ -735,6 +735,8 @@ function setGameStatus(status) {
 //#endregion
 
 //#region Menu functions
+document.body.onload = setupListeners;
+
 /**
  * Adds listeners to all of the menu buttons, executing as appropriate for each button
  */
@@ -777,11 +779,20 @@ function setupListeners() {
                     pauseGame();
                     displaySettings();
                     break;
+                case 'exit-btn':
+                    hideSecondaryMenu();
+                    break;
                 default:
                     return;
             }
         });
     }
+
+    let highScoreEntryForm = document.getElementById('score-submission');
+
+    highScoreEntryForm.addEventListener('submit', function() {
+        return storeHighScore();
+    });
 
     menuButtons[0].focus();
 }
