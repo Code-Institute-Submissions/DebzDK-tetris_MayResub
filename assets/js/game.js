@@ -738,25 +738,47 @@ function setGameStatus(status) {
 document.body.onload = setupListeners;
 
 /**
- * Adds listeners to all of the menu buttons, executing as appropriate for each button
+ * Handles a menu button click event
  */
-function setupListeners() {
+function menuButtonClickEventHandler() {
+    processMenuOption(this.id);
+}
+
+/**
+ * Handles a menu button mouse over event
+ */
+function menuButtonMouseOverHandler() {
+    removeClassFromAllElementsWithClass('#main-menu-options .active', 'active');
+    addClassToElementClassList(this.id, 'active');
+    this.focus();
+}
+
+/**
+ * Handles a menu button mouse out event
+ */
+function menuButtonMouseOutHandler() {
+    removeClassFromElementClassList(this.id, 'active');
+    this.blur();
+}
+
+/**
+ * Sets button click, mouseover and mouseout event listeners
+ */
+function setupMenuButtonListeners() {
     let menuButtons = document.getElementsByClassName('menu-item');
 
     for (let i = 0; i < menuButtons.length; i++) {
-        menuButtons[i].addEventListener('click', function() {
-            processMenuOption(this.id);
-        });
-        menuButtons[i].addEventListener('mouseover', function() {
-            removeClassFromAllElementsWithClass('#main-menu-options .active', 'active');
-            addClassToElementClassList(this.id, 'active');
-            this.focus();
-        });
-        menuButtons[i].addEventListener('mouseout', function() {
-            removeClassFromElementClassList(this.id, 'active');
-            this.blur();
-        });
+        menuButtons[i].addEventListener('click', menuButtonClickEventHandler);
+        menuButtons[i].addEventListener('mouseover', menuButtonMouseOverHandler);
+        menuButtons[i].addEventListener('mouseout', menuButtonMouseOutHandler);
     }
+}
+
+/**
+ * Adds listeners to all of the menu buttons, executing as appropriate for each button
+ */
+function setupListeners() {
+    setupMenuButtonListeners();
 
     let gameControlButtons = document.getElementsByClassName('control-btn');
     
