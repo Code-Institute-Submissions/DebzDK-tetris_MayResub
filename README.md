@@ -20,7 +20,7 @@ After discussing this idea during the Mentor Project Planning session, the wiref
 
 [Google Fonts](https://fonts.google.com/) and [Fontspace](https://www.fontspace.com/) were used to search for and select the following fonts for this game.
 
-'[VT323](https://fonts.google.com/specimen/VT323?query=vt)' (from Google Fonts) was used for the stats and preview areas and 'Tetris 2' (from Fontspace) was used for the game title and menu texts.
+'[VT323](https://fonts.google.com/specimen/VT323?query=vt)' (from Google Fonts) was used for the stats and preview areas and '[Tetris 2](https://www.fontspace.com/tetris-2-font-f11520)' (from Fontspace by [Zombie Unicorn](https://www.fontspace.com/zombie-unicorn)) was used for the game title and menu texts.
 
 ![Screenshot of selected Fontspace font](documentation/screenshots/evidence/tetris-font-selection.jpg)
 ![Screenshot of selected Google Fonts font](documentation/screenshots/evidence/google-font-selection.jpg)
