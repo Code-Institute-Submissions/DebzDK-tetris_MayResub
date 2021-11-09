@@ -1,3 +1,5 @@
+/* jshint esversion: 8 */
+
 //#region Global variables
 const CANVAS = document.getElementById('tetris');
 const PREVIEW_CANVAS = document.getElementById('preview-block');
