@@ -137,18 +137,32 @@ Here are the specific game features.
 
 * Shape rotation
     * Lastly, users are able to rotate falling shapes. Tetris simply wouldn't be Tetris without it.
+
         To achieve this, I found and used code from a YouTube tutorial called '[Tetris, Block Movement and Rotation](https://www.youtube.com/watch?v=iAGokSQQxI8&t=1590s)'. Alternatively, I could have stored all of the versions of the tetris block rotation states and achieved the same behaviour but I wanted to learn a smarter way to do it.
 
-        I made use of and sectioned the referenced code toward the bottom of my block.js file and modified as appropriate.
-
+        I made use of and sectioned the referenced code toward the bottom of my [block.js](https://github.com/DebzDK/tetris/blob/main/assets/js/block.js#L131) file and modified as appropriate.
+        
         ![GIF of shape rotation in action](documentation/screenshots/website/shape-rotation.gif)
 
 ### Future features
 
 * Programmable controls
+    * This would enable users to control which keys would do what in the game. E.g. users could use W, A, S, D instead of the arrow keys for block movement.
+
 * Ability to choose themes
+    * This would enable users to select from a preset list of themes, or maybe even define their own, in order to change the colour scheme of the game.
+
+        I would have used the other [trending tetris palettes from Coolors.co](https://coolors.co/palettes/trending/tetris).
+
 * Difficulty modes
-* Stats for falling pieces
+    * To set this game apart from the classic Tetris in some way, I would've used the usual difficulty (speed increase) coupled with something else such as, an ever-increasing or decreasing grid, the random appearance of unclearable blocks in the game, or some kind of sudden death type occurrence.
+
+* Stats for fallen pieces
+    * When searching for design ideas for my Tetris game using Google Images, one retro [design](https://miro.medium.com/max/1838/1*6cPm3UhWEMBpYja5LFtkGg.png) caught my eye:
+
+        ![Screenshot of retro-style Tetris with stats for fallen pieces](documentation/screenshots/evidence/future-feature-block-stats.png)
+
+        I thought the in-game display of statistics for fallen pieces was really cool and would've been easy enough to implement but I decided to leave it out of this version.
 
 ## Languages and technologies used
 
