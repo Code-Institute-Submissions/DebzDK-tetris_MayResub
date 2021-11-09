@@ -26,9 +26,13 @@
     * [block.js](https://github.com/DebzDK/tetris/blob/main/assets/js/block.js)
         * 1 warning and 2 undefined variables were found after passing through the official JSHint Code Quality Tool.
             
-            *Note: The unused variable 'BLOCK_SIZE' is used in game.js and board.js. It is defined in block.js because it is a property/variable related to blocks so was not addressed.*
+            *Note: The unused variable 'BLOCK_SIZE' is used in game.js and board.js and it is defined in block.js because it is a property/variable related to blocks so was not addressed. The other unused variable 'Block' is the name of the class so this was also ignored.*
 
             ![Screenshot of JSHint result for block.js](documentation/screenshots/testing/jshint-validation-result-for-blockjs.png)
+
+        * These were all fixed as can be seen here:
+
+            ![Screenshot of JSHint result after fixes for block.js](documentation/screenshots/testing/jshint-validation-fixes-for-blockjs.png)
 
     * [game.js](https://github.com/DebzDK/tetris/blob/main/assets/js/game.js)
         * 5 warnings, 6 undefined variables and 1 unused variable were found after passing through the official JSHint Code Quality Tool.
