@@ -224,5 +224,14 @@ The rest of the code is based on my prior attempt at a Tetris game that I comple
 
 Purpose | Credit | Source
 ------------ | ------------- | -------------
+Tetris music | [Downloads Khinsider](https://downloads.khinsider.com/) | [Tetris Gameboy 2 music](https://downloads.khinsider.com/game-soundtracks/album/tetris-gameboy-rip/tetris-gameboy-02.mp3)
+Tetris gameover sound effect | [101 Soundboards](https://www.101soundboards.com/) | [Game Over sound effect](https://www.101soundboards.com/sounds/20902-game-over)
+
+Seeing as Tetris is a huge game, I had to due my due-diligence and check copyright regarding use of the music.
+
+The theme song 'Korobeiniki' is a Russian folk song and is free-to-use but recordings of it are, in fact, copyrighted and therefore cannot be commercially used.
+Thankfully, this game is non-commercial and simply an ode to my childhood in the form of a project.
 
 ## Acknowledgements
+
+Thanks to my brothers for introducing me to the world of games and thanks again to my mentor [Tim Nelson](https://github.com/TravelTimN) for his encouragement and constructive feedback!
