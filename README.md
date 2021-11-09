@@ -3,6 +3,8 @@
 This is a single page site that allows people to play yet another remake of the classic Tetris game.
 The site is targeted toward people who enjoy games, like Tetris. This site will be useful for people who are interested in having a taste of nostalgia or who have never played Tetris before and stumble across this version.
 
+![Screenshot of main menu of game](documentation/screenshots/website/am-i-responsive.png)
+
 ## Design
 
 ### Wireframes
@@ -198,6 +200,28 @@ Here are the specific game features.
     * No errors were found after passing through the official (Jigsaw) validator.
     This can be verified by clicking [here](https://jigsaw.w3.org/css-validator/validator?uri=https%3A%2F%2Fdebzdk.github.io%2Ftetris&profile=css3svg&usermedium=all&warning=1&vextwarning=&lang=en).
     * There are 21 warnings regarding the use of vendor extensions. The properties referred to in these warnings are necessary for browser compatibility in Chrome, Safari, IE/Microsoft Edge, and Firefox.
+    
+* JavaScript
+    * [board.js](https://github.com/DebzDK/tetris/blob/main/assets/js/board.js)
+        * No errors and 1 unused variable were found after passing through the official JSHint Code Quality Tool.
+            
+            *Note: the unused variable is actually referring to the class name so was not addressed.*
+            
+            ![Screenshot of JSHint result for board.js file](documentation/screenshots/testing/jshint-validation-result-for-boardjs.png)
+
+    * [block.js](https://github.com/DebzDK/tetris/blob/main/assets/js/block.js)
+        * 1 warning and 2 undefined variables were found after passing through the official JSHint Code Quality Tool.
+            
+            *Note: the unused variable 'BLOCK_SIZE' is used in game.js and board.js. It is defined in block.js because it is a property/variable related to blocks so was not addressed.*
+
+            ![Screenshot of JSHint result for block.js](documentation/screenshots/testing/jshint-validation-result-for-blockjs.png)
+
+    * [game.js](https://github.com/DebzDK/tetris/blob/main/assets/js/game.js)
+        * 5 warnings and 6 undefined variables were found after passing through the official JSHint Code Quality Tool.
+            
+            *Note: the unused variable 'BLOCK_SIZE' is used in game.js and board.js. It is defined in block.js because it is a property/variable related to blocks so was not addressed.*
+
+            ![Screenshot of JSHint result for block.js](documentation/screenshots/testing/jshint-validation-result-for-blockjs.png)
 
 * Accessibility
     * 4 error and 5 alerts were found after running the [WAVE Accessibility Evaluation tool](https://wave.webaim.org/report#/https://debzdk.github.io/pilates-your-guide-to-flexible-fun).
@@ -267,7 +291,7 @@ The rest of the code is based on my prior attempt at a Tetris game that I comple
 
 Purpose | Credit | Source
 ------------ | ------------- | -------------
-Logo | [Vitaly Gorbachev](https://www.flaticon.com/authors/vitaly-gorbachev) | [Flat icon](https://www.flaticon.com/free-icon/tetris_824380)
+Favicon | [Vitaly Gorbachev](https://www.flaticon.com/authors/vitaly-gorbachev) | [Flat icon](https://www.flaticon.com/free-icon/tetris_824380)
 Tetris music | [Downloads Khinsider](https://downloads.khinsider.com/) | [Tetris Gameboy 2 music](https://downloads.khinsider.com/game-soundtracks/album/tetris-gameboy-rip/tetris-gameboy-02.mp3)
 Tetris gameover sound effect | [101 Soundboards](https://www.101soundboards.com/) | [Game Over sound effect](https://www.101soundboards.com/sounds/20902-game-over)
 
