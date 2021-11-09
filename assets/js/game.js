@@ -775,40 +775,53 @@ function setupMenuButtonListeners() {
 }
 
 /**
+ * Handles a game control button click event
+ * @returns nothing - stops execution if none of the expected buttons are clicked
+ */
+function gameControlButtonClickEventHandler() {
+    switch (this.id) {
+        case 'pause-game':
+            pauseGame();
+            showPausedGameScreen();
+            break;
+        case 'resume-game':
+            resumeGame();
+            hidePausedGameScreen();
+            break;
+        case 'restart-game':
+            clearGameCanvas();
+            startGame();
+            break;
+        case 'settings':
+            pauseGame();
+            displaySettings();
+            break;
+        case 'exit-btn':
+            hideSecondaryMenu();
+            break;
+        default:
+            return;
+    }
+}
+
+/**
+ * Sets click event listener for game control buttons
+ */
+function setupGameControlButtonListeners() {
+    let gameControlButtons = document.getElementsByClassName('control-btn');
+    
+    for (let i = 0; i < gameControlButtons.length; i++) {
+        gameControlButtons[i].addEventListener('click', gameControlButtonClickEventHandler);
+    }
+}
+
+/**
  * Adds listeners to all of the menu buttons, executing as appropriate for each button
  */
 function setupListeners() {
     setupMenuButtonListeners();
 
-    let gameControlButtons = document.getElementsByClassName('control-btn');
-    
-    for (let i = 0; i < gameControlButtons.length; i++) {
-        gameControlButtons[i].addEventListener('click', function() {
-            switch (this.id) {
-                case 'pause-game':
-                    pauseGame();
-                    showPausedGameScreen();
-                    break;
-                case 'resume-game':
-                    resumeGame();
-                    hidePausedGameScreen();
-                    break;
-                case 'restart-game':
-                    clearGameCanvas();
-                    startGame();
-                    break;
-                case 'settings':
-                    pauseGame();
-                    displaySettings();
-                    break;
-                case 'exit-btn':
-                    hideSecondaryMenu();
-                    break;
-                default:
-                    return;
-            }
-        });
-    }
+    setupGameControlButtonListeners();
 
     let highScoreEntryForm = document.getElementById('score-submission');
 
