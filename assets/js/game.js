@@ -1,4 +1,5 @@
 /* jshint esversion: 8 */
+/*globals BLOCK_SIZE, COLS, ROWS, Board, Block, COLOURS */
 
 //#region Global variables
 const CANVAS = document.getElementById('tetris');
