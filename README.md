@@ -186,6 +186,11 @@ Here are the specific game features.
 
 ### Validator testing
         
+* HTML
+    * There were 4 HTML errors found, as shown below, after passing through the official W3C Markup Validator.
+
+        ![HTML validator errors image](documentation/screenshots/testing/errors-1-to-4.png)
+
 ## Deployment
 
 The site was deployed to GitHub pages using the steps listed below: 
