@@ -32,7 +32,6 @@ let scoreKey = 'port-2-tet-highScores';
 
 let isPlaying = false;
 let isPaused = false;
-let isFalling = false;
 let isGameOver = false;
 let isSoundOn = false;
 //#endregion
