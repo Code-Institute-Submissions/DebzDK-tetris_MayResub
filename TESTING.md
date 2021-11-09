@@ -74,3 +74,15 @@
                 ![Screenshot of Lighthouse mobile report for index.html](documentation/screenshots/testing/lighthouse-mobile-report.png)
 
                 *Note: Mobile has the same accessibilty issues as shown for desktop*
+
+## Unfixed bugs
+
+* Hanging piece
+    This issue was discovered when testing rotation and only happens after rotating a 'Z' and 'S' shape tetris block.
+
+    ![Screenshot of hanging piece bug](documentation/screenshots/testing/hanging-piece-bug.png)
+
+* Game display on mobile devices (dev tools)
+
+
+## Fixed bugs
