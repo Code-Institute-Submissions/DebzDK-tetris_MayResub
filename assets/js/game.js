@@ -772,6 +772,8 @@ function setupMenuButtonListeners() {
         menuButtons[i].addEventListener('mouseover', menuButtonMouseOverHandler);
         menuButtons[i].addEventListener('mouseout', menuButtonMouseOutHandler);
     }
+    
+    menuButtons[0].focus();
 }
 
 /**
@@ -828,8 +830,6 @@ function setupListeners() {
     highScoreEntryForm.addEventListener('submit', function() {
         return storeHighScore();
     });
-
-    menuButtons[0].focus();
 }
 
 /**
