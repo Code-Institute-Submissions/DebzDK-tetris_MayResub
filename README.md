@@ -187,9 +187,12 @@ Here are the specific game features.
 ### Validator testing
         
 * HTML
-    * There were 4 HTML errors found, as shown below, after passing through the official W3C Markup Validator.
+    * 1 warning and 3 HTML errors were found, as shown below, after passing through the official W3C Markup Validator.
 
         ![HTML validator errors image](documentation/screenshots/testing/errors-1-to-4.png)
+
+    * The warning and the errors were fixed, as shown below, and can be verified by clicking [here](https://validator.w3.org/nu/?doc=https%3A%2F%2Fdebzdk.github.io%2Ftetris%2F).
+        ![Fixed HTML validator errors image](documentation/screenshots/testing/fixed-html-errors.png)
 
 ## Deployment
 
