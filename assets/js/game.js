@@ -76,7 +76,7 @@ document.addEventListener('keydown', function(e) {
 // Arrow key released
 document.addEventListener('keyup', function(e) {
     if (isPlaying) {
-        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(1000)
+        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(1000);
     }
 });
 //#endregion
