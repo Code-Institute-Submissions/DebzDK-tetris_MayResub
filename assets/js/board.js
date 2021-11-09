@@ -1,3 +1,5 @@
+/* jshint esversion: 8 */
+
 const COLS = 30;
 const ROWS = 60;
 

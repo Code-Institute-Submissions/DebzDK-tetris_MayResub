@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -8,15 +9,17 @@
 
         <title>Tetris</title>
 
-        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="icon" type="image/x-icon" href="assets/images/logo.ico">
+
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+        <link rel="stylesheet" href="assets/css/style.css">
     </head>
-    <body onload="setupListeners()">
+    <body>
         <!-- Left game area -->
         <section id="left">
             <!-- Stats area -->
             <div id="stats">
-                <h2 class="bordered-box-title">Stats</h1>
+                <h2 class="bordered-box-title">Stats</h2>
                 <div class="bordered-box">
                     <div class="attribute">
                         <p class="property">Score</p>
@@ -51,7 +54,7 @@
                 
                 <!-- Secondary menu -->
                 <div id="secondary-menu" class="bordered-box hidden">
-                    <h2 id="secondary-menu-title"></h2>
+                    <div id="secondary-menu-title"></div>
 
                     <!-- Game controls -->
                     <div id="secondary-menu-controls-content" class="hidden">
@@ -85,7 +88,7 @@
                     <div id="secondary-menu-status-content" class="hidden">
                         <p><strong>GAME <span id="game-status"></span></strong></p>
                         <br>
-                        <form id="score-submission" onsubmit="return storeHighScore()" class="hidden">
+                        <form id="score-submission" class="hidden">
                             <label for="player">ENTER NAME:</label>
                             <input id="player" type="text" minlength="3" maxlength="4" aria-label="Enter player name for highscore (minimum 3 characters required)" placeholder="_ _ _ _" required>
                             <button type="submit" class="finer-bordered-box control-btn">Submit</button>
@@ -111,7 +114,7 @@
                     </div>
 
                     <br>
-                    <button id="exit-btn" class="bordered-box control-btn" onclick="hideSecondaryMenu()">Exit</button>
+                    <button id="exit-btn" class="bordered-box control-btn">Exit</button>
                     <div id="exit-btn-blackout"></div>
                 </div>
             </div>
@@ -126,8 +129,8 @@
         <section id="right">
             <!-- Next etris block preview -->
             <div id="preview">
-                <h2 class="bordered-box-title">Preview</h1>
                 <div class="bordered-box">
+                    <h2 class="bordered-box-title">Preview</h2>
                     <canvas id="preview-block"></canvas>
                 </div>
             </div>

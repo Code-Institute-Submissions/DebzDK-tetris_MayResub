@@ -1,3 +1,5 @@
+/* jshint esversion: 8 */
+
 // Tetris blocks represented in 3x3 matrixes
 const BLOCK_TYPES = {
     L: {

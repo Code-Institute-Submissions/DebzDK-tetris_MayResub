@@ -2,7 +2,7 @@
 
 @font-face {
     font-family: 'Tetris2';
-    src: url(../fonts/Tetris2-VP0w.ttf) format('truetype'),
+    src: url(../fonts/tetris2-vp0w.ttf) format('truetype'),
          url(../fonts/tetris2-vp0w-webfont.woff2) format('woff2'),
          url(../fonts/tetris2-vp0w-webfont.woff) format('woff');
     font-weight: normal;
@@ -35,6 +35,7 @@ body {
     display: flex;
     justify-content: space-between;
     padding: 20px 0;
+    height: 90vh;
 }
 
 button {
@@ -56,6 +57,7 @@ section {
     position: relative;
     display: flex;
     flex-direction: column;
+    flex: 1;
 }
 
 #center {
@@ -70,7 +72,7 @@ section {
     background-color: #000;
     padding: 0 5px;
     position: absolute;
-    left: 15px;
+    top: 0px;
 }
 
 .bordered-box {
@@ -98,11 +100,16 @@ section {
 .hidden {
     display: none !important;
 }
+
+#stats,
+#preview {
+    align-self: center;
+}
 /*#endregion*/
 
 /*#region Stats box*/
 #stats {
-    width: 175px;
+    min-width: 175px;
 }
 /*#endregion*/
 
@@ -157,13 +164,14 @@ button.menu-item {
 #block-entrance {
     background-color: #000;
     position: absolute;
-    top: -10px;
-    width: 300px;
+    top: -7px;
+    left: 2.5%;
+    width: 95%;
     height: 10px;
 }
 
 #game {
-    width: 300px;
+    width: 100%;
 }
 
 #tetris {
@@ -177,11 +185,11 @@ button.menu-item {
 
 #preview {
     text-align: center;
+    min-width: 150px;
 }
 
 #preview-block {
-    width: 200px;
-    height: 210px;
+    width: 100%;
 }
 /*#endregion*/
 
@@ -215,6 +223,11 @@ button.menu-item {
     height: auto;
     left: -15px;
     transition: 1s ease-in all;
+}
+
+#secondary-menu-title {
+    font-weight: 600;
+    font-size: 1.5rem;
 }
 
 #secondary-menu p {
