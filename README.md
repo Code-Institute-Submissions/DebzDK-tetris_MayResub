@@ -66,9 +66,89 @@ All other user stories follow the same kind of format except for where the user 
 
 ## Features
 
+Each feature listed below was chosen to ultimately meet the project goal of portfolio project 2 - '...build an interactive front-end site. The site should respond to the users' actions, allowing users to actively engage with data, alter the way the site displays the information to achieve their preferred goals'.
+
+A simple game of Tetris meets these requirements as follows:
+
+* Responds to the users' actions by way of game controls and menu options
+* Allows users to actively engage with data, i.e. playing the game
+* Alters the way the site displays information through shape rotation, stats (score and level), and moving blocks through the grid
+
+Here are the specific game features.
+
 ### Existing features
 
+* Main menu
+    * Users able to see a main menu before starting the game.
+
+        ![GIF of main menu](documentation/screenshots/evidence/website/main-menu.gif)
+
+        From here, a user can start the game and view game controls, credits and the leaderboard.
+
+* Game controls
+    * Users are able to use the arrow keys on their keyboard to control the movement of the Tetris blocks as follows:
+
+        ![Screenshot of game controls](documentation/screenshots/website/controls.png)
+
+        *For mobile gameplay, these controls will be displayed underneath the stats area.*
+
+* Game credits
+    * Users are able to see a small scrolling thank you note I included.
+
+        ![GIF of scrolling credits](documentation/screenshots/website/credits.gif)
+
+* Current game score counter and level indicator - 'Stats' area
+    * Users are able to see their current game score and level while playing a game.
+
+        Initially, this area contains dots as a placeholder until a game has begun.
+
+        ![GIF of stats area changing from initial state to game state](documentation/screenshots/website/stats.gif)
+
+* Persisting highscore table/leaderboard
+    * Users are able to view highscores that persist after closing the browser, or refreshing the webpage, and returning to the game.
+
+        Ideally, this should've been implemented in a way where scores would persist between players on different computers but that would've gone beyong this scope of this project. Instead, scores are stored locally using `localStorage`.
+
+        ![GIF of leaderboard persisting after refreshing the page](documentation/screenshots/website/persisting-leaderboard.gif)
+
+* Multiplier for consequtive row clearing
+    * In order to stay true to Tetris, I googled 'Tetris scoring system' and chose to base my code on the description given for the '[Original Nintendo scoring system](https://tetris.wiki/Scoring#Original_Nintendo_scoring_system)' provided by [Wikipedia](https://en.wikipedia.org/wiki/Main_Page).
+
+        ![Screenshot of Wikipedia's description for the original Nintendo scoring system for Tetris](documentation/screenshots/evidence/wikipedia-tetris-scoring-system.png)
+
+        Resulting code:
+        ```
+        let level = 0;
+        let currentScore = 0;
+        let baseScorePerLinesCleared = [40, 100, 300, 1200];
+
+        function incrementScore(numOfLinesCleared) {
+            let baseScore = baseScorePerLinesCleared[numOfLinesCleared - 1] || baseScorePerLinesCleared[4];
+            currentScore += baseScore * (level + 1);
+        }
+        ```
+
+        *Note: I did not incorporate the extra points for the consequtive soft-dropping of blocks into spaces.*
+
+* Next shape preview
+    * Like in classic Tetris, there is an area where users can preview the next shape to fall which gives them a chance to strategise while playing the game.
+
+        ![Screenshot of next shape preview](documentation/screenshots/website/next-shape-preview.png)
+
+* Shape rotation
+    * Lastly, users are able to rotate falling shapes. Tetris simply wouldn't be Tetris without it.
+        To achieve this, I found and used code from a YouTube tutorial called '[Tetris, Block Movement and Rotation](https://www.youtube.com/watch?v=iAGokSQQxI8&t=1590s)'. Alternatively, I could have stored all of the versions of the tetris block rotation states and achieved the same behaviour but I wanted to learn a smarter way to do it.
+
+        I made use of and sectioned the referenced code toward the bottom of my block.js file and modified as appropriate.
+
+        ![GIF of shape rotation in action](documentation/screenshots/website/shape-rotation.gif)
+
 ### Future features
+
+* Programmable controls
+* Ability to choose themes
+* Difficulty modes
+* Stats for falling pieces
 
 ## Languages and technologies used
 
