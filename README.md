@@ -186,6 +186,19 @@ Here are the specific game features.
 
 ### Validator testing
         
+* HTML
+    * 1 warning and 3 HTML errors were found, as shown below, after passing through the official W3C Markup Validator.
+
+        ![HTML validator errors image](documentation/screenshots/testing/errors-1-to-4.png)
+
+    * The warning and the errors were fixed, as shown below, and can be verified by clicking [here](https://validator.w3.org/nu/?doc=https%3A%2F%2Fdebzdk.github.io%2Ftetris%2F).
+        ![Fixed HTML validator errors image](documentation/screenshots/testing/fixed-html-errors.png)
+
+* CSS
+    * No errors were found after passing through the official (Jigsaw) validator.
+    This can be verified by clicking [here](https://jigsaw.w3.org/css-validator/validator?uri=https%3A%2F%2Fdebzdk.github.io%2Ftetris&profile=css3svg&usermedium=all&warning=1&vextwarning=&lang=en).
+    * There are 21 warnings regarding the use of vendor extensions. The properties referred to in these warnings are necessary for browser compatibility in Chrome, Safari, IE/Microsoft Edge, and Firefox.
+
 ## Deployment
 
 The site was deployed to GitHub pages using the steps listed below: 
