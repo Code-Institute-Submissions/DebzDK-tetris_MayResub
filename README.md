@@ -205,23 +205,27 @@ Here are the specific game features.
     * [board.js](https://github.com/DebzDK/tetris/blob/main/assets/js/board.js)
         * No errors and 1 unused variable were found after passing through the official JSHint Code Quality Tool.
             
-            *Note: the unused variable is actually referring to the class name so was not addressed.*
+            *Note: The unused variable is actually referring to the class name so was not addressed.*
             
             ![Screenshot of JSHint result for board.js file](documentation/screenshots/testing/jshint-validation-result-for-boardjs.png)
 
     * [block.js](https://github.com/DebzDK/tetris/blob/main/assets/js/block.js)
         * 1 warning and 2 undefined variables were found after passing through the official JSHint Code Quality Tool.
             
-            *Note: the unused variable 'BLOCK_SIZE' is used in game.js and board.js. It is defined in block.js because it is a property/variable related to blocks so was not addressed.*
+            *Note: The unused variable 'BLOCK_SIZE' is used in game.js and board.js. It is defined in block.js because it is a property/variable related to blocks so was not addressed.*
 
             ![Screenshot of JSHint result for block.js](documentation/screenshots/testing/jshint-validation-result-for-blockjs.png)
 
     * [game.js](https://github.com/DebzDK/tetris/blob/main/assets/js/game.js)
-        * 5 warnings and 6 undefined variables were found after passing through the official JSHint Code Quality Tool.
+        * 5 warnings, 6 undefined variables and 1 unused variable were found after passing through the official JSHint Code Quality Tool.
             
-            *Note: the unused variable 'BLOCK_SIZE' is used in game.js and board.js. It is defined in block.js because it is a property/variable related to blocks so was not addressed.*
+            *Note: The undefied variables 'BLOCK_SIZE, COLOURS, Block, Board, COLS, ROW' are used in game.js but defined in board.js and block.js as appropriate. I used the JSHint 'globals' to remove these specific warnings. The function with the cyclomatic complexity value of 12 is processMenuOption(). Seeing as the statements used were required for the behaviour of the game, I could not see a way to further reduce the complexity.*
 
-            ![Screenshot of JSHint result for block.js](documentation/screenshots/testing/jshint-validation-result-for-blockjs.png)
+            ![Screenshot of JSHint result for game.js](documentation/screenshots/testing/jshint-validation-result-for-gamejs.png)
+        
+        * These were all fixed as can be seen here:
+
+            ![Screenshot of JSHint result after fixes gor game.js](documentation/screenshots/testing/jshint-validation-fixes-for-gamejs.png)
 
 * Accessibility
     * 4 error and 5 alerts were found after running the [WAVE Accessibility Evaluation tool](https://wave.webaim.org/report#/https://debzdk.github.io/pilates-your-guide-to-flexible-fun).
