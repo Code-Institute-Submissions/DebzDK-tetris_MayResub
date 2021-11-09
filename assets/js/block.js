@@ -86,12 +86,6 @@ const COLOURS = [
 ];
 
 class Block {
-    // Stores the tetris block represented by the Block object
-    static currentBlock = [];
-
-    // Stores the tetris block colour
-    static currentColour = '#000000';
-
     /**
      * Sets the block type and colour to be represent the Block object
      */
