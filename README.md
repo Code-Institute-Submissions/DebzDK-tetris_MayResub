@@ -212,10 +212,13 @@ Since my work is in a publicly-accesible repository, it can be copied in 3 diffe
 
 1. Using Gitpod to create a new workspace for the repository via https://gitpod.io/#https://github.com/DebzDK/tetris
 
-
 ## Credits
 
 ### Content
+
+The code used to rotate Tetris blocks is sourced from a YouTube video called '[Tetris, Block Movement and Rotation](https://www.youtube.com/watch?v=iAGokSQQxI8&t=1590s)'. It details, step-by-step, how to create a Tetris game using React. The only steps followed and used in this project were the steps to achieve rotation in my [block.js](https://github.com/DebzDK/tetris/blob/main/assets/js/block.js#L131) file.
+
+The rest of the code is based on my prior attempt at a Tetris game that I completed as a 2nd year assignment in university which was built using Java's JApplet.
 
 ### Media
 
