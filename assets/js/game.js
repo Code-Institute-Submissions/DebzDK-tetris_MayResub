@@ -26,6 +26,7 @@ let gameOverTrackPath = soundFolderPath + 'game-over.mp3';
 let currentScore = 0;
 let baseScorePerLinesCleared = [40, 100, 300, 1200];
 let level = 0;
+let scoreKey = 'port-2-tet-highScores';
 
 let isPlaying = false;
 let isPaused = false;
@@ -48,6 +49,11 @@ document.addEventListener('keydown', function(e) {
                 if (blockX + block.currentBlock.xOffset + block.currentBlock.width < canvasWidth) {
                     moveRg();
                 }
+                break;
+            case 'ArrowUp':
+                drawBlock(true);
+                block.rotateBlockClockwise();
+                drawBlock();
                 break;
             case 'ArrowDown':
                 if (gameSpeed !== 100) {
@@ -141,6 +147,89 @@ function incrementScore(numOfLinesCleared) {
 }
 
 /**
+ * Stores score as highscore in local storage to persist value
+ */
+function storeHighScore() {
+    if (currentScore > 0) {
+        let leaderBoard = getHighScores();
+        let playerName = document.getElementById('player').value;
+        let playerEntryIndex = getIndexOfHighScoreForPlayer(playerName);
+
+        if (playerEntryIndex > -1) {
+            let playerEntry = leaderBoard[playerEntryIndex];
+            if (playerEntry.score < currentScore) {
+                leaderBoard[playerEntryIndex].score = currentScore;
+            }
+
+            let indexToInsertInto = playerEntryIndex;
+            while (indexToInsertInto - 1 > -1) {
+                indexToInsertInto--;
+                let entryAbovePlayer = leaderBoard[indexToInsertInto];
+
+                if (entryAbovePlayer.score > currentScore) {
+                    break;
+                }
+            }
+
+            if (indexToInsertInto !== playerEntryIndex) {
+                leaderBoard.splice(indexToInsertInto, 0, leaderBoard[playerEntryIndex]);
+                leaderBoard.splice(playerEntryIndex + 1, 1);
+            }
+        } else {
+            let currentNumOfLeaderBoardEntries = leaderBoard.length;
+            for (let i = 0; i < currentNumOfLeaderBoardEntries; i++) {
+                let entry = leaderBoard[i];
+
+                if (entry.score < currentScore ||
+                    (entry.score === currentScore && entry.player.toLowerCase() > playerName.toLowerCase())) {
+                    leaderBoard.splice(i, 0, { player: playerName, score: currentScore });
+                } else {
+                    leaderBoard.push({ player: playerName, score: currentScore });
+                }
+            }
+        }
+
+        localStorage.setItem(scoreKey, JSON.stringify(leaderBoard));
+    }
+    hideSecondaryMenu();
+
+    return false;
+}
+
+/**
+ * Retrieves highscores from local storage
+ * @returns array - array of objects containing high score information
+ */
+function getHighScores() {
+    let highScores = localStorage.getItem(scoreKey);
+    if (highScores) {
+        highScores = JSON.parse(highScores);
+    } else {
+        highScores = [];
+    }
+
+    return highScores;
+}
+
+/**
+ * Retrieves the index of a given player's highscore entry
+ * @param {string} playerName - Name of player
+ * @returns int - index of a given player's highscore entry or -1 if it doesn't exist
+ */
+function getIndexOfHighScoreForPlayer(playerName) {
+    let highScores = getHighScores();
+
+    for (let i = 0; i < highScores.length; i++) {
+        let userScorePair = highScores[i];
+        if (userScorePair.player === playerName) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+/**
  * Clears game canvas
  */
 function clearGameCanvas() {
@@ -200,6 +289,7 @@ function endGame() {
     showSecondaryMenuContent('status');
     hideSecondaryMenuContent('settings');
     setGameStatus('over');
+    showHighScoreEntryForm();
     showSecondaryMenu();
 }
 
@@ -715,6 +805,12 @@ function processMenuOption(id) {
             removeClassFromElementClassList('exit-btn-blackout', 'hidden');
             showSecondaryMenu();
             break;
+        case 'game-leaderboard':
+            setSecondaryMenuTitle('Leaderboard');
+            showSecondaryMenuContent('leaderboard');
+            setLeaderBoardHTML();
+            showSecondaryMenu();
+            break;
         case 'game-sounds':
             toggleSoundSetting();
             break;
@@ -820,6 +916,7 @@ function hideSecondaryMenu() {
     addClassToElementClassList('secondary-menu-title', 'hidden');
     hideSecondaryMenuContent('controls');
     hideSecondaryMenuContent('credits');
+    hideSecondaryMenuContent('leaderboard');
     addClassToElementClassList('exit-btn-blackout', 'hidden');
     setSecondaryMenuTitle('');
 
@@ -968,5 +1065,29 @@ function resetAudio() {
     if (isSoundOn && musicPlayer.outerHTML.indexOf(tetrisTrackPath) === -1) {
         setAudio(tetrisTrackPath, audioTimeUpdateCallback);
     }
+}
+
+/**
+ * Displays form for highscore entry
+ */
+function showHighScoreEntryForm() {
+    removeClassFromElementClassList('score-submission', 'hidden');
+    addClassToElementClassList('exit-btn', 'hidden');
+}
+
+/**
+ * Generates and sets HTML for stored leaderboard values
+ */
+function setLeaderBoardHTML() {
+    let leaderBoardHTML = '<ol>';
+    let leaderBoard = getHighScores();
+
+    for (let i = 0; i < leaderBoard.length; i++) {
+        let entry = leaderBoard[i];
+        leaderBoardHTML += '<li>' + entry.player + ' ........ ' + entry.score + '</li>';
+    }
+
+    leaderBoardHTML += "</ol>";
+    document.getElementById('scores').innerHTML = leaderBoardHTML;
 }
 //#endregion
