@@ -172,6 +172,8 @@ Here are the specific game features.
         * [Flexbox](https://en.wikipedia.org/wiki/CSS_Flexible_Box_Layout) - used instead of `float` property for responsive web design
 * Technologies
     * [Autoprefixer](https://autoprefixer.github.io/) - used to automatically add vendor prefixes for browser compatibility
+    * [Coolors](https://coolors.co/) - used to provide colour scheme for Tetris blocks
+    * [EZGIF](https://ezgif.com/) - used to create GIFS for this README
     * [Trello](https://trello.com/) - used to document planning/design and development project progress and steps
     * [Git](https://git-scm.com/) - used for version control
     * [GitHub](https://github.com/) - used for internet hosting and version control through use of Git
@@ -186,7 +188,30 @@ Here are the specific game features.
         
 ## Deployment
 
+The site was deployed to GitHub pages using the steps listed below: 
+* In the GitHub repository, navigate to the Settings tab
+* From the source section drop-down menu, select the 'main' branch
+    ![Deployment step 1 image](documentation/screenshots/evidence/deployment-step-1.jpg)
+* Once the 'main' branch has been selected, the page will be automatically refreshed and indicate the state of deployment (which should eventually show as successful)
+    ![Deployment step 2 image](documentation/screenshots/evidence/deployment-step-2.png)
+    ![Deployment final step image](documentation/screenshots/evidence/deployment-final.png)
+
+The live site can be found here - https://debzdk.github.io/tetris
+
 ### Local deployment
+
+Since my work is in a publicly-accesible repository, it can be copied in 3 different ways:
+
+1. Cloning the repository
+
+    <code>git clone https://github.com/DebzDK/tetris.git</code>
+
+1. Forking the repository
+
+    ![Fork repo image](documentation/screenshots/evidence/fork-it.png)
+
+1. Using Gitpod to create a new workspace for the repository via https://gitpod.io/#https://github.com/DebzDK/tetris
+
 
 ## Credits
 
