@@ -27,6 +27,12 @@ After discussing this idea during the Mentor Project Planning session, the wiref
 
 ### Colours
 
+The site's colour scheme was chosen using [Coolers colour scheme generator](https://coolors.co/) and searching for [trending 'Tetris' colour palettes](https://coolors.co/palettes/trending/tetris).
+
+I chose the following [colour palette](https://coolors.co/0341ae-72cb3b-ffd500-ff971c-ff3213) because it was the brightest.
+
+![Screenshot of selected colour palette for tetris blocks](documentation/screenshots/evidence/tetris-colour-palette.jpg)
+
 ### Planning and execution
 
 ## Features
