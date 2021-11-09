@@ -146,52 +146,89 @@ function incrementScore(numOfLinesCleared) {
 }
 
 /**
+ * Updates the current player's score and position in the leaderboard
+ * @param {int} currentPlayerPosition - index of current player's score in 'leadBoard' array
+ * @param {array} leaderBoard - array of key-pair values
+ */
+function updatePlayerScoreInLeaderBoard(currentPlayerPosition, leaderBoard) {
+    let entry = leaderBoard[currentPlayerPosition];
+
+    if (currentScore > entry.score) {
+        entry.score = currentScore;
+    }
+
+    let leaderBoardPositionToPlacePlayer = currentPlayerPosition - 1;
+    // while an entry above the current position exists (i.e. the array isn't out of bounds)
+    while (leaderBoardPositionToPlacePlayer > -1) {
+        // look at the preceeding entry
+        let otherPlayerEntry = leaderBoard[leaderBoardPositionToPlacePlayer];
+
+        // if the current player's score is less than the score of a preceeding entry
+        // or we've reached the top of the leaderboard
+        if (currentScore < otherPlayerEntry.score || leaderBoardPositionToPlacePlayer === 0) {
+            // break out of the loop, this is the index where the current player will be spliced
+            break;
+        }
+        // look at the next preceeding entry
+        leaderBoardPositionToPlacePlayer--;
+    }
+
+    // if the player deserves to be moved up the ranks
+    if (leaderBoardPositionToPlacePlayer !== currentPlayerPosition) {
+        // splice them into their new rank
+        leaderBoard.splice(leaderBoardPositionToPlacePlayer, 0, leaderBoard[currentPlayerPosition]);
+        // and remove their old one (which is +1 because we've just added an element)
+        leaderBoard.splice(currentPlayerPosition + 1, 1);
+    }
+}
+
+/**
+ * Adds a player's score to its appropriate place in the leaderboard
+ * @param {array} leaderBoard - an array of key-pair values
+ * @param {string} playerName - a 3-4 character string representation of a player's name
+ */
+function addPlayerToLeaderBoard(leaderBoard, playerName) {
+    let currentNumOfLeaderBoardEntries = leaderBoard.length;
+
+    for (let i = 0; i < currentNumOfLeaderBoardEntries; i++) {
+        let entry = leaderBoard[i];
+
+        if (entry.score === currentScore && entry.player.toLowerCase() > playerName.toLowerCase()) {
+            leaderBoard.splice(i, 0, { player: playerName, score: currentScore });
+        } else {
+            leaderBoard.push({ player: playerName, score: currentScore });
+        }
+    }
+}
+
+/**
  * Stores score as highscore in local storage to persist value
  */
 function storeHighScore() {
-    if (currentScore > 0) {
+    if (currentScore > 0) { // only proceed if the player has a score
         let leaderBoard = getHighScores();
         let playerName = document.getElementById('player').value;
-        let playerEntryIndex = getIndexOfHighScoreForPlayer(playerName);
+        let currentPlayerPosition = getLeaderBoardPositionForPlayer(playerName);
 
-        if (playerEntryIndex > -1) {
-            let playerEntry = leaderBoard[playerEntryIndex];
-            if (playerEntry.score < currentScore) {
-                leaderBoard[playerEntryIndex].score = currentScore;
+        // if player is already on the leaderboard
+        if (currentPlayerPosition > -1) {
+            let playersLeaderBoardScore = leaderBoard[currentPlayerPosition].score;
+            //  and there current score is higher than their leaderboard score
+            if (currentScore > playersLeaderBoardScore) {
+                // update their score
+                updatePlayerScoreInLeaderBoard(currentPlayerPosition, leaderBoard);
             }
-
-            let indexToInsertInto = playerEntryIndex;
-            while (indexToInsertInto - 1 > -1) {
-                indexToInsertInto--;
-                let entryAbovePlayer = leaderBoard[indexToInsertInto];
-
-                if (entryAbovePlayer.score > currentScore) {
-                    break;
-                }
-            }
-
-            if (indexToInsertInto !== playerEntryIndex) {
-                leaderBoard.splice(indexToInsertInto, 0, leaderBoard[playerEntryIndex]);
-                leaderBoard.splice(playerEntryIndex + 1, 1);
-            }
-        } else {
-            let currentNumOfLeaderBoardEntries = leaderBoard.length;
-            for (let i = 0; i < currentNumOfLeaderBoardEntries; i++) {
-                let entry = leaderBoard[i];
-
-                if (entry.score < currentScore ||
-                    (entry.score === currentScore && entry.player.toLowerCase() > playerName.toLowerCase())) {
-                    leaderBoard.splice(i, 0, { player: playerName, score: currentScore });
-                } else {
-                    leaderBoard.push({ player: playerName, score: currentScore });
-                }
-            }
+        } else { // if player isn't on the leaderboard, add them
+            addPlayerToLeaderBoard(leaderBoard);
         }
 
+        // store modified value in local storage
         localStorage.setItem(scoreKey, JSON.stringify(leaderBoard));
     }
+
     hideSecondaryMenu();
 
+    // to prevent form from submitting and refreshing the page
     return false;
 }
 
@@ -211,11 +248,11 @@ function getHighScores() {
 }
 
 /**
- * Retrieves the index of a given player's highscore entry
+ * Retrieves the index of a given player's leaderboard entry
  * @param {string} playerName - Name of player
- * @returns int - index of a given player's highscore entry or -1 if it doesn't exist
+ * @returns int - index of a given player's leaderboard entry or -1 if it doesn't exist
  */
-function getIndexOfHighScoreForPlayer(playerName) {
+function getLeaderBoardPositionForPlayer(playerName) {
     let highScores = getHighScores();
 
     for (let i = 0; i < highScores.length; i++) {
