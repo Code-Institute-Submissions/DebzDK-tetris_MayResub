@@ -43,7 +43,7 @@
         
         * These were all fixed as can be seen here:
 
-            ![Screenshot of JSHint result after fixes gor game.js](documentation/screenshots/testing/jshint-validation-fixes-for-gamejs.png)
+            ![Screenshot of JSHint result after fixes for game.js](documentation/screenshots/testing/jshint-validation-fixes-for-gamejs.png)
 
 * Accessibility
     * 4 error and 5 alerts were found after running the [WAVE Accessibility Evaluation tool](https://wave.webaim.org/report#/https://debzdk.github.io/pilates-your-guide-to-flexible-fun).
