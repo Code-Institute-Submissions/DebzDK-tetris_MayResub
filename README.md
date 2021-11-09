@@ -8,14 +8,22 @@ The site is targeted toward people who enjoy games, like Tetris. This site will 
 ### Wireframes
 
 To kickstart the project design process, a hand-drawn wireframe was created in order to visualise this project idea.
+
 ![Hand-drawn wireframe](documentation/wireframes/hand-drawn-wireframe.jpg)
-<br>
+
 After discussing this idea during the Mentor Project Planning session, the wireframe for the chosen project idea was re-created digitally using Balsamiq.
 
 ![Wireframe for main menu](documentation/wireframes/main-menu.png)
 ![Wireframe for gameplay](documentation/wireframes/gameplay.png)
 
 ### Typography
+
+[Google Fonts](https://fonts.google.com/) and [Fontspace](https://www.fontspace.com/) were used to search for and select the following fonts for this game.
+
+'[VT323](https://fonts.google.com/specimen/VT323?query=vt)' (from Google Fonts) was used for the stats and preview areas and 'Tetris 2' (from Fontspace) was used for the game title and menu texts.
+
+![Screenshot of selected Fontspace font](documentation/screenshots/evidence/tetris-font-selection.jpg)
+![Screenshot of selected Google Fonts font](documentation/screenshots/evidence/google-font-selection.jpg)
 
 ### Colours
 
