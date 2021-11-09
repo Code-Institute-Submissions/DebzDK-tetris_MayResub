@@ -217,6 +217,11 @@ button.menu-item {
     transition: 1s ease-in all;
 }
 
+#secondary-menu-title {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
 #secondary-menu p {
     padding: 10px;
 }
