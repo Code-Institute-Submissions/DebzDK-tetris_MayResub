@@ -214,6 +214,21 @@ Here are the specific game features.
 
             Contrast Ratio: <b>[21:1](https://webaim.org/resources/contrastchecker/?fcolor=FFFFFF&bcolor=000000)</b>
 
+* Lighthouse
+    * Initial report
+        * Desktop
+            * index.html
+
+                ![Screenshot of initial Lighthouse desktop report for index.html](documentation/screenshots/testing/lighthouse-desktop-report.png)
+                ![Screenshot of initial Lighthouse desktop report for index.html accessibility issues](documentation/screenshots/testing/lighthouse-desktop-accessibility-issues.png)
+
+        * Mobile
+            * index.html
+
+                ![Screenshot of Lighthouse mobile report for index.html](documentation/screenshots/testing/lighthouse-mobile-report.png)
+
+                *Note: Mobile has the same accessibilty issues as shown for desktop*
+
 ## Deployment
 
 The site was deployed to GitHub pages using the steps listed below: 
