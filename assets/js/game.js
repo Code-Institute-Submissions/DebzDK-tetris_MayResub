@@ -1,3 +1,5 @@
+/* jshint esversion: 8 */
+
 //#region Global variables
 const CANVAS = document.getElementById('tetris');
 const PREVIEW_CANVAS = document.getElementById('preview-block');
@@ -19,7 +21,7 @@ let gameSpeed = 1000;
 let statPlaceholder = '.........';
 
 let musicPlayer;
-let soundFolderPath = '../assets/sounds/';
+let soundFolderPath = 'assets/sounds/';
 let tetrisTrackPath = soundFolderPath + 'tetris-gameboy-02.mp3';
 let gameOverTrackPath = soundFolderPath + 'game-over.mp3';
 
@@ -733,6 +735,8 @@ function setGameStatus(status) {
 //#endregion
 
 //#region Menu functions
+document.body.onload = setupListeners;
+
 /**
  * Adds listeners to all of the menu buttons, executing as appropriate for each button
  */
@@ -775,11 +779,20 @@ function setupListeners() {
                     pauseGame();
                     displaySettings();
                     break;
+                case 'exit-btn':
+                    hideSecondaryMenu();
+                    break;
                 default:
                     return;
             }
         });
     }
+
+    let highScoreEntryForm = document.getElementById('score-submission');
+
+    highScoreEntryForm.addEventListener('submit', function() {
+        return storeHighScore();
+    });
 
     menuButtons[0].focus();
 }
