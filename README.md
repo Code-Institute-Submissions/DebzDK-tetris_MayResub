@@ -198,6 +198,28 @@ Here are the specific game features.
     * No errors were found after passing through the official (Jigsaw) validator.
     This can be verified by clicking [here](https://jigsaw.w3.org/css-validator/validator?uri=https%3A%2F%2Fdebzdk.github.io%2Ftetris&profile=css3svg&usermedium=all&warning=1&vextwarning=&lang=en).
     * There are 21 warnings regarding the use of vendor extensions. The properties referred to in these warnings are necessary for browser compatibility in Chrome, Safari, IE/Microsoft Edge, and Firefox.
+    
+* JavaScript
+    * [board.js](https://github.com/DebzDK/tetris/blob/main/assets/js/board.js)
+        * No errors and 1 unused variable were found after passing through the official JSHint Code Quality Tool.
+            
+            *Note: the unused variable is actually referring to the class name so was not addressed.*
+            
+            ![Screenshot of JSHint result for board.js file](documentation/screenshots/testing/jshint-validation-result-for-boardjs.png)
+
+    * [block.js](https://github.com/DebzDK/tetris/blob/main/assets/js/block.js)
+        * 1 warning and 2 undefined variables were found after passing through the official JSHint Code Quality Tool.
+            
+            *Note: the unused variable 'BLOCK_SIZE' is used in game.js and board.js. It is defined in block.js because it is a property/variable related to blocks so was not addressed.*
+
+            ![Screenshot of JSHint result for block.js](documentation/screenshots/testing/jshint-validation-result-for-blockjs.png)
+
+    * [game.js](https://github.com/DebzDK/tetris/blob/main/assets/js/game.js)
+        * 5 warnings and 6 undefined variables were found after passing through the official JSHint Code Quality Tool.
+            
+            *Note: the unused variable 'BLOCK_SIZE' is used in game.js and board.js. It is defined in block.js because it is a property/variable related to blocks so was not addressed.*
+
+            ![Screenshot of JSHint result for block.js](documentation/screenshots/testing/jshint-validation-result-for-blockjs.png)
 
 * Accessibility
     * 4 error and 5 alerts were found after running the [WAVE Accessibility Evaluation tool](https://wave.webaim.org/report#/https://debzdk.github.io/pilates-your-guide-to-flexible-fun).
