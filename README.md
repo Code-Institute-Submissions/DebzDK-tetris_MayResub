@@ -81,7 +81,7 @@ Here are the specific game features.
 * Main menu
     * Users able to see a main menu before starting the game.
 
-        ![GIF of main menu](documentation/screenshots/evidence/website/main-menu.gif)
+        ![GIF of main menu](documentation/screenshots/website/main-menu.gif)
 
         From here, a user can start the game and view game controls, credits and the leaderboard.
 
