@@ -21,7 +21,7 @@ let gameSpeed = 1000;
 let statPlaceholder = '.........';
 
 let musicPlayer;
-let soundFolderPath = '../assets/sounds/';
+let soundFolderPath = 'assets/sounds/';
 let tetrisTrackPath = soundFolderPath + 'tetris-gameboy-02.mp3';
 let gameOverTrackPath = soundFolderPath + 'game-over.mp3';
 
