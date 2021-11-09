@@ -61,14 +61,12 @@ document.addEventListener('keydown', function(e) {
                     setGameSpeed(100);
                 }
         }
-    } else {
-        if (e.key === 'ArrowDown') {
-            cycleThroughMenu('#main-menu-options', 'game-play');
-        } else if (e.key === 'ArrowUp') {
-            cycleThroughMenu('#main-menu-options', 'game-credits', true);
-        } else if (e.key === 'Enter') {
-            processMenuOption(e.target.id);
-        }
+    } else if (e.key === 'ArrowDown') {
+        cycleThroughMenu('#main-menu-options', 'game-play');
+    } else if (e.key === 'ArrowUp') {
+        cycleThroughMenu('#main-menu-options', 'game-credits', true);
+    } else if (e.key === 'Enter') {
+        processMenuOption(e.target.id);
     }
 });
 
