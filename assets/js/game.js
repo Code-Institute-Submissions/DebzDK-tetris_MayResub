@@ -112,7 +112,7 @@ function initialiseNextBlockPreview() {
     // Board dimensions setup
     PRE_TET_GRID.canvas.width = COLS * 5;
     PRE_TET_GRID.canvas.height = COLS * 5;
-    PRE_TET_GRID.scale(30, 30);
+    PRE_TET_GRID.scale(BLOCK_SIZE, BLOCK_SIZE);
 
     // Tetris block border setup
     PRE_TET_GRID.strokeStyle = 'white';

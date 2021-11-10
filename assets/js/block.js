@@ -68,7 +68,7 @@ const BLOCK_TYPES = {
 };
 
 // Multiplier for calculating board size
-const BLOCK_SIZE = 10;
+const BLOCK_SIZE = 20;
 
 // All possible tetris block shapes
 const BLOCKS = [BLOCK_TYPES.L, BLOCK_TYPES.J,
