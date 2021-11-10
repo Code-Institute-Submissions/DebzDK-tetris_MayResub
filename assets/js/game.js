@@ -1200,6 +1200,11 @@ function setLeaderBoardHTML() {
     }
 
     leaderBoardHTML += "</ol>";
+
+    if (leaderBoardHTML === '<ol></ol>') {
+        leaderBoardHTML = 'No winners yet...';
+    }
+    
     document.getElementById('scores').innerHTML = leaderBoardHTML;
 }
 //#endregion
