@@ -186,12 +186,17 @@ Here are the specific game features.
 * Difficulty modes
     * To set this game apart from the classic Tetris in some way, I would've used the usual difficulty (speed increase) coupled with something else such as, an ever-increasing or decreasing grid, the random appearance of unclearable blocks in the game, or some kind of sudden death type occurrence.
 
+    I made an attempt at this, as mentioned in 'Multiplier for consequtive row clearing' bullet point above but it needs work.
+
 * Stats for fallen pieces
     * When searching for design ideas for my Tetris game using Google Images, one retro [design](https://miro.medium.com/max/1838/1*6cPm3UhWEMBpYja5LFtkGg.png) caught my eye:
 
         ![Screenshot of retro-style Tetris with stats for fallen pieces](documentation/screenshots/evidence/future-feature-block-stats.png)
 
         I thought the in-game display of statistics for fallen pieces was really cool and would've been easy enough to implement but I decided to leave it out of this version.
+
+* Ability to floor/fast drop a Tetris block to the bottom of the grid
+    * This is a tetris classic! I left it for last, to be the cherry on top of the cake, but I didn't leave enough time for testing so this will have to be a future feature.
 
 ## Languages and technologies used
 
