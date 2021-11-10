@@ -34,6 +34,7 @@ let isPlaying = false;
 let isPaused = false;
 let isGameOver = false;
 let isSoundOn = false;
+let isPressingKey = false;
 //#endregion
 
 //#region Game event listeners
@@ -44,22 +45,29 @@ document.addEventListener('keydown', function(e) {
             case 'ArrowLeft':
                 if (blockX + block.currentBlock.xOffset > 0) {
                     moveLf();
+                    isPressingKey = true;
                 }
                 break;
             case 'ArrowRight':
                 if (blockX + block.currentBlock.xOffset + block.currentBlock.width < canvasWidth) {
                     moveRg();
+                    isPressingKey = true;
                 }
                 break;
             case 'ArrowUp':
                 drawBlock(true);
                 block.rotateBlockClockwise();
                 drawBlock();
+                isPressingKey = true;
                 break;
             case 'ArrowDown':
-                if (gameSpeed !== 100) {
-                    setGameSpeed(100);
+                if (!isPressingKey) {
+                    if (gameSpeed !== 100) {
+                        setGameSpeed(100);
+                    }
+                    isPressingKey = true;
                 }
+                break;
         }
     } else if (e.key === 'ArrowDown') {
         cycleThroughMenu('#main-menu-options', 'game-play');
@@ -74,6 +82,7 @@ document.addEventListener('keydown', function(e) {
 document.addEventListener('keyup', function(e) {
     if (isPlaying) {
         if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(1000);
+        isPressingKey = false;
     }
 });
 //#endregion
@@ -544,6 +553,9 @@ function shiftRowsDown(rowIndex) {
  * or the bottom of the grid has been reached
  */ 
 function moveDn() {
+    // Holds the number of rows in a block's array
+    let numOfRows = block.currentBlock.shape.length - 1;
+
     // Holds the width of the current block
     let width = block.currentBlock.width;
 
@@ -554,7 +566,7 @@ function moveDn() {
      * Loops through each bit of the current block and determines if the bottom of the board has been reached
      * or checks if the current block has hit another block below it
      */
-    for (let y = block.currentBlock.shape.length; y >= 0; y--) { // starts from the bottom row of the block
+    for (let y = numOfRows; y >= 0; y--) { // starts from the bottom row of the block
         for (let x = block.currentBlock.xOffset; x <= width; x++) { // loops through each column
             if (!isShapeBelow) {
                 // store the current row of block bits
@@ -573,7 +585,7 @@ function moveDn() {
                 }
 
                 let isBoardBitAndCurrentBlockBitTheSame = false;
-                if (y < block.currentBlock.shape.length) { // overlap can only over when we're not looking at the last row of the block representation
+                if (y < numOfRows) { // overlap can only over when we're not looking at the last row of the block representation
                     // basic check to see if the part of the board we're looking it is actually part of the current moving block
                     isBoardBitAndCurrentBlockBitTheSame = bitInBoardRowBelowBlock && block.currentBlock.shape[y + 1][x];
                 }
