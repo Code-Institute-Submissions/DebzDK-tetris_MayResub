@@ -17,7 +17,9 @@ let blockX;
 let blockY;
 
 let timer;
+let baseGameSpeed = 1000;
 let gameSpeed = 1000;
+let softDropSpeed = 100;
 let statPlaceholder = '.........';
 
 let musicPlayer;
@@ -28,6 +30,7 @@ let gameOverTrackPath = soundFolderPath + 'game-over.mp3';
 let currentScore = 0;
 let baseScorePerLinesCleared = [40, 100, 300, 1200];
 let level = 0;
+let totalNumOfLinesCleared = 0;
 let scoreKey = 'port-2-tet-highScores';
 let scoreElement;
 
@@ -58,8 +61,9 @@ document.addEventListener('keydown', function(e) {
                 drawBlock();
                 break;
             case 'ArrowDown':
-                if (gameSpeed !== 100) {
-                    setGameSpeed(100);
+                let newDropSpeed = gameSpeed - softDropSpeed;
+                if (gameSpeed > newDropSpeed && newDropSpeed >= 0) {
+                    setGameSpeed(newDropSpeed);
                 }
                 currentScore += 1;
                 updateScore();
@@ -76,7 +80,7 @@ document.addEventListener('keydown', function(e) {
 // Arrow key released
 document.addEventListener('keyup', function(e) {
     if (isPlaying) {
-        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(1000);
+        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeedForCurrentLevel();
     }
 });
 //#endregion
@@ -121,17 +125,74 @@ function initialiseNextBlockPreview() {
  */
 function initialiseStats(withPlaceholder) {
     if (withPlaceholder) {
-        updateScore(statPlaceholder);
-        document.getElementById('score').textContent = statPlaceholder;
-        document.getElementById('level').textContent = statPlaceholder;
+        scoreElement.textContent = statPlaceholder;
+        updateStat('level', statPlaceholder);
+        updateStat('lines', statPlaceholder);
     } else {
+        currentScore = 0;
+        level = 0;
+        totalNumOfLinesCleared = 0;
+
         updateScore();
-        document.getElementById('level').textContent = level;
+        updateStat('level', level);
+        updateStat('lines', totalNumOfLinesCleared);
     }
 }
 
 /**
- * Updates score value in stats box with current score
+ * Returns true if criteria for next level has been met
+ * @returns boolean - true if integer values are equal
+ */
+function meetsNextLevelCriteria() {
+    return totalNumOfLinesCleared === (level * 5 + 5);
+}
+
+/**
+ * Sets game speed based on current level
+ * (set to get fast fairly quickly so that all aspects of the game can be seen for assessment purposes)
+ */
+function setGameSpeedForCurrentLevel() {
+    let newSpeed = baseGameSpeed - (level * 50);
+
+    if (newSpeed < 0) {
+        gameSpeed = 0;
+    } else {
+        gameSpeed = newSpeed;
+    }
+}
+
+/**
+ * Increases level
+ */
+function increaseLevel() {
+    level += 1;
+}
+
+/**
+ * Updates level indicator in 'Stats' area
+ */
+function updateLevel() {
+    document.getElementById('level').textContent = level;
+}
+
+/**
+ * Updates lines cleared indicator in 'Stats' area
+ */
+function updateLinesCleared() {
+    document.getElementById('lines').textContent = totalNumOfLinesCleared;
+}
+
+/**
+ * Updates value in stats box with given value
+ * @param {string} statElementId - ID of element in the stat area
+ * @param {string} value - value to update element's text content with
+ */
+function updateStat(statElementId, value) {
+    document.getElementById(statElementId).textContent = value;
+}
+
+/**
+ * Updates score in stats box
  */
 function updateScore() {
     scoreElement.textContent = currentScore;
@@ -527,9 +588,18 @@ function checkForFullRow() {
             redrawBoard();
         }
     }
+
     if (numOfLinesCleared > 0) {
+        totalNumOfLinesCleared += numOfLinesCleared;
         incrementScore(numOfLinesCleared);
         updateScore();
+        updateLinesCleared();
+
+        if (meetsNextLevelCriteria()) {
+            increaseLevel();
+            updateLevel();
+            setGameSpeedForCurrentLevel();
+        }
     }
 }
 
