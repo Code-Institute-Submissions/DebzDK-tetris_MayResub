@@ -1,6 +1,9 @@
 /* jshint esversion: 8 */
 /*globals BLOCK_SIZE, COLS, ROWS, Board, Block, COLOURS */
 
+/* #region and #endregion have been used for the purpose of being able to group
+    and collapse related rules when developing */
+
 //#region Global variables
 const CANVAS = document.getElementById('tetris');
 const PREVIEW_CANVAS = document.getElementById('preview-block');
