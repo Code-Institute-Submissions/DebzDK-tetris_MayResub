@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -8,146 +9,158 @@
 
         <title>Tetris</title>
 
+        <link rel="icon" type="image/x-icon" href="assets/images/logo.ico">
+
+        <link rel="stylesheet" href="assets/css/fontawesome.min.css">
+        <link rel="stylesheet" href="assets/css/solid.min.css">
         <link rel="stylesheet" href="assets/css/style.css">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
     </head>
-    <body onload="setupListeners()">
-        <!-- Left game area -->
-        <section id="left">
-            <!-- Stats area -->
-            <div id="stats">
-                <h2 class="bordered-box-title">Stats</h1>
-                <div class="bordered-box">
-                    <div class="attribute">
-                        <p class="property">Score</p>
-                        <p id="score" class="value">.........</p>
-                    </div>
-                    <div class="attribute">
-                        <p class="property">Level</p>
-                        <p id="level" class="value">.........</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Center game area -->
-        <section id="center" class="bordered-box">
-            <div id="block-entrance"></div>
-            <!-- Menus -->
-            <div id="menu">
-                <!-- Main menu -->
-                <div id="main-menu">
-                    <h1>Tetris</h1>
-
-                    <div id="main-menu-options" class="bordered-box">
-                        <h2>Menu</h2>
-                        <br>
-                        <button id="game-play" class="menu-item active">Play Game</button>
-                        <button id="game-controls" class="menu-item">Controls</button>
-                        <button id="game-credits" class="menu-item">Credits</button>
-                        <button id="game-leaderboard" class="menu-item">View Leaderboard</button>
-                    </div>
-                </div>
-                
-                <!-- Secondary menu -->
-                <div id="secondary-menu" class="bordered-box hidden">
-                    <h2 id="secondary-menu-title"></h2>
-
-                    <!-- Game controls -->
-                    <div id="secondary-menu-controls-content" class="hidden">
-                        <p>Up ................ <span class="finer-bordered-box">&#8593;</span></p>
-                        <p>Down ........... <span class="finer-bordered-box">&#8595;</span></p>
-                        <p>Left ................ <span class="finer-bordered-box">&#8592;</span></p>
-                        <p>Right .............. <span class="finer-bordered-box">&#8594;</span></p>
-                    </div>
-
-                    <!-- Game credits -->
-                    <div id="secondary-menu-credits-content" class="hidden">
-                        <div id="credits-scroller">
-                            My awesome childhood
-                            <br>
-                            <br>
-                            My older bro for introducing me to games
-                            <br>
-                            <br>
-                            My love for retro classics
-                            <br>
-                            <br>
-                            And my mentor~
-                            <br>
-                            <br>
-                            <br>
-                            Thanks for playing!
+    <body>
+        <!-- Start of main content, i.e. the game components -->
+        <main>
+            <!-- Left game area -->
+            <section id="left">
+                <!-- Stats area -->
+                <div id="stats">
+                    <h2 class="bordered-box-title">Stats</h2>
+                    <div class="bordered-box">
+                        <div class="attribute">
+                            Score<span id="score" class="value">.........</span>
+                        </div>
+                        <div class="attribute">
+                            Level<span id="level" class="value">.........</span>
+                        </div>
+                        <div class="attribute">
+                            Lines<span id="lines" class="value">.........</span>
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    <!-- Game status -->
-                    <div id="secondary-menu-status-content" class="hidden">
-                        <p><strong>GAME <span id="game-status"></span></strong></p>
-                        <br>
-                        <form id="score-submission" onsubmit="return storeHighScore()" class="hidden">
-                            <label for="player">ENTER NAME:</label>
-                            <input id="player" type="text" minlength="3" maxlength="4" aria-label="Enter player name for highscore (minimum 3 characters required)" placeholder="_ _ _ _" required>
-                            <button type="submit" class="finer-bordered-box control-btn">Submit</button>
+            <!-- Center game area -->
+            <section id="center" class="bordered-box">
+                <div id="block-entrance"></div>
+                <!-- Menus -->
+                <div id="menu">
+                    <!-- Main menu -->
+                    <div id="main-menu">
+                        <h1>Tetris</h1>
+
+                        <div id="main-menu-options" class="bordered-box">
+                            <h2>Menu</h2>
                             <br>
-                            <br>
-                            <br>
-                        </form>
+                            <button id="game-play" class="menu-item active" aria-label="Play game button">Play Game</button>
+                            <button id="game-controls" class="menu-item" aria-label="View game controls button">Controls</button>
+                            <button id="game-credits" class="menu-item" aria-label="View game credits button">Credits</button>
+                            <button id="game-leaderboard" class="menu-item" aria-label="View game leaderboard button">View Leaderboard</button>
+                        </div>
                     </div>
                     
-                    <!-- Game leaderboard -->
-                    <div id="secondary-menu-leaderboard-content" class="hidden">
+                    <!-- Secondary menu -->
+                    <div id="secondary-menu" class="bordered-box hidden">
+                        <div id="secondary-menu-title"></div>
+
+                        <!-- Game controls -->
+                        <div id="secondary-menu-controls-content" class="hidden">
+                            <p>Up (Rotate) ................ <span class="finer-bordered-box">&#8593;</span></p>
+                            <p>Down (Soft Drop) ........... <span class="finer-bordered-box">&#8595;</span></p>
+                            <p>Left (Move Left) ................ <span class="finer-bordered-box">&#8592;</span></p>
+                            <p>Right (Move Right) .............. <span class="finer-bordered-box">&#8594;</span></p>
+                        </div>
+
+                        <!-- Game credits -->
+                        <div id="secondary-menu-credits-content" class="hidden">
+                            <div id="credits-scroller">
+                                My awesome childhood
+                                <br>
+                                <br>
+                                My older bro for introducing me to games
+                                <br>
+                                <br>
+                                My love for retro classics
+                                <br>
+                                <br>
+                                And my mentor~
+                                <br>
+                                <br>
+                                <br>
+                                Thanks for playing!
+                            </div>
+                        </div>
+
+                        <!-- Game status -->
+                        <div id="secondary-menu-status-content" class="hidden">
+                            <p><strong>GAME <span id="game-status"></span></strong></p>
+                            <br>
+                            <form id="score-submission" class="hidden">
+                                <label for="player">ENTER NAME:</label>
+                                <br>
+                                <input id="player" type="text" minlength="3" maxlength="4" aria-label="Enter player name for highscore (minimum 3 characters required)" placeholder="_ _ _ _" required>
+                                <button type="submit" class="finer-bordered-box control-btn" aria-label="Submit highscore button">Submit</button>
+                                <br>
+                                <br>
+                                <br>
+                            </form>
+                        </div>
+                        
+                        <!-- Game leaderboard -->
+                        <div id="secondary-menu-leaderboard-content" class="hidden">
+                            <br>
+                            <div id="scores"></div>
+                        </div>
+
+                        <!-- Game settings -->
+                        <div id="secondary-menu-settings-content" class="hidden">
+                            <br>
+                            <button id="game-sounds" class="menu-item active" aria-label="Toggle game sound button">Sound: <span id="sound-setting">OFF</span></button>
+                            <button id="quit-game" class="menu-item hidden" aria-label="Quit game button">Quit</button>
+                            <br>
+                            <br>
+                        </div>
+
                         <br>
-                        <div id="scores"></div>
+                        <button id="exit-btn" class="bordered-box control-btn">Exit</button>
+                        <div id="exit-btn-blackout"></div>
                     </div>
+                </div>
 
-                    <!-- Game settings -->
-                    <div id="secondary-menu-settings-content" class="hidden">
-                        <br>
-                        <button id="game-sounds" class="menu-item active">Sound: <span id="sound-setting">OFF</span></button>
-                        <button id="quit-game" class="menu-item hidden">Quit</button>
-                        <br>
-                        <br>
+                <!-- Tetris -->
+                <div id="game" class="full-height">
+                    <canvas id="tetris"></canvas>
+                </div>
+            </section>
+
+            <!-- Right game area-->
+            <section id="right">
+                <!-- Next etris block preview -->
+                <div id="preview">
+                    <div class="bordered-box">
+                        <h2 class="bordered-box-title">Preview</h2>
+                        <canvas id="preview-block"></canvas>
                     </div>
-
-                    <br>
-                    <button id="exit-btn" class="bordered-box control-btn" onclick="hideSecondaryMenu()">Exit</button>
-                    <div id="exit-btn-blackout"></div>
                 </div>
-            </div>
 
-            <!-- Tetris -->
-            <div id="game" class="full-height">
-                <canvas id="tetris"></canvas>
-            </div>
-        </section>
-
-        <!-- Right game area-->
-        <section id="right">
-            <!-- Next etris block preview -->
-            <div id="preview">
-                <h2 class="bordered-box-title">Preview</h1>
-                <div class="bordered-box">
-                    <canvas id="preview-block"></canvas>
+                <!-- Game controls -->
+                <div id="controls">
+                    <button id="pause-game" class="bordered-box control-btn big hidden" aria-label="Pause game button">
+                        <i class="fas fa-pause"></i>
+                        <span>Pause</span>
+                    </button>
+                    <button id="resume-game" class="bordered-box control-btn big hidden" aria-label="Resume game button">
+                        <i class="fas fa-play"></i>
+                        <span>Resume</span>
+                    </button>
+                    <button id="restart-game" class="bordered-box control-btn big hidden" aria-label="Restart game button">
+                        <i class="fas fa-redo-alt"></i>
+                        <span>Restart</span>
+                    </button>
+                    <button id="settings" class="bordered-box control-btn big" aria-label="Game settings button">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </button>
                 </div>
-            </div>
-
-            <!-- Game controls -->
-            <div id="controls">
-                <button id="pause-game" class="bordered-box control-btn hidden">
-                    <i class="fas fa-pause"></i>
-                </button>
-                <button id="resume-game" class="bordered-box control-btn hidden">
-                    <i class="fas fa-play"></i>
-                </button>
-                <button id="restart-game" class="bordered-box control-btn hidden">
-                    <i class="fas fa-redo-alt"></i>
-                </button>
-                <button id="settings" class="bordered-box control-btn">
-                    <i class="fas fa-cog"></i>
-                </button>
-            </div>
-        </section>
+            </section>
+        </main>
 
         <script src="assets/js/board.js"></script>
         <script src="assets/js/block.js"></script>

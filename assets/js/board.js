@@ -1,5 +1,7 @@
-const COLS = 30;
-const ROWS = 60;
+/* jshint esversion: 8 */
+
+const COLS = 20;
+const ROWS = 40;
 
 class Board {
     /**

@@ -1,3 +1,6 @@
+/* jshint esversion: 8 */
+/*globals BLOCK_SIZE, COLS, ROWS, Board, Block, COLOURS */
+
 //#region Global variables
 const CANVAS = document.getElementById('tetris');
 const PREVIEW_CANVAS = document.getElementById('preview-block');
@@ -5,7 +8,6 @@ const TET_GRID = CANVAS.getContext('2d');
 const PRE_TET_GRID = PREVIEW_CANVAS.getContext('2d');
 
 let board;
-let nextBlockPreview;
 let block;
 let nextBlock;
 
@@ -15,22 +17,25 @@ let blockX;
 let blockY;
 
 let timer;
+let baseGameSpeed = 1000;
 let gameSpeed = 1000;
+let softDropSpeed = 100;
 let statPlaceholder = '.........';
 
 let musicPlayer;
-let soundFolderPath = '../assets/sounds/';
+let soundFolderPath = 'assets/sounds/';
 let tetrisTrackPath = soundFolderPath + 'tetris-gameboy-02.mp3';
 let gameOverTrackPath = soundFolderPath + 'game-over.mp3';
 
 let currentScore = 0;
 let baseScorePerLinesCleared = [40, 100, 300, 1200];
 let level = 0;
+let totalNumOfLinesCleared = 0;
 let scoreKey = 'port-2-tet-highScores';
+let scoreElement;
 
 let isPlaying = false;
 let isPaused = false;
-let isFalling = false;
 let isGameOver = false;
 let isSoundOn = false;
 //#endregion
@@ -56,25 +61,28 @@ document.addEventListener('keydown', function(e) {
                 drawBlock();
                 break;
             case 'ArrowDown':
-                if (gameSpeed !== 100) {
-                    setGameSpeed(100);
+                let newSoftDropSpeed = getGameSpeedForCurrentLevel() / 10;
+                if (gameSpeed !== newSoftDropSpeed) {
+                    if (gameSpeed >= 0) {
+                        setGameSpeed(newSoftDropSpeed);
+                    }
                 }
+                currentScore += 1;
+                updateScore();
         }
-    } else {
-        if (e.key === 'ArrowDown') {
-            cycleThroughMenu('#main-menu-options', 'game-play');
-        } else if (e.key === 'ArrowUp') {
-            cycleThroughMenu('#main-menu-options', 'game-credits', true);
-        } else if (e.key === 'Enter') {
-            processMenuOption(e.target.id);
-        }
+    } else if (e.key === 'ArrowDown') {
+        cycleThroughMenu('#main-menu-options', 'game-play');
+    } else if (e.key === 'ArrowUp') {
+        cycleThroughMenu('#main-menu-options', 'game-credits', true);
+    } else if (e.key === 'Enter') {
+        processMenuOption(e.target.id);
     }
 });
 
 // Arrow key released
 document.addEventListener('keyup', function(e) {
     if (isPlaying) {
-        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(1000)
+        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(getGameSpeedForCurrentLevel());
     }
 });
 //#endregion
@@ -103,12 +111,10 @@ function initialiseBoard() {
  * Initialises the next block preview canvas
  */
 function initialiseNextBlockPreview() {
-    nextBlockPreview = new Board(PRE_TET_GRID);
-
     // Board dimensions setup
     PRE_TET_GRID.canvas.width = COLS * 5;
     PRE_TET_GRID.canvas.height = COLS * 5;
-    PRE_TET_GRID.scale(30, 30);
+    PRE_TET_GRID.scale(BLOCK_SIZE, BLOCK_SIZE);
 
     // Tetris block border setup
     PRE_TET_GRID.strokeStyle = 'white';
@@ -121,20 +127,84 @@ function initialiseNextBlockPreview() {
  */
 function initialiseStats(withPlaceholder) {
     if (withPlaceholder) {
-        updateScore(statPlaceholder);
-        document.getElementById('score').textContent = statPlaceholder;
-        document.getElementById('level').textContent = statPlaceholder;
+        scoreElement.textContent = statPlaceholder;
+        updateStat('level', statPlaceholder);
+        updateStat('lines', statPlaceholder);
     } else {
+        currentScore = 0;
+        level = 0;
+        totalNumOfLinesCleared = 0;
+
         updateScore();
-        document.getElementById('level').textContent = level;
+        updateStat('level', level);
+        updateStat('lines', totalNumOfLinesCleared);
     }
 }
 
 /**
- * Updates score value in stats box with current score
+ * Returns true if criteria for next level has been met
+ * @returns boolean - true if integer values are equal
+ */
+function meetsNextLevelCriteria() {
+    return totalNumOfLinesCleared === (level * 5 + 5);
+}
+
+/**
+ * Sets game speed based on current level
+ * (set to get fast fairly quickly so that all aspects of the game can be seen for assessment purposes)
+ */
+function setGameSpeedForCurrentLevel() {
+    gameSpeed = getGameSpeedForCurrentLevel();
+}
+
+/**
+ * Gets game speed for current level
+ */
+function getGameSpeedForCurrentLevel() {
+    let newSpeed = baseGameSpeed - (level * 50);
+
+    if (newSpeed < 0) {
+        newSpeed = 0;
+    }
+
+    return newSpeed;
+}
+
+/**
+ * Increases level
+ */
+function increaseLevel() {
+    level += 1;
+}
+
+/**
+ * Updates level indicator in 'Stats' area
+ */
+function updateLevel() {
+    document.getElementById('level').textContent = level;
+}
+
+/**
+ * Updates lines cleared indicator in 'Stats' area
+ */
+function updateLinesCleared() {
+    document.getElementById('lines').textContent = totalNumOfLinesCleared;
+}
+
+/**
+ * Updates value in stats box with given value
+ * @param {string} statElementId - ID of element in the stat area
+ * @param {string} value - value to update element's text content with
+ */
+function updateStat(statElementId, value) {
+    document.getElementById(statElementId).textContent = value;
+}
+
+/**
+ * Updates score in stats box
  */
 function updateScore() {
-    document.getElementById('score').textContent = currentScore;
+    scoreElement.textContent = currentScore;
 }
 
 /**
@@ -147,52 +217,98 @@ function incrementScore(numOfLinesCleared) {
 }
 
 /**
+ * Updates the current player's score and position in the leaderboard
+ * @param {int} currentPlayerPosition - index of current player's score in 'leadBoard' array
+ * @param {array} leaderBoard - array of key-pair values
+ */
+function updatePlayerScoreInLeaderBoard(currentPlayerPosition, leaderBoard) {
+    let entry = leaderBoard[currentPlayerPosition];
+
+    if (currentScore > entry.score) {
+        entry.score = currentScore;
+    }
+
+    let leaderBoardPositionToPlacePlayer = currentPlayerPosition - 1;
+    // while an entry above the current position exists (i.e. the array isn't out of bounds)
+    while (leaderBoardPositionToPlacePlayer > -1) {
+        // look at the preceeding entry
+        let otherPlayerEntry = leaderBoard[leaderBoardPositionToPlacePlayer];
+
+        // if the current player's score is less than the score of a preceeding entry
+        // or we've reached the top of the leaderboard
+        if (currentScore < otherPlayerEntry.score || leaderBoardPositionToPlacePlayer === 0) {
+            // break out of the loop, this is the index where the current player will be spliced
+            break;
+        }
+        // look at the next preceeding entry
+        leaderBoardPositionToPlacePlayer--;
+    }
+
+    // if the player deserves to be moved up the ranks
+    if (leaderBoardPositionToPlacePlayer !== currentPlayerPosition) {
+        // splice them into their new rank
+        leaderBoard.splice(leaderBoardPositionToPlacePlayer, 0, leaderBoard[currentPlayerPosition]);
+        // and remove their old one (which is +1 because we've just added an element)
+        leaderBoard.splice(currentPlayerPosition + 1, 1);
+    }
+}
+
+/**
+ * Adds a player's score to its appropriate place in the leaderboard
+ * @param {array} leaderBoard - an array of key-pair values
+ * @param {string} playerName - a 3-4 character string representation of a player's name
+ */
+function addPlayerToLeaderBoard(leaderBoard, playerName) {
+    let currentNumOfLeaderBoardEntries = leaderBoard.length;
+    let hasPlayerEntryBeenAdded = false;
+
+    for (let i = 0; i < currentNumOfLeaderBoardEntries; i++) {
+        let entry = leaderBoard[i];
+
+        // if the entry score is less than the current player's score
+        // or another player entry has the same score and their name is alphabetically lower than the current player's name
+        if (entry.score < currentScore ||
+                (entry.score === currentScore && entry.player.toLowerCase() > playerName.toLowerCase())) {
+            // the current player gets inserted into the leaderboard above the entry
+            leaderBoard.splice(i, 0, { player: playerName, score: currentScore });
+            hasPlayerEntryBeenAdded = true;
+            break;
+        }
+    }
+
+    if (currentNumOfLeaderBoardEntries === 0 || !hasPlayerEntryBeenAdded) {
+        leaderBoard.push({ player: playerName, score: currentScore });
+    }
+}
+
+/**
  * Stores score as highscore in local storage to persist value
  */
 function storeHighScore() {
-    if (currentScore > 0) {
+    if (currentScore > 0) { // only proceed if the player has a score
         let leaderBoard = getHighScores();
         let playerName = document.getElementById('player').value;
-        let playerEntryIndex = getIndexOfHighScoreForPlayer(playerName);
+        let currentPlayerPosition = getLeaderBoardPositionForPlayer(playerName);
 
-        if (playerEntryIndex > -1) {
-            let playerEntry = leaderBoard[playerEntryIndex];
-            if (playerEntry.score < currentScore) {
-                leaderBoard[playerEntryIndex].score = currentScore;
+        // if player is already on the leaderboard
+        if (currentPlayerPosition > -1) {
+            let playersLeaderBoardScore = leaderBoard[currentPlayerPosition].score;
+            //  and there current score is higher than their leaderboard score
+            if (currentScore > playersLeaderBoardScore) {
+                // update their score
+                updatePlayerScoreInLeaderBoard(currentPlayerPosition, leaderBoard);
             }
-
-            let indexToInsertInto = playerEntryIndex;
-            while (indexToInsertInto - 1 > -1) {
-                indexToInsertInto--;
-                let entryAbovePlayer = leaderBoard[indexToInsertInto];
-
-                if (entryAbovePlayer.score > currentScore) {
-                    break;
-                }
-            }
-
-            if (indexToInsertInto !== playerEntryIndex) {
-                leaderBoard.splice(indexToInsertInto, 0, leaderBoard[playerEntryIndex]);
-                leaderBoard.splice(playerEntryIndex + 1, 1);
-            }
-        } else {
-            let currentNumOfLeaderBoardEntries = leaderBoard.length;
-            for (let i = 0; i < currentNumOfLeaderBoardEntries; i++) {
-                let entry = leaderBoard[i];
-
-                if (entry.score < currentScore ||
-                    (entry.score === currentScore && entry.player.toLowerCase() > playerName.toLowerCase())) {
-                    leaderBoard.splice(i, 0, { player: playerName, score: currentScore });
-                } else {
-                    leaderBoard.push({ player: playerName, score: currentScore });
-                }
-            }
+        } else { // if player isn't on the leaderboard, add them
+            addPlayerToLeaderBoard(leaderBoard, playerName);
         }
 
+        // store modified value in local storage
         localStorage.setItem(scoreKey, JSON.stringify(leaderBoard));
     }
+
     hideSecondaryMenu();
 
+    // to prevent form from submitting and refreshing the page
     return false;
 }
 
@@ -212,11 +328,11 @@ function getHighScores() {
 }
 
 /**
- * Retrieves the index of a given player's highscore entry
+ * Retrieves the index of a given player's leaderboard entry
  * @param {string} playerName - Name of player
- * @returns int - index of a given player's highscore entry or -1 if it doesn't exist
+ * @returns int - index of a given player's leaderboard entry or -1 if it doesn't exist
  */
-function getIndexOfHighScoreForPlayer(playerName) {
+function getLeaderBoardPositionForPlayer(playerName) {
     let highScores = getHighScores();
 
     for (let i = 0; i < highScores.length; i++) {
@@ -233,14 +349,14 @@ function getIndexOfHighScoreForPlayer(playerName) {
  * Clears game canvas
  */
 function clearGameCanvas() {
-    TET_GRID.clearRect(0, 0, canvasWidth, canvasWidth);
+    TET_GRID.clearRect(0, 0, canvasWidth, canvasHeight);
 }
 
 /**
  * Clears canvas
  */
 function clearPreviewCanvas() {
-    PRE_TET_GRID.clearRect(0, 0, COLS * 5, COLS * 5);
+    PRE_TET_GRID.clearRect(0, 0, PRE_TET_GRID.canvas.width, PRE_TET_GRID.canvas.height);
 }
 
 /**
@@ -284,12 +400,17 @@ function endGame() {
     playAudio();
 
     // hides settings screen and shows game over message
+    showGameState();
     showMenuArea();
     setSecondaryMenuTitle('');
     showSecondaryMenuContent('status');
     hideSecondaryMenuContent('settings');
     setGameStatus('over');
-    showHighScoreEntryForm();
+
+    if (currentScore > 0) {
+        showHighScoreEntryForm();
+    }
+    
     showSecondaryMenu();
 }
 
@@ -476,9 +597,18 @@ function checkForFullRow() {
             redrawBoard();
         }
     }
+
     if (numOfLinesCleared > 0) {
+        totalNumOfLinesCleared += numOfLinesCleared;
         incrementScore(numOfLinesCleared);
         updateScore();
+        updateLinesCleared();
+
+        if (meetsNextLevelCriteria()) {
+            increaseLevel();
+            updateLevel();
+            setGameSpeedForCurrentLevel();
+        }
     }
 }
 
@@ -510,34 +640,50 @@ function shiftRowsDown(rowIndex) {
  * or the bottom of the grid has been reached
  */ 
 function moveDn() {
-    // Holds the height of the current block
-    let height = block.currentBlock.height;
-
-    // Holds the width of the current block
-    let width = block.currentBlock.width;
+    // Holds the upper bound index of outer array
+    let maxBlockArrayOuterIndex = block.currentBlock.shape.length - 1;
+    // Holds the upper bound index of inner array
+    let maxBlockArrayInnerIndex = block.currentBlock.shape[0].length - 1;
 
     // Used to indicate whether a block is below the current block
     let isShapeBelow = false;
 
     /**
-     * Loops through the width of the bottom row of the current block and determines if there's a block sitting below the current block
-     * or checks if an empty cell of a the bottom row of a block corresponds to an occupied block of the board
+     * Loops through each bit of the current block and determines if the bottom of the board has been reached
+     * or checks if the current block has hit another block below it
      */
-    for (let x = block.currentBlock.xOffset; x <= width; x++) {
-        if (!isShapeBelow) {
-            let rowOfBlockBits = block.currentBlock.shape[height - 1 + block.currentBlock.yOffset];
-            let bitInBlockRow = rowOfBlockBits[x];
-            let rowOfBoardBitsBelowBlock = board.grid[blockY + height + block.currentBlock.yOffset];
-            let bitInBoardRowBelowBlock;
+    for (let y = maxBlockArrayOuterIndex; y >= 0; y--) { // starts from the bottom row of the block
+        for (let x = block.currentBlock.xOffset; x <= maxBlockArrayInnerIndex; x++) { // loops through each column
+            if (!isShapeBelow) {
+                // store the current row of block bits
+                let rowOfBlockBits = block.currentBlock.shape[y];
+                // get the value of the bit (if it exists, i.e. isn't 0, then we know it's a something we can collide with)
+                let bitInBlockRow = rowOfBlockBits[x];
 
-            if (rowOfBoardBitsBelowBlock) {
-                bitInBoardRowBelowBlock = rowOfBoardBitsBelowBlock[blockX + x];
-            }
-            
-            if ((bitInBlockRow && (rowOfBoardBitsBelowBlock === undefined || bitInBoardRowBelowBlock)) ||
-                    !bitInBlockRow && board.grid[blockY + block.currentBlock.yOffset + 1][blockX + x]) {
-                isShapeBelow = true;
-                break;
+                // get the board representation of the row below the row of the current block we're looking at
+                let rowOfBoardBitsBelowBlock = board.grid[blockY + y + 1];
+
+                let bitInBoardRowBelowBlock;
+                // if there is a board row (is undefined once the bottom of the board is reached) 
+                if (rowOfBoardBitsBelowBlock) {
+                    // then store the bit directly below the one we're currently looking at
+                    bitInBoardRowBelowBlock = rowOfBoardBitsBelowBlock[blockX + x];
+                }
+
+                let isBoardBitAndCurrentBlockBitTheSame = false;
+                if (y < maxBlockArrayOuterIndex) { // overlap can only over when we're not looking at the last row of the block representation
+                    // basic check to see if the part of the board we're looking it is actually part of the current moving block
+                    isBoardBitAndCurrentBlockBitTheSame = bitInBoardRowBelowBlock && block.currentBlock.shape[y + 1][x];
+                }
+                
+                // if we're looking at a bit of the block (part of the shape) and we're not looking at the same block
+                // and we've reached the bottom of the board or there's already something occupying the below space on the board
+                if (bitInBlockRow && !isBoardBitAndCurrentBlockBitTheSame && 
+                        ((rowOfBoardBitsBelowBlock === undefined || bitInBoardRowBelowBlock))) {
+                    // no more wiggle room so act accordingly
+                    isShapeBelow = true;
+                    break;
+                }
             }
         }
     }
@@ -559,29 +705,32 @@ function moveDn() {
  * or the left side of the grid has been reached
  */ 
 function moveLf() {
-    // Holds the height of the current block
-    let height = block.currentBlock.height;
-
     // Used to indicate whether a block is on the left side of the current block
     let isShapeLeft = false;
 
     /**
-     * Loops through the first bit of the each row of the current block and determines if there's a block sitting on the left side
-     * or checks if an empty first cell of a row of a block corresponds to an occupied block of the board
+     * Loops through the first bit of the each row of the current block and determines if the block's hit the left side of the board
+     * or checks if the current block has hit another block on the left side of it
      */
-     for (let y = block.currentBlock.yOffset; y <= height - 1 + block.currentBlock.yOffset; y++) {
+     for (let y = block.currentBlock.yOffset; y < block.currentBlock.shape.length - 1; y++) {
         if (!isShapeLeft) {
+            // store the current row of block bits
             let rowOfBlockBits = block.currentBlock.shape[y];
-            let firstBitInBlockRow = rowOfBlockBits[0 + block.currentBlock.xOffset];
+            // get the value of the first bit in the row (if it exists, i.e. isn't 0, then we know it's a something we can collide with)
+            let firstBitInBlockRow = rowOfBlockBits[block.currentBlock.xOffset];
+            // get the board representation of the row matching with the row of the current block we're looking at
             let rowOfBoardBitsLeftOfBlock = board.grid[blockY + y];
             let bitInBoardRowLeftOfBlock;
 
+            // if there is a board column (is undefined once the left side of the board is reached)
             if (rowOfBoardBitsLeftOfBlock) {
+                // then store the bit directly left of the one we're currently looking at
                 bitInBoardRowLeftOfBlock = rowOfBoardBitsLeftOfBlock[blockX + block.currentBlock.xOffset - 1];
             }
-            
-            if (bitInBoardRowLeftOfBlock === undefined || (firstBitInBlockRow && bitInBoardRowLeftOfBlock) ||
-                    !firstBitInBlockRow && board.grid[blockY + block.currentBlock.yOffset + y][blockX + block.currentBlock.xOffset - 1]) {
+
+            // if there's no space to the left of the current block or collision detected
+            if (bitInBoardRowLeftOfBlock === undefined || (firstBitInBlockRow && bitInBoardRowLeftOfBlock)) {
+                // no wiggle room so act accordingly
                 isShapeLeft = true;
                 break;
             }
@@ -602,29 +751,37 @@ function moveLf() {
  * or the right side of the grid has been reached
  */ 
  function moveRg() {
-    // Holds the height of the current block
-    let height = block.currentBlock.height;
+    // Holds the number of rows/cols in a block's array
+    let numOfRows = block.currentBlock.shape.length - 1;
 
     // Used to indicate whether a block is on the right side of the current block
     let isShapeRight = false;
 
     /**
-     * Loops through the last bit of the each row of the current block and determines if there's a block sitting on the right side
-     * or checks if an empty last cell of a row of a block corresponds to an occupied block of the board
+     * Loops through the last bit of the each row of the current block and determines if the block's hit the right side of the board
+     * or checks if the current block has hit another block on the right side of it
      */
-     for (let y = block.currentBlock.yOffset; y <= height - 1 + block.currentBlock.yOffset; y++) {
+     for (let y = block.currentBlock.yOffset; y <= numOfRows; y++) {
         if (!isShapeRight) {
+            // store the current row of block bits
             let rowOfBlockBits = block.currentBlock.shape[y];
-            let firstBitInBlockRow = rowOfBlockBits[2];
+            // get the value of the last bit in the row (if it exists, i.e. isn't 0, then we know it's a something we can collide with)
+            let lastBitInBlockRow = rowOfBlockBits[block.currentBlock.xOffset + block.currentBlock.width - 1];
+
+            // get the board representation of the row matching the row of the current block we're looking at
             let rowOfBoardBitsRightOfBlock = board.grid[blockY + y];
+
             let bitInBoardRowRightOfBlock;
 
+            // if there is a board column (is undefined once the right side of the board is reached)
             if (rowOfBoardBitsRightOfBlock) {
+                // then store the bit directly right of the one we're currently looking at
                 bitInBoardRowRightOfBlock = rowOfBoardBitsRightOfBlock[blockX + block.currentBlock.xOffset + block.currentBlock.width];
             }
             
-            if (bitInBoardRowRightOfBlock === undefined || (firstBitInBlockRow && bitInBoardRowRightOfBlock) ||
-                    !firstBitInBlockRow && board.grid[blockY + block.currentBlock.yOffset + y][blockX + block.currentBlock.xOffset + block.currentBlock.width]) {
+            // if there's no space to the right of the current block or collision detected
+            if (bitInBoardRowRightOfBlock === undefined || (lastBitInBlockRow && bitInBoardRowRightOfBlock)) {
+                // no wiggle room so act accorrdingly
                 isShapeRight = true;
                 break;
             }
@@ -652,19 +809,58 @@ function progressGame() {
 }
 
 /**
+ * Hides game state
+ */
+function hideGameState() {
+    let curtain = document.getElementById('block-entrance');
+
+    curtain.style.height = "101%";
+    curtain.style.width = "100%";
+    curtain.style.left = "0";
+}
+
+/**
+ * Shows game state
+ */
+function showGameState() {
+    let curtain = document.getElementById('block-entrance');
+
+    curtain.style.height = "10px";
+    curtain.style.width = "95%";
+    curtain.style.left = "2.5%";
+}
+
+/**
+ * Hides game board and preview area from user
+ */
+function hideGame() {
+    hideGameState();
+    clearPreviewCanvas();
+}
+
+/**
+ * Shows game board and preview area
+ */
+ function showGame() {
+    showGameState();
+    drawPreview();
+}
+
+/**
  * Updates pause game control and menu display
  */
 function showPausedGameScreen() {
     removeClassFromElementClassList('resume-game', 'hidden');
     addClassToElementClassList('pause-game', 'hidden');
     addClassToElementClassList('game-sounds', 'hidden');
-    addClassToElementClassList('exit-btn', 'hidden');
     addClassToElementClassList('exit-btn-blackout', 'hidden');
     removeClassFromElementClassList('menu', 'hidden');
     
+    hideGame();
     showSecondaryMenu();
     showSecondaryMenuContent('status');
     setGameStatus('paused');
+    addClassToElementClassList('exit-btn', 'hidden');
 }
 
 /**
@@ -677,6 +873,7 @@ function hidePausedGameScreen() {
     removeClassFromElementClassList('pause-game', 'hidden');
     removeClassFromElementClassList('game-sounds', 'hidden');
     removeClassFromElementClassList('exit-btn', 'hidden');
+    showGame();
 }
 
 /**
@@ -713,6 +910,7 @@ function toggleMenuButtonVisibility(elementID) {
  * Displays settings menu
  */
 function displaySettings() {
+    hideGame();
     hideMainMenu();
     showMenuArea();
     
@@ -733,55 +931,104 @@ function setGameStatus(status) {
 //#endregion
 
 //#region Menu functions
+document.body.onload = function() {
+    setupListeners();
+    scoreElement = document.getElementById('score');
+};
+
+/**
+ * Handles a menu button click event
+ */
+function menuButtonClickEventHandler() {
+    processMenuOption(this.id);
+}
+
+/**
+ * Handles a menu button mouse over event
+ */
+function menuButtonMouseOverHandler() {
+    removeClassFromAllElementsWithClass('#main-menu-options .active', 'active');
+    addClassToElementClassList(this.id, 'active');
+    this.focus();
+}
+
+/**
+ * Handles a menu button mouse out event
+ */
+function menuButtonMouseOutHandler() {
+    removeClassFromElementClassList(this.id, 'active');
+    this.blur();
+}
+
+/**
+ * Sets button click, mouseover and mouseout event listeners
+ */
+function setupMenuButtonListeners() {
+    let menuButtons = document.getElementsByClassName('menu-item');
+
+    for (let i = 0; i < menuButtons.length; i++) {
+        menuButtons[i].addEventListener('click', menuButtonClickEventHandler);
+        menuButtons[i].addEventListener('mouseover', menuButtonMouseOverHandler);
+        menuButtons[i].addEventListener('mouseout', menuButtonMouseOutHandler);
+    }
+    
+    menuButtons[0].focus();
+}
+
+/**
+ * Handles a game control button click event
+ * @returns nothing - stops execution if none of the expected buttons are clicked
+ */
+function gameControlButtonClickEventHandler() {
+    switch (this.id) {
+        case 'pause-game':
+            pauseGame();
+            showPausedGameScreen();
+            break;
+        case 'resume-game':
+            resumeGame();
+            hidePausedGameScreen();
+            break;
+        case 'restart-game':
+            clearGameCanvas();
+            startGame();
+            break;
+        case 'settings':
+            pauseGame();
+            displaySettings();
+            break;
+        case 'exit-btn':
+            hideSecondaryMenu();
+            break;
+        default:
+            return;
+    }
+}
+
+/**
+ * Sets click event listener for game control buttons
+ */
+function setupGameControlButtonListeners() {
+    let gameControlButtons = document.getElementsByClassName('control-btn');
+    
+    for (let i = 0; i < gameControlButtons.length; i++) {
+        gameControlButtons[i].addEventListener('click', gameControlButtonClickEventHandler);
+    }
+}
+
 /**
  * Adds listeners to all of the menu buttons, executing as appropriate for each button
  */
 function setupListeners() {
-    let menuButtons = document.getElementsByClassName('menu-item');
+    setupMenuButtonListeners();
 
-    for (let i = 0; i < menuButtons.length; i++) {
-        menuButtons[i].addEventListener('click', function() {
-            processMenuOption(this.id);
-        });
-        menuButtons[i].addEventListener('mouseover', function() {
-            removeClassFromAllElementsWithClass('#main-menu-options .active', 'active');
-            addClassToElementClassList(this.id, 'active');
-            this.focus();
-        });
-        menuButtons[i].addEventListener('mouseout', function() {
-            removeClassFromElementClassList(this.id, 'active');
-            this.blur();
-        });
-    }
+    setupGameControlButtonListeners();
 
-    let gameControlButtons = document.getElementsByClassName('control-btn');
-    
-    for (let i = 0; i < gameControlButtons.length; i++) {
-        gameControlButtons[i].addEventListener('click', function() {
-            switch (this.id) {
-                case 'pause-game':
-                    pauseGame();
-                    showPausedGameScreen();
-                    break;
-                case 'resume-game':
-                    resumeGame();
-                    hidePausedGameScreen();
-                    break;
-                case 'restart-game':
-                    clearGameCanvas();
-                    startGame();
-                    break;
-                case 'settings':
-                    pauseGame();
-                    displaySettings();
-                    break;
-                default:
-                    return;
-            }
-        });
-    }
+    let highScoreEntryForm = document.getElementById('score-submission');
 
-    menuButtons[0].focus();
+    highScoreEntryForm.addEventListener('submit', function() {
+        return storeHighScore();
+    });
 }
 
 /**
@@ -905,6 +1152,7 @@ function showMenuArea() {
  */
 function showSecondaryMenu() {
     removeClassFromElementClassList('secondary-menu-title', 'hidden');
+    removeClassFromElementClassList('exit-btn', 'hidden');
     setClassesOnElement('secondary-menu', 'bordered-box');
 }
 
@@ -921,6 +1169,7 @@ function hideSecondaryMenu() {
     setSecondaryMenuTitle('');
 
     if (isPaused && isPlaying) {
+        showGame();
         resumeGame();
     } else if (isGameOver) {
         hideSecondaryMenuContent('status');
@@ -1088,6 +1337,10 @@ function setLeaderBoardHTML() {
     }
 
     leaderBoardHTML += "</ol>";
+
+    if (leaderBoardHTML === '<ol></ol>') {
+        leaderBoardHTML = 'No winners yet...';
+    }
     document.getElementById('scores').innerHTML = leaderBoardHTML;
 }
 //#endregion
