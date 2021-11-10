@@ -299,7 +299,7 @@ function storeHighScore() {
                 updatePlayerScoreInLeaderBoard(currentPlayerPosition, leaderBoard);
             }
         } else { // if player isn't on the leaderboard, add them
-            addPlayerToLeaderBoard(leaderBoard);
+            addPlayerToLeaderBoard(leaderBoard, playerName);
         }
 
         // store modified value in local storage
