@@ -87,14 +87,38 @@
 
                 ![Screenshot of secondary Lighthouse mobile report for index.html](documentation/screenshots/testing/lighthouse-mobile-report-after-fixes.png)
 
-## Unfixed bugs
+    * Browser Compatibility
+        * Desktop
+
+            This project was developed and tested mainly using Chrome so that is the browser with which to have the best playing experience. It also appears normally on Firefox and Edge.
+
+            Autoprefixer was used on style.css to cater for the potential styling issues that typically arise across different browers.
+
+        * Mobile
+
+            Sadly, the game was made entirely with medium to large desktops in mind as there wasn't enough time to fully test and ensure an enjoyable playthrough on mobile devices. It also isn't the best on smaller screens as the game doesn't scale well.
+            
+            I had attempted to do this, by using percentages to size elements but ran into the other issue of the fact that Canvas doesn't scale as lines drawn on it are rendered in pixels. I also tried scaling the canvases based on a factor found through calculations invovling the target device's width and height and the desired device width and height (larger screen dimensions).
+
+            Although it doesn't scale, the game is visible and can be scrolled into view on a medium to large-size device.
+
+## Fixed bugs
 
 * Hanging piece
+    
     This issue was discovered when testing rotation and only happens after rotating a 'Z' and 'S' shape tetris block.
+
+    It was later fixed and no longer seems to occur.
 
     ![Screenshot of hanging piece bug](documentation/screenshots/testing/hanging-piece-bug.png)
 
-* Game display on mobile devices (dev tools)
+## Unfixed bugs
 
+* Border annihilation
+    
+    Each tetris block has a thick, white border that surrounds the block's set colour. When one block slides against the other, the white border of the resting block gets erased. I know that the bug is related to when I call the `drawRect()` function in my `drawBlock()` function but I couldn't find the write values to a) get the borders to slide up against each other without disappearing and b) not get ghost white lines where a block has fallen from due to the border not clearing fully.
 
-## Fixed bugs
+* Rotate through the wall and other blocks... sometimes
+
+    This issue was also discovered when testing rotation after fixing the 'hanging piece' bug.
+    Sometimes, when rotating a block, it may overlap with an existing one.
