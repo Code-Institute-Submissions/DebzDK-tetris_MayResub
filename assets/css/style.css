@@ -1,3 +1,10 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v8.3.6,
+* Autoprefixer: v10.3.1
+* Browsers: last 4 version
+*/
+
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 @font-face {
@@ -13,6 +20,7 @@
 /*
 * The below CSS follows a top-down format so that styles are tackled in order of appearance in the webpage.
 * All font-sizes are set in rem for responsiveness and for accessibility.
+* #region and #endregion have been used for the purpose of being able to group and collapse related rules when developing
 */
 
 /*#region General */
@@ -36,40 +44,24 @@ body {
 }
 
 main {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
     padding: 20px 0;
     height: 90vh;
+}
+
+section {
+    margin: 0 20px;
 }
 
 button {
     font-family: 'Tetris2';
     background-color: #000;
     color: #FFF;
-}
-/*#endregion */
-
-/*#region Initial game state*/
-/*#region All areas*/
-section {
-    margin: 0 20px;
-}
-
-#left,
-#center,
-#right {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
-
-#center {
-    padding: 1px 0 1px 0;
-}
-
-#right {
-    justify-content: space-between;
 }
 
 .bordered-box-title {
@@ -85,25 +77,34 @@ section {
     margin-top: 10px;
 }
 
-.attribute {
+#left,
+#center,
+#right {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-around;
-    font-size: 1.5rem;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
 }
 
-.value {
-    flex: 1;
-    margin-left: 10px;
-    text-align: end;
-}
 
-.hidden {
-    display: none !important;
+#right {
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
 }
 
 #stats,
 #preview {
-    align-self: center;
+    -ms-flex-item-align: center;
+        -ms-grid-row-align: center;
+        align-self: center;
 }
 /*#endregion*/
 
@@ -111,9 +112,30 @@ section {
 #stats {
     min-width: 175px;
 }
+
+.attribute {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: distribute;
+        justify-content: space-around;
+    font-size: 1.5rem;
+}
+
+.value {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    margin-left: 10px;
+    text-align: end;
+}
 /*#endregion*/
 
 /*#region Game area*/
+#center {
+    padding: 1px 0 1px 0;
+}
+
 .full-height {
     height: 100%;
 }
@@ -126,10 +148,19 @@ h1 {
     position: absolute;
     height: 100%;
     font-family: 'Tetris2';
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-self: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -ms-flex-item-align: center;
+        -ms-grid-row-align: center;
+        align-self: center;
     text-align: center;
 }
 
@@ -149,14 +180,19 @@ button.menu-item {
 .menu-item.active:before {
     content: '\2BC8';
     margin: 0 5px;
-    animation: blink 1s linear infinite;
+    -webkit-animation: blink 1s linear infinite;
+            animation: blink 1s linear infinite;
 }
 
 .menu-item.active {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     background-color: white;
     color: #000;
-    align-items: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
 }
 
 #block-entrance {
@@ -194,8 +230,12 @@ button.menu-item {
 
 /*#region Controls*/
 #controls {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: flex-end;
+    -webkit-box-pack: end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
 }
 
 #controls .control-btn {
@@ -229,12 +269,17 @@ button.menu-item {
 
 /*#region Secondary menu */
 #secondary-menu {
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
     background-color: #000000;
     position: absolute;
     width: 100%;
     height: auto;
     left: -15px;
+    -webkit-transition: 1s ease-in all;
+    -o-transition: 1s ease-in all;
     transition: 1s ease-in all;
 }
 
@@ -260,15 +305,21 @@ button.menu-item {
 
 #credits-scroller {
     position: absolute;
-    animation: rollingCredits 5s linear forwards infinite;
-    animation-iteration-count: 1;
+    -webkit-animation: rollingCredits 5s linear forwards infinite;
+            animation: rollingCredits 5s linear forwards infinite;
+    -webkit-animation-iteration-count: 1;
+            animation-iteration-count: 1;
 }
 
 #scores {
     height: 95px;
     text-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
 }
 
 .finer-bordered-box {
@@ -296,9 +347,23 @@ button.menu-item {
 /*#endregion*/
 
 /*#region Animations*/
+@-webkit-keyframes blink {
+    50% {
+      opacity: 0;
+    }
+}
 @keyframes blink {
     50% {
       opacity: 0;
+    }
+}
+                        
+@-webkit-keyframes rollingCredits {
+    0% {
+      top: 30%;
+    }
+    100% {
+      top: 5%;
     }
 }
                         
@@ -311,4 +376,7 @@ button.menu-item {
     }
 }
 /*#endregion*/
-/*#endregion*/
+
+.hidden {
+    display: none;
+}
