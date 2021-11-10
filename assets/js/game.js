@@ -544,9 +544,6 @@ function shiftRowsDown(rowIndex) {
  * or the bottom of the grid has been reached
  */ 
 function moveDn() {
-    // Holds the height of the current block
-    let height = block.currentBlock.height;
-
     // Holds the width of the current block
     let width = block.currentBlock.width;
 
@@ -557,7 +554,7 @@ function moveDn() {
      * Loops through each bit of the current block and determines if the bottom of the board has been reached
      * or checks if the current block has hit another block below it
      */
-    for (let y = 2; y >= 0; y--) { // starts from the bottom row of the block
+    for (let y = block.currentBlock.shape.length; y >= 0; y--) { // starts from the bottom row of the block
         for (let x = block.currentBlock.xOffset; x <= width; x++) { // loops through each column
             if (!isShapeBelow) {
                 // store the current row of block bits
@@ -576,7 +573,7 @@ function moveDn() {
                 }
 
                 let isBoardBitAndCurrentBlockBitTheSame = false;
-                if (y < 2) { // overlap can only over when we're not looking at the last row of the block representation
+                if (y < block.currentBlock.shape.length) { // overlap can only over when we're not looking at the last row of the block representation
                     // basic check to see if the part of the board we're looking it is actually part of the current moving block
                     isBoardBitAndCurrentBlockBitTheSame = bitInBoardRowBelowBlock && block.currentBlock.shape[y + 1][x];
                 }
