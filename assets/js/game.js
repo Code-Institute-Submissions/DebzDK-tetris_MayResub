@@ -34,7 +34,6 @@ let isPlaying = false;
 let isPaused = false;
 let isGameOver = false;
 let isSoundOn = false;
-let isPressingKey = false;
 //#endregion
 
 //#region Game event listeners
@@ -45,29 +44,22 @@ document.addEventListener('keydown', function(e) {
             case 'ArrowLeft':
                 if (blockX + block.currentBlock.xOffset > 0) {
                     moveLf();
-                    isPressingKey = true;
                 }
                 break;
             case 'ArrowRight':
                 if (blockX + block.currentBlock.xOffset + block.currentBlock.width < canvasWidth) {
                     moveRg();
-                    isPressingKey = true;
                 }
                 break;
             case 'ArrowUp':
                 drawBlock(true);
                 block.rotateBlockClockwise();
                 drawBlock();
-                isPressingKey = true;
                 break;
             case 'ArrowDown':
-                if (!isPressingKey) {
-                    if (gameSpeed !== 100) {
-                        setGameSpeed(100);
-                    }
-                    isPressingKey = true;
+                if (gameSpeed !== 100) {
+                    setGameSpeed(100);
                 }
-                break;
         }
     } else if (e.key === 'ArrowDown') {
         cycleThroughMenu('#main-menu-options', 'game-play');
@@ -585,7 +577,7 @@ function moveDn() {
                 }
 
                 let isBoardBitAndCurrentBlockBitTheSame = false;
-                if (y < numOfRows) { // overlap can only over when we're not looking at the last row of the block representation
+                if (y < block.currentBlock.shape.length - 1) { // overlap can only over when we're not looking at the last row of the block representation
                     // basic check to see if the part of the board we're looking it is actually part of the current moving block
                     isBoardBitAndCurrentBlockBitTheSame = bitInBoardRowBelowBlock && block.currentBlock.shape[y + 1][x];
                 }
