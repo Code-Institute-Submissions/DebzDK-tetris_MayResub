@@ -29,6 +29,7 @@ let currentScore = 0;
 let baseScorePerLinesCleared = [40, 100, 300, 1200];
 let level = 0;
 let scoreKey = 'port-2-tet-highScores';
+let scoreElement;
 
 let isPlaying = false;
 let isPaused = false;
@@ -60,6 +61,8 @@ document.addEventListener('keydown', function(e) {
                 if (gameSpeed !== 100) {
                     setGameSpeed(100);
                 }
+                currentScore += 1;
+                updateScore();
         }
     } else if (e.key === 'ArrowDown') {
         cycleThroughMenu('#main-menu-options', 'game-play');
@@ -131,7 +134,7 @@ function initialiseStats(withPlaceholder) {
  * Updates score value in stats box with current score
  */
 function updateScore() {
-    document.getElementById('score').textContent = currentScore;
+    scoreElement.textContent = currentScore;
 }
 
 /**
@@ -849,7 +852,10 @@ function setGameStatus(status) {
 //#endregion
 
 //#region Menu functions
-document.body.onload = setupListeners;
+document.body.onload = function() {
+    setupListeners();
+    scoreElement = document.getElementById('score');
+};
 
 /**
  * Handles a menu button click event
