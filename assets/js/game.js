@@ -74,7 +74,6 @@ document.addEventListener('keydown', function(e) {
 document.addEventListener('keyup', function(e) {
     if (isPlaying) {
         if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(1000);
-        isPressingKey = false;
     }
 });
 //#endregion
