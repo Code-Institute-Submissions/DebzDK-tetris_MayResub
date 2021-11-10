@@ -187,15 +187,24 @@ function updatePlayerScoreInLeaderBoard(currentPlayerPosition, leaderBoard) {
  */
 function addPlayerToLeaderBoard(leaderBoard, playerName) {
     let currentNumOfLeaderBoardEntries = leaderBoard.length;
+    let hasPlayerEntryBeenAdded = false;
 
     for (let i = 0; i < currentNumOfLeaderBoardEntries; i++) {
         let entry = leaderBoard[i];
 
-        if (entry.score === currentScore && entry.player.toLowerCase() > playerName.toLowerCase()) {
+        // if the entry score is less than the current player's score
+        // or another player entry has the same score and their name is alphabetically lower than the current player's name
+        if (entry.score < currentScore ||
+                (entry.score === currentScore && entry.player.toLowerCase() > playerName.toLowerCase())) {
+            // the current player gets inserted into the leaderboard above the entry
             leaderBoard.splice(i, 0, { player: playerName, score: currentScore });
-        } else {
-            leaderBoard.push({ player: playerName, score: currentScore });
+            hasPlayerEntryBeenAdded = true;
+            break;
         }
+    }
+
+    if (currentNumOfLeaderBoardEntries === 0 || !hasPlayerEntryBeenAdded) {
+        leaderBoard.push({ player: playerName, score: currentScore });
     }
 }
 
@@ -1204,7 +1213,6 @@ function setLeaderBoardHTML() {
     if (leaderBoardHTML === '<ol></ol>') {
         leaderBoardHTML = 'No winners yet...';
     }
-    
     document.getElementById('scores').innerHTML = leaderBoardHTML;
 }
 //#endregion
