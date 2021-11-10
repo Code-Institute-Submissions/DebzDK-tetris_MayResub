@@ -75,6 +75,17 @@
                 ![Screenshot of Lighthouse mobile report for index.html](documentation/screenshots/testing/lighthouse-mobile-report.png)
 
                 *Note: Mobile has the same accessibilty issues as shown for desktop*
+    
+    * Secondary report
+        * Desktop
+            * index.html report can be found [here](https://htmlpreview.github.io/?https://github.com/DebzDK/tetris/blob/main/documentation/reports/secondary-lighthouse-desktop-report.html)
+
+                ![Screenshot of secondary Lighthouse desktop report for index.html](documentation/screenshots/testing/lighthouse-desktop-report-after-fixes.png)
+        
+        * Mobile
+            * index.html report can be found [here](https://htmlpreview.github.io/?https://github.com/DebzDK/pilates-your-guide-to-flexible-fun/blob/main/documentation/reports/secondary-lighthouse-mobile-report.html)
+
+                ![Screenshot of secondary Lighthouse mobile report for index.html](documentation/screenshots/testing/lighthouse-mobile-report-after-fixes.png)
 
 ## Unfixed bugs
 
