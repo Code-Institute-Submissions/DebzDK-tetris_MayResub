@@ -187,15 +187,24 @@ function updatePlayerScoreInLeaderBoard(currentPlayerPosition, leaderBoard) {
  */
 function addPlayerToLeaderBoard(leaderBoard, playerName) {
     let currentNumOfLeaderBoardEntries = leaderBoard.length;
+    let hasPlayerEntryBeenAdded = false;
 
     for (let i = 0; i < currentNumOfLeaderBoardEntries; i++) {
         let entry = leaderBoard[i];
 
-        if (entry.score === currentScore && entry.player.toLowerCase() > playerName.toLowerCase()) {
+        // if the entry score is less than the current player's score
+        // or another player entry has the same score and their name is alphabetically lower than the current player's name
+        if (entry.score < currentScore ||
+                (entry.score === currentScore && entry.player.toLowerCase() > playerName.toLowerCase())) {
+            // the current player gets inserted into the leaderboard above the entry
             leaderBoard.splice(i, 0, { player: playerName, score: currentScore });
-        } else {
-            leaderBoard.push({ player: playerName, score: currentScore });
+            hasPlayerEntryBeenAdded = true;
+            break;
         }
+    }
+
+    if (currentNumOfLeaderBoardEntries === 0 || !hasPlayerEntryBeenAdded) {
+        leaderBoard.push({ player: playerName, score: currentScore });
     }
 }
 
@@ -318,12 +327,17 @@ function endGame() {
     playAudio();
 
     // hides settings screen and shows game over message
+    showGame();
     showMenuArea();
     setSecondaryMenuTitle('');
     showSecondaryMenuContent('status');
     hideSecondaryMenuContent('settings');
     setGameStatus('over');
-    showHighScoreEntryForm();
+
+    if (currentScore > 0) {
+        showHighScoreEntryForm();
+    }
+    
     showSecondaryMenu();
 }
 
@@ -713,19 +727,58 @@ function progressGame() {
 }
 
 /**
+ * Hides game state
+ */
+function hideGameState() {
+    let curtain = document.getElementById('block-entrance');
+
+    curtain.style.height = "101%";
+    curtain.style.width = "100%";
+    curtain.style.left = "0";
+}
+
+/**
+ * Shows game state
+ */
+function showGameState() {
+    let curtain = document.getElementById('block-entrance');
+
+    curtain.style.height = "10px";
+    curtain.style.width = "95%";
+    curtain.style.left = "2.5%";
+}
+
+/**
+ * Hides game board and preview area from user
+ */
+function hideGame() {
+    hideGameState();
+    clearPreviewCanvas();
+}
+
+/**
+ * Shows game board and preview area
+ */
+ function showGame() {
+    showGameState();
+    drawPreview();
+}
+
+/**
  * Updates pause game control and menu display
  */
 function showPausedGameScreen() {
     removeClassFromElementClassList('resume-game', 'hidden');
     addClassToElementClassList('pause-game', 'hidden');
     addClassToElementClassList('game-sounds', 'hidden');
-    addClassToElementClassList('exit-btn', 'hidden');
     addClassToElementClassList('exit-btn-blackout', 'hidden');
     removeClassFromElementClassList('menu', 'hidden');
     
+    hideGame();
     showSecondaryMenu();
     showSecondaryMenuContent('status');
     setGameStatus('paused');
+    addClassToElementClassList('exit-btn', 'hidden');
 }
 
 /**
@@ -738,6 +791,7 @@ function hidePausedGameScreen() {
     removeClassFromElementClassList('pause-game', 'hidden');
     removeClassFromElementClassList('game-sounds', 'hidden');
     removeClassFromElementClassList('exit-btn', 'hidden');
+    showGame();
 }
 
 /**
@@ -774,6 +828,7 @@ function toggleMenuButtonVisibility(elementID) {
  * Displays settings menu
  */
 function displaySettings() {
+    hideGame();
     hideMainMenu();
     showMenuArea();
     
@@ -1012,6 +1067,7 @@ function showMenuArea() {
  */
 function showSecondaryMenu() {
     removeClassFromElementClassList('secondary-menu-title', 'hidden');
+    removeClassFromElementClassList('exit-btn', 'hidden');
     setClassesOnElement('secondary-menu', 'bordered-box');
 }
 
@@ -1028,6 +1084,7 @@ function hideSecondaryMenu() {
     setSecondaryMenuTitle('');
 
     if (isPaused && isPlaying) {
+        showGame();
         resumeGame();
     } else if (isGameOver) {
         hideSecondaryMenuContent('status');
@@ -1195,6 +1252,10 @@ function setLeaderBoardHTML() {
     }
 
     leaderBoardHTML += "</ol>";
+
+    if (leaderBoardHTML === '<ol></ol>') {
+        leaderBoardHTML = 'No winners yet...';
+    }
     document.getElementById('scores').innerHTML = leaderBoardHTML;
 }
 //#endregion
