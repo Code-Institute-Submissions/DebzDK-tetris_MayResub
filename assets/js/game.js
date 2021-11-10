@@ -323,7 +323,11 @@ function endGame() {
     showSecondaryMenuContent('status');
     hideSecondaryMenuContent('settings');
     setGameStatus('over');
-    showHighScoreEntryForm();
+
+    if (currentScore > 0) {
+        showHighScoreEntryForm();
+    }
+    
     showSecondaryMenu();
 }
 
@@ -1012,6 +1016,7 @@ function showMenuArea() {
  */
 function showSecondaryMenu() {
     removeClassFromElementClassList('secondary-menu-title', 'hidden');
+    removeClassFromElementClassList('exit-btn', 'hidden');
     setClassesOnElement('secondary-menu', 'bordered-box');
 }
 
