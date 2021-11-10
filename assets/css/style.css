@@ -172,6 +172,7 @@ button.menu-item {
 
 #game {
     width: 100%;
+    min-width: 300px;
 }
 
 #tetris {
