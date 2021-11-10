@@ -545,11 +545,10 @@ function shiftRowsDown(rowIndex) {
  * or the bottom of the grid has been reached
  */ 
 function moveDn() {
-    // Holds the number of rows in a block's array
-    let numOfRows = block.currentBlock.shape.length - 1;
-
-    // Holds the width of the current block
-    let width = block.currentBlock.width;
+    // Holds the upper bound index of outer array
+    let maxBlockArrayOuterIndex = block.currentBlock.shape.length - 1;
+    // Holds the upper bound index of inner array
+    let maxBlockArrayInnerIndex = block.currentBlock.shape[0].length - 1;
 
     // Used to indicate whether a block is below the current block
     let isShapeBelow = false;
@@ -558,8 +557,8 @@ function moveDn() {
      * Loops through each bit of the current block and determines if the bottom of the board has been reached
      * or checks if the current block has hit another block below it
      */
-    for (let y = numOfRows; y >= 0; y--) { // starts from the bottom row of the block
-        for (let x = block.currentBlock.xOffset; x <= width; x++) { // loops through each column
+    for (let y = maxBlockArrayOuterIndex; y >= 0; y--) { // starts from the bottom row of the block
+        for (let x = block.currentBlock.xOffset; x <= maxBlockArrayInnerIndex; x++) { // loops through each column
             if (!isShapeBelow) {
                 // store the current row of block bits
                 let rowOfBlockBits = block.currentBlock.shape[y];
@@ -577,7 +576,7 @@ function moveDn() {
                 }
 
                 let isBoardBitAndCurrentBlockBitTheSame = false;
-                if (y < block.currentBlock.shape.length - 1) { // overlap can only over when we're not looking at the last row of the block representation
+                if (y < maxBlockArrayOuterIndex) { // overlap can only over when we're not looking at the last row of the block representation
                     // basic check to see if the part of the board we're looking it is actually part of the current moving block
                     isBoardBitAndCurrentBlockBitTheSame = bitInBoardRowBelowBlock && block.currentBlock.shape[y + 1][x];
                 }
@@ -586,7 +585,7 @@ function moveDn() {
                 // and we've reached the bottom of the board or there's already something occupying the below space on the board
                 if (bitInBlockRow && !isBoardBitAndCurrentBlockBitTheSame && 
                         ((rowOfBoardBitsBelowBlock === undefined || bitInBoardRowBelowBlock))) {
-                    // no more wiggle room so we need to act accordingly
+                    // no more wiggle room so act accordingly
                     isShapeBelow = true;
                     break;
                 }
@@ -611,29 +610,32 @@ function moveDn() {
  * or the left side of the grid has been reached
  */ 
 function moveLf() {
-    // Holds the height of the current block
-    let height = block.currentBlock.height;
-
     // Used to indicate whether a block is on the left side of the current block
     let isShapeLeft = false;
 
     /**
-     * Loops through the first bit of the each row of the current block and determines if there's a block sitting on the left side
-     * or checks if an empty first cell of a row of a block corresponds to an occupied block of the board
+     * Loops through the first bit of the each row of the current block and determines if the block's hit the left side of the board
+     * or checks if the current block has hit another block on the left side of it
      */
-     for (let y = block.currentBlock.yOffset; y <= height - 1 + block.currentBlock.yOffset; y++) {
+     for (let y = block.currentBlock.yOffset; y < block.currentBlock.shape.length - 1; y++) {
         if (!isShapeLeft) {
+            // store the current row of block bits
             let rowOfBlockBits = block.currentBlock.shape[y];
-            let firstBitInBlockRow = rowOfBlockBits[0 + block.currentBlock.xOffset];
+            // get the value of the first bit in the row (if it exists, i.e. isn't 0, then we know it's a something we can collide with)
+            let firstBitInBlockRow = rowOfBlockBits[block.currentBlock.xOffset];
+            // get the board representation of the row matching with the row of the current block we're looking at
             let rowOfBoardBitsLeftOfBlock = board.grid[blockY + y];
             let bitInBoardRowLeftOfBlock;
 
+            // if there is a board column (is undefined once the left side of the board is reached)
             if (rowOfBoardBitsLeftOfBlock) {
+                // then store the bit directly left of the one we're currently looking at
                 bitInBoardRowLeftOfBlock = rowOfBoardBitsLeftOfBlock[blockX + block.currentBlock.xOffset - 1];
             }
-            
-            if (bitInBoardRowLeftOfBlock === undefined || (firstBitInBlockRow && bitInBoardRowLeftOfBlock) ||
-                    !firstBitInBlockRow && board.grid[blockY + block.currentBlock.yOffset + y][blockX + block.currentBlock.xOffset - 1]) {
+
+            // if there's no space to the left of the current block or collision detected
+            if (bitInBoardRowLeftOfBlock === undefined || (firstBitInBlockRow && bitInBoardRowLeftOfBlock)) {
+                // no wiggle room so act accordingly
                 isShapeLeft = true;
                 break;
             }
@@ -654,29 +656,37 @@ function moveLf() {
  * or the right side of the grid has been reached
  */ 
  function moveRg() {
-    // Holds the height of the current block
-    let height = block.currentBlock.height;
+    // Holds the number of rows/cols in a block's array
+    let numOfRows = block.currentBlock.shape.length - 1;
 
     // Used to indicate whether a block is on the right side of the current block
     let isShapeRight = false;
 
     /**
-     * Loops through the last bit of the each row of the current block and determines if there's a block sitting on the right side
-     * or checks if an empty last cell of a row of a block corresponds to an occupied block of the board
+     * Loops through the last bit of the each row of the current block and determines if the block's hit the right side of the board
+     * or checks if the current block has hit another block on the right side of it
      */
-     for (let y = block.currentBlock.yOffset; y <= height - 1 + block.currentBlock.yOffset; y++) {
+     for (let y = block.currentBlock.yOffset; y <= numOfRows; y++) {
         if (!isShapeRight) {
+            // store the current row of block bits
             let rowOfBlockBits = block.currentBlock.shape[y];
-            let firstBitInBlockRow = rowOfBlockBits[2];
+            // get the value of the last bit in the row (if it exists, i.e. isn't 0, then we know it's a something we can collide with)
+            let lastBitInBlockRow = rowOfBlockBits[block.currentBlock.xOffset + block.currentBlock.width - 1];
+
+            // get the board representation of the row matching the row of the current block we're looking at
             let rowOfBoardBitsRightOfBlock = board.grid[blockY + y];
+
             let bitInBoardRowRightOfBlock;
 
+            // if there is a board column (is undefined once the right side of the board is reached)
             if (rowOfBoardBitsRightOfBlock) {
+                // then store the bit directly right of the one we're currently looking at
                 bitInBoardRowRightOfBlock = rowOfBoardBitsRightOfBlock[blockX + block.currentBlock.xOffset + block.currentBlock.width];
             }
             
-            if (bitInBoardRowRightOfBlock === undefined || (firstBitInBlockRow && bitInBoardRowRightOfBlock) ||
-                    !firstBitInBlockRow && board.grid[blockY + block.currentBlock.yOffset + y][blockX + block.currentBlock.xOffset + block.currentBlock.width]) {
+            // if there's no space to the right of the current block or collision detected
+            if (bitInBoardRowRightOfBlock === undefined || (lastBitInBlockRow && bitInBoardRowRightOfBlock)) {
+                // no wiggle room so act accorrdingly
                 isShapeRight = true;
                 break;
             }
