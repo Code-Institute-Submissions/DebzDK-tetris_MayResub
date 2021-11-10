@@ -86,12 +86,6 @@ const COLOURS = [
 ];
 
 class Block {
-    // Stores the tetris block represented by the Block object
-    static currentBlock = [];
-
-    // Stores the tetris block colour
-    static currentColour = '#000000';
-
     /**
      * Sets the block type and colour to be represent the Block object
      */
@@ -109,22 +103,37 @@ class Block {
         return Math.floor(Math.random() * x);
     }
 
+    /**
+     * Calculates the offset (how far from the left (x) or top (y) before reaching bits of a block)
+     * @param {string} axis - 'x' or 'y' value representing the current offset to calculate
+     * @returns int - offset value
+     */
     calculateOffset(axis) {
         let offset = 0;
         let numOfEmptyBits = 0;
+        let numOfDefinedBits = 0;
 
         for (let col = 0; col < 3; col++) {
             for (let row = 0; row < 3; row++) {
                 let bit = axis === 'x' ? this.currentBlock.shape[row][col] : this.currentBlock.shape[col][row];
+
                 if (!bit) {
                     numOfEmptyBits++;
+                } else {
+                    numOfDefinedBits++;
+                }
+
+                if (numOfEmptyBits === 3) {
+                    offset++;
                 }
             }
-            if (numOfEmptyBits === 3) {
-                offset++;
-            } else {
+
+            if (numOfDefinedBits > 0) {
                 break;
             }
+
+            numOfEmptyBits = 0;
+            numOfDefinedBits = 0;
         }
 
         return offset;

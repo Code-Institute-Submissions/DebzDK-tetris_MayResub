@@ -3,6 +3,8 @@
 This is a single page site that allows people to play yet another remake of the classic Tetris game.
 The site is targeted toward people who enjoy games, like Tetris. This site will be useful for people who are interested in having a taste of nostalgia or who have never played Tetris before and stumble across this version.
 
+![Screenshot of main menu of game](documentation/screenshots/website/am-i-responsive.png)
+
 ## Design
 
 ### Wireframes
@@ -170,8 +172,11 @@ Here are the specific game features.
     * [HTML5](https://en.wikipedia.org/wiki/HTML5) - used to create and structure webpages using semantic (meaningful) markup
     * [CSS3](https://en.wikipedia.org/wiki/CSS) - used Cascading Style Sheets to style HTML
         * [Flexbox](https://en.wikipedia.org/wiki/CSS_Flexible_Box_Layout) - used instead of `float` property for responsive web design
+    * [JavaScript](https://en.wikipedia.org/wiki/JavaScript) - used to make webpages interactive
+
 * Technologies
     * [Autoprefixer](https://autoprefixer.github.io/) - used to automatically add vendor prefixes for browser compatibility
+    * [cloudconvert](https://cloudconvert.com/png-to-ico) - used to convert .png file for game icon into .ico file format
     * [Coolors](https://coolors.co/) - used to provide colour scheme for Tetris blocks
     * [EZGIF](https://ezgif.com/) - used to create GIFS for this README
     * [Trello](https://trello.com/) - used to document planning/design and development project progress and steps
@@ -180,54 +185,11 @@ Here are the specific game features.
     * [Gitpod](https://gitpod.io/) - used as online IDE for software development
         * The terminal was used to create branchs to work on before merging into the main branch. These branches have been preserved for the sake of the assessment, otherwise they would have been deleted after use.
 
-        TO-DO: Add screenshot of branches
+        ![Screenshot of all GitHub branches for project](documentation/screenshots/evidence/branches.png)
 
 ## Testing
 
-### Validator testing
-        
-* HTML
-    * 1 warning and 3 HTML errors were found, as shown below, after passing through the official W3C Markup Validator.
-
-        ![HTML validator errors image](documentation/screenshots/testing/errors-1-to-4.png)
-
-    * The warning and the errors were fixed, as shown below, and can be verified by clicking [here](https://validator.w3.org/nu/?doc=https%3A%2F%2Fdebzdk.github.io%2Ftetris%2F).
-        ![Fixed HTML validator errors image](documentation/screenshots/testing/fixed-html-errors.png)
-
-* CSS
-    * No errors were found after passing through the official (Jigsaw) validator.
-    This can be verified by clicking [here](https://jigsaw.w3.org/css-validator/validator?uri=https%3A%2F%2Fdebzdk.github.io%2Ftetris&profile=css3svg&usermedium=all&warning=1&vextwarning=&lang=en).
-    * There are 21 warnings regarding the use of vendor extensions. The properties referred to in these warnings are necessary for browser compatibility in Chrome, Safari, IE/Microsoft Edge, and Firefox.
-
-* Accessibility
-    * 4 error and 5 alerts were found after running the [WAVE Accessibility Evaluation tool](https://wave.webaim.org/report#/https://debzdk.github.io/pilates-your-guide-to-flexible-fun).
-
-        ![WAVE accessibility evaluation tool report image 1](documentation/screenshots/testing/wave-accessibility-evaluation-tool-report-1.png)
-        ![WAVE accessibility evaluation tool report image 2](documentation/screenshots/testing/wave-accessibility-evaluation-tool-report-2.png)
-
-    * Manual foreground and background colour testing
-        * Text
-            
-            Contrast Ratio: <b>[21:1](https://webaim.org/resources/contrastchecker/?fcolor=000000&bcolor=FFFFFF)</b>
-
-        * Highlighted button text
-
-            Contrast Ratio: <b>[21:1](https://webaim.org/resources/contrastchecker/?fcolor=FFFFFF&bcolor=000000)</b>
-
-* Lighthouse
-    * Initial report
-        * Desktop
-            * index.html
-
-                ![Screenshot of initial Lighthouse desktop report for index.html](documentation/screenshots/testing/lighthouse-desktop-report.png)
-                ![Screenshot of initial Lighthouse desktop report for index.html accessibility issues](documentation/screenshots/testing/lighthouse-desktop-accessibility-issues.png)
-
-        * Mobile
-            * index.html
-
-                ![Screenshot of Lighthouse mobile report for index.html](documentation/screenshots/testing/lighthouse-mobile-report.png)
-
-                *Note: Mobile has the same accessibilty issues as shown for desktop*
+Evidence for this section has been placed in its own .md file which can be found [here](https://github.com/DebzDK/tetris/blob/main/TESTING.md).
 
 ## Deployment
 
@@ -253,7 +215,7 @@ Since my work is in a publicly-accesible repository, it can be copied in 3 diffe
 
     ![Fork repo image](documentation/screenshots/evidence/fork-it.png)
 
-1. Using Gitpod to create a new workspace for the repository via https://gitpod.io/#https://github.com/DebzDK/tetris
+1. Using Gitpod to create a new workspace for the repository with this button: [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/DebzDK/tetris)
 
 ## Credits
 
@@ -267,6 +229,7 @@ The rest of the code is based on my prior attempt at a Tetris game that I comple
 
 Purpose | Credit | Source
 ------------ | ------------- | -------------
+Favicon | [Vitaly Gorbachev](https://www.flaticon.com/authors/vitaly-gorbachev) | [Flat icon](https://www.flaticon.com/free-icon/tetris_824380)
 Tetris music | [Downloads Khinsider](https://downloads.khinsider.com/) | [Tetris Gameboy 2 music](https://downloads.khinsider.com/game-soundtracks/album/tetris-gameboy-rip/tetris-gameboy-02.mp3)
 Tetris gameover sound effect | [101 Soundboards](https://www.101soundboards.com/) | [Game Over sound effect](https://www.101soundboards.com/sounds/20902-game-over)
 
