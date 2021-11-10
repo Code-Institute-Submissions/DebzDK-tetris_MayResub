@@ -327,6 +327,7 @@ function endGame() {
     playAudio();
 
     // hides settings screen and shows game over message
+    showGame();
     showMenuArea();
     setSecondaryMenuTitle('');
     showSecondaryMenuContent('status');
@@ -726,19 +727,58 @@ function progressGame() {
 }
 
 /**
+ * Hides game state
+ */
+function hideGameState() {
+    let curtain = document.getElementById('block-entrance');
+
+    curtain.style.height = "101%";
+    curtain.style.width = "100%";
+    curtain.style.left = "0";
+}
+
+/**
+ * Shows game state
+ */
+function showGameState() {
+    let curtain = document.getElementById('block-entrance');
+
+    curtain.style.height = "10px";
+    curtain.style.width = "95%";
+    curtain.style.left = "2.5%";
+}
+
+/**
+ * Hides game board and preview area from user
+ */
+function hideGame() {
+    hideGameState();
+    clearPreviewCanvas();
+}
+
+/**
+ * Shows game board and preview area
+ */
+ function showGame() {
+    showGameState();
+    drawPreview();
+}
+
+/**
  * Updates pause game control and menu display
  */
 function showPausedGameScreen() {
     removeClassFromElementClassList('resume-game', 'hidden');
     addClassToElementClassList('pause-game', 'hidden');
     addClassToElementClassList('game-sounds', 'hidden');
-    addClassToElementClassList('exit-btn', 'hidden');
     addClassToElementClassList('exit-btn-blackout', 'hidden');
     removeClassFromElementClassList('menu', 'hidden');
     
+    hideGame();
     showSecondaryMenu();
     showSecondaryMenuContent('status');
     setGameStatus('paused');
+    addClassToElementClassList('exit-btn', 'hidden');
 }
 
 /**
@@ -751,6 +791,7 @@ function hidePausedGameScreen() {
     removeClassFromElementClassList('pause-game', 'hidden');
     removeClassFromElementClassList('game-sounds', 'hidden');
     removeClassFromElementClassList('exit-btn', 'hidden');
+    showGame();
 }
 
 /**
@@ -787,6 +828,7 @@ function toggleMenuButtonVisibility(elementID) {
  * Displays settings menu
  */
 function displaySettings() {
+    hideGame();
     hideMainMenu();
     showMenuArea();
     
@@ -1042,6 +1084,7 @@ function hideSecondaryMenu() {
     setSecondaryMenuTitle('');
 
     if (isPaused && isPlaying) {
+        showGame();
         resumeGame();
     } else if (isGameOver) {
         hideSecondaryMenuContent('status');
