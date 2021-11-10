@@ -61,9 +61,11 @@ document.addEventListener('keydown', function(e) {
                 drawBlock();
                 break;
             case 'ArrowDown':
-                let newDropSpeed = gameSpeed - softDropSpeed;
-                if (gameSpeed > newDropSpeed && newDropSpeed >= 0) {
-                    setGameSpeed(newDropSpeed);
+                let newSoftDropSpeed = getGameSpeedForCurrentLevel() / 10;
+                if (gameSpeed !== newSoftDropSpeed) {
+                    if (gameSpeed >= 0) {
+                        setGameSpeed(newSoftDropSpeed);
+                    }
                 }
                 currentScore += 1;
                 updateScore();
@@ -80,7 +82,7 @@ document.addEventListener('keydown', function(e) {
 // Arrow key released
 document.addEventListener('keyup', function(e) {
     if (isPlaying) {
-        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeedForCurrentLevel();
+        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(getGameSpeedForCurrentLevel());
     }
 });
 //#endregion
@@ -152,13 +154,20 @@ function meetsNextLevelCriteria() {
  * (set to get fast fairly quickly so that all aspects of the game can be seen for assessment purposes)
  */
 function setGameSpeedForCurrentLevel() {
+    gameSpeed = getGameSpeedForCurrentLevel();
+}
+
+/**
+ * Gets game speed for current level
+ */
+function getGameSpeedForCurrentLevel() {
     let newSpeed = baseGameSpeed - (level * 50);
 
     if (newSpeed < 0) {
-        gameSpeed = 0;
-    } else {
-        gameSpeed = newSpeed;
+        newSpeed = 0;
     }
+
+    return newSpeed;
 }
 
 /**
