@@ -46,7 +46,7 @@
             ![Screenshot of JSHint result after fixes for game.js](documentation/screenshots/testing/jshint-validation-fixes-for-gamejs.png)
 
 * Accessibility
-    * 4 error and 5 alerts were found and fixed after running the [WAVE Accessibility Evaluation tool](https://wave.webaim.org/report#/https://debzdk.github.io/pilates-your-guide-to-flexible-fun).
+    * 4 error and 5 alerts were found and fixed after running the [WAVE Accessibility Evaluation tool](https://wave.webaim.org/report#/https://debzdk.github.io/tetris).
 
         ![WAVE accessibility evaluation tool report image 1](documentation/screenshots/testing/wave-accessibility-evaluation-tool-report-1.png)
         ![WAVE accessibility evaluation tool report image 2](documentation/screenshots/testing/wave-accessibility-evaluation-tool-report-2.png)
