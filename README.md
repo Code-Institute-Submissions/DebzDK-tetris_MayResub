@@ -212,7 +212,7 @@ Since my work is in a publicly-accesible repository, it can be copied in 3 diffe
 
     ![Fork repo image](documentation/screenshots/evidence/fork-it.png)
 
-1. Using Gitpod to create a new workspace for the repository via https://gitpod.io/#https://github.com/DebzDK/tetris
+1. Using Gitpod to create a new workspace for the repository with this button: [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/DebzDK/tetris)
 
 ## Credits
 
