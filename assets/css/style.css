@@ -32,6 +32,9 @@ body {
     background-color: #000;
     color: #FFF;
     font-family: 'VT323', monospace;
+}
+
+main {
     display: flex;
     justify-content: space-between;
     padding: 20px 0;
