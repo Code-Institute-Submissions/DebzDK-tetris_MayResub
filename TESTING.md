@@ -13,7 +13,7 @@
 * CSS
     * No errors were found after passing through the official (Jigsaw) validator.
     This can be verified by clicking [here](https://jigsaw.w3.org/css-validator/validator?uri=https%3A%2F%2Fdebzdk.github.io%2Ftetris&profile=css3svg&usermedium=all&warning=1&vextwarning=&lang=en).
-    * There are 21 warnings regarding the use of vendor extensions. The properties referred to in these warnings are necessary for browser compatibility in Chrome, Safari, IE/Microsoft Edge, and Firefox.
+    * There are 72 warnings regarding the use of vendor extensions and imports. The properties referred to in these warnings are necessary for browser compatibility in Chrome, Safari, IE/Microsoft Edge, and Firefox.
     
 * JavaScript
     * [board.js](https://github.com/DebzDK/tetris/blob/main/assets/js/board.js)
