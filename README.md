@@ -119,9 +119,10 @@ Here are the specific game features.
         ![Screenshot of Wikipedia's description for the original Nintendo scoring system for Tetris](documentation/screenshots/evidence/wikipedia-tetris-scoring-system.png)
 
         Resulting code:
+
         ```
-        let level = 0;
-        let currentScore = 0;
+        let level = 0; // incremented elsewhere
+        let currentScore = 0; // incremented elsewhere
         let baseScorePerLinesCleared = [40, 100, 300, 1200];
 
         function incrementScore(numOfLinesCleared) {
@@ -130,7 +131,33 @@ Here are the specific game features.
         }
         ```
 
-        *Note: I did not incorporate the extra points for the consequtive soft-dropping of blocks into spaces.*
+        In my haste, I completely forgot to incorporate a leveling system so I quickly put the following logic together:
+
+        * A user advances to the next level, everytime they clear x amount of lines
+            
+            ```
+            let totalNumOfLinesCleared = 0; // gets incremented every time a line is cleared
+
+            function meetsNextLevelCriteria() {
+                return totalNumOfLinesCleared === (level * 5 + 5);
+            }
+            ````
+
+        * The game speed also increases...
+
+            ```
+            let baseGameSpeed = 1000; // in ms
+
+            function getGameSpeedForCurrentLevel() {
+                let newSpeed = baseGameSpeed - (level * 50);
+
+                if (newSpeed < 0) {
+                    newSpeed = 0; // equivalent of sudden death (I image because I haven't actually managed to get that far!)
+                }
+
+                return newSpeed;
+            }
+            ```
 
 * Next shape preview
     * Like in classic Tetris, there is an area where users can preview the next shape to fall which gives them a chance to strategise while playing the game.
