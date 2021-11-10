@@ -554,24 +554,41 @@ function moveDn() {
     let isShapeBelow = false;
 
     /**
-     * Loops through the width of the bottom row of the current block and determines if there's a block sitting below the current block
-     * or checks if an empty cell of a the bottom row of a block corresponds to an occupied block of the board
+     * Loops through each bit of the current block and determines if the bottom of the board has been reached
+     * or checks if the current block has hit another block below it
      */
-    for (let x = block.currentBlock.xOffset; x <= width; x++) {
-        if (!isShapeBelow) {
-            let rowOfBlockBits = block.currentBlock.shape[height - 1 + block.currentBlock.yOffset];
-            let bitInBlockRow = rowOfBlockBits[x];
-            let rowOfBoardBitsBelowBlock = board.grid[blockY + height + block.currentBlock.yOffset];
-            let bitInBoardRowBelowBlock;
+    for (let y = 2; y >= 0; y--) { // starts from the bottom row of the block
+        for (let x = block.currentBlock.xOffset; x <= width; x++) { // loops through each column
+            if (!isShapeBelow) {
+                // store the current row of block bits
+                let rowOfBlockBits = block.currentBlock.shape[y];
+                // get the value of the bit (if it exists, i.e. isn't 0, then we know it's a something we can collide with)
+                let bitInBlockRow = rowOfBlockBits[x];
 
-            if (rowOfBoardBitsBelowBlock) {
-                bitInBoardRowBelowBlock = rowOfBoardBitsBelowBlock[blockX + x];
-            }
-            
-            if ((bitInBlockRow && (rowOfBoardBitsBelowBlock === undefined || bitInBoardRowBelowBlock)) ||
-                    !bitInBlockRow && board.grid[blockY + block.currentBlock.yOffset + 1][blockX + x]) {
-                isShapeBelow = true;
-                break;
+                // get the board representation of the row below the row of the current block we're looking at
+                let rowOfBoardBitsBelowBlock = board.grid[blockY + y + 1];
+
+                let bitInBoardRowBelowBlock;
+                // if there is a board row (is undefined once the bottom of the board is reached) 
+                if (rowOfBoardBitsBelowBlock) {
+                    // then store the bit directly below the one we're currently looking at
+                    bitInBoardRowBelowBlock = rowOfBoardBitsBelowBlock[blockX + x];
+                }
+
+                let isBoardBitAndCurrentBlockBitTheSame = false;
+                if (y < 2) { // overlap can only over when we're not looking at the last row of the block representation
+                    // basic check to see if the part of the board we're looking it is actually part of the current moving block
+                    isBoardBitAndCurrentBlockBitTheSame = bitInBoardRowBelowBlock && block.currentBlock.shape[y + 1][x];
+                }
+                
+                // if we're looking at a bit of the block (part of the shape) and we're not looking at the same block
+                // and we've reached the bottom of the board or there's already something occupying the below space on the board
+                if (bitInBlockRow && !isBoardBitAndCurrentBlockBitTheSame && 
+                        ((rowOfBoardBitsBelowBlock === undefined || bitInBoardRowBelowBlock))) {
+                    // no more wiggle room so we need to act accordingly
+                    isShapeBelow = true;
+                    break;
+                }
             }
         }
     }
