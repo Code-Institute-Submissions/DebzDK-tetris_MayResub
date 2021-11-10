@@ -90,13 +90,9 @@ section {
     font-size: 1.5rem;
 }
 
-.property {
-    margin-right: 10px;
-    flex: 1;
-}
-
 .value {
     flex: 1;
+    margin-left: 10px;
     text-align: end;
 }
 
