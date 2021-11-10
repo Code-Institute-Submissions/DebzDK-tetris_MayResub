@@ -356,7 +356,7 @@ function clearGameCanvas() {
  * Clears canvas
  */
 function clearPreviewCanvas() {
-    PRE_TET_GRID.clearRect(0, 0, COLS * 5, COLS * 5);
+    PRE_TET_GRID.clearRect(0, 0, PRE_TET_GRID.canvas.width, PRE_TET_GRID.canvas.height);
 }
 
 /**
@@ -400,7 +400,7 @@ function endGame() {
     playAudio();
 
     // hides settings screen and shows game over message
-    showGame();
+    showGameState();
     showMenuArea();
     setSecondaryMenuTitle('');
     showSecondaryMenuContent('status');
