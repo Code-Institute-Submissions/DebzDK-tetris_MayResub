@@ -64,6 +64,13 @@ button {
     color: #FFF;
 }
 
+button[type=submit] {
+    height: 35px;
+    border: 1px solid white;
+    padding: 5px;
+    width: 60px;
+}
+
 .bordered-box-title {
     background-color: #000;
     padding: 0 5px;
@@ -216,6 +223,7 @@ button.menu-item {
 
 #player {
     text-align: center;
+    width: 75px;
 }
 
 #preview {
