@@ -22,7 +22,6 @@ let blockY;
 let timer;
 let baseGameSpeed = 1000;
 let gameSpeed = 1000;
-let softDropSpeed = 100;
 let statPlaceholder = '.........';
 
 let musicPlayer;
