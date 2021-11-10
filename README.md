@@ -185,7 +185,7 @@ Here are the specific game features.
     * [Gitpod](https://gitpod.io/) - used as online IDE for software development
         * The terminal was used to create branchs to work on before merging into the main branch. These branches have been preserved for the sake of the assessment, otherwise they would have been deleted after use.
 
-        TO-DO: Add screenshot of branches
+        ![Screenshot of all GitHub branches for project](documentation/screenshots/evidence/branches.png)
 
 ## Testing
 
