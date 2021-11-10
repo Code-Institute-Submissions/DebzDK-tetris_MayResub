@@ -17,7 +17,9 @@ let blockX;
 let blockY;
 
 let timer;
+let baseGameSpeed = 1000;
 let gameSpeed = 1000;
+let softDropSpeed = 100;
 let statPlaceholder = '.........';
 
 let musicPlayer;
@@ -28,7 +30,9 @@ let gameOverTrackPath = soundFolderPath + 'game-over.mp3';
 let currentScore = 0;
 let baseScorePerLinesCleared = [40, 100, 300, 1200];
 let level = 0;
+let totalNumOfLinesCleared = 0;
 let scoreKey = 'port-2-tet-highScores';
+let scoreElement;
 
 let isPlaying = false;
 let isPaused = false;
@@ -57,9 +61,14 @@ document.addEventListener('keydown', function(e) {
                 drawBlock();
                 break;
             case 'ArrowDown':
-                if (gameSpeed !== 100) {
-                    setGameSpeed(100);
+                let newSoftDropSpeed = getGameSpeedForCurrentLevel() / 10;
+                if (gameSpeed !== newSoftDropSpeed) {
+                    if (gameSpeed >= 0) {
+                        setGameSpeed(newSoftDropSpeed);
+                    }
                 }
+                currentScore += 1;
+                updateScore();
         }
     } else if (e.key === 'ArrowDown') {
         cycleThroughMenu('#main-menu-options', 'game-play');
@@ -73,7 +82,7 @@ document.addEventListener('keydown', function(e) {
 // Arrow key released
 document.addEventListener('keyup', function(e) {
     if (isPlaying) {
-        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(1000);
+        if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(getGameSpeedForCurrentLevel());
     }
 });
 //#endregion
@@ -105,7 +114,7 @@ function initialiseNextBlockPreview() {
     // Board dimensions setup
     PRE_TET_GRID.canvas.width = COLS * 5;
     PRE_TET_GRID.canvas.height = COLS * 5;
-    PRE_TET_GRID.scale(30, 30);
+    PRE_TET_GRID.scale(BLOCK_SIZE, BLOCK_SIZE);
 
     // Tetris block border setup
     PRE_TET_GRID.strokeStyle = 'white';
@@ -118,20 +127,84 @@ function initialiseNextBlockPreview() {
  */
 function initialiseStats(withPlaceholder) {
     if (withPlaceholder) {
-        updateScore(statPlaceholder);
-        document.getElementById('score').textContent = statPlaceholder;
-        document.getElementById('level').textContent = statPlaceholder;
+        scoreElement.textContent = statPlaceholder;
+        updateStat('level', statPlaceholder);
+        updateStat('lines', statPlaceholder);
     } else {
+        currentScore = 0;
+        level = 0;
+        totalNumOfLinesCleared = 0;
+
         updateScore();
-        document.getElementById('level').textContent = level;
+        updateStat('level', level);
+        updateStat('lines', totalNumOfLinesCleared);
     }
 }
 
 /**
- * Updates score value in stats box with current score
+ * Returns true if criteria for next level has been met
+ * @returns boolean - true if integer values are equal
+ */
+function meetsNextLevelCriteria() {
+    return totalNumOfLinesCleared === (level * 5 + 5);
+}
+
+/**
+ * Sets game speed based on current level
+ * (set to get fast fairly quickly so that all aspects of the game can be seen for assessment purposes)
+ */
+function setGameSpeedForCurrentLevel() {
+    gameSpeed = getGameSpeedForCurrentLevel();
+}
+
+/**
+ * Gets game speed for current level
+ */
+function getGameSpeedForCurrentLevel() {
+    let newSpeed = baseGameSpeed - (level * 50);
+
+    if (newSpeed < 0) {
+        newSpeed = 0;
+    }
+
+    return newSpeed;
+}
+
+/**
+ * Increases level
+ */
+function increaseLevel() {
+    level += 1;
+}
+
+/**
+ * Updates level indicator in 'Stats' area
+ */
+function updateLevel() {
+    document.getElementById('level').textContent = level;
+}
+
+/**
+ * Updates lines cleared indicator in 'Stats' area
+ */
+function updateLinesCleared() {
+    document.getElementById('lines').textContent = totalNumOfLinesCleared;
+}
+
+/**
+ * Updates value in stats box with given value
+ * @param {string} statElementId - ID of element in the stat area
+ * @param {string} value - value to update element's text content with
+ */
+function updateStat(statElementId, value) {
+    document.getElementById(statElementId).textContent = value;
+}
+
+/**
+ * Updates score in stats box
  */
 function updateScore() {
-    document.getElementById('score').textContent = currentScore;
+    scoreElement.textContent = currentScore;
 }
 
 /**
@@ -226,7 +299,7 @@ function storeHighScore() {
                 updatePlayerScoreInLeaderBoard(currentPlayerPosition, leaderBoard);
             }
         } else { // if player isn't on the leaderboard, add them
-            addPlayerToLeaderBoard(leaderBoard);
+            addPlayerToLeaderBoard(leaderBoard, playerName);
         }
 
         // store modified value in local storage
@@ -524,9 +597,18 @@ function checkForFullRow() {
             redrawBoard();
         }
     }
+
     if (numOfLinesCleared > 0) {
+        totalNumOfLinesCleared += numOfLinesCleared;
         incrementScore(numOfLinesCleared);
         updateScore();
+        updateLinesCleared();
+
+        if (meetsNextLevelCriteria()) {
+            increaseLevel();
+            updateLevel();
+            setGameSpeedForCurrentLevel();
+        }
     }
 }
 
@@ -849,7 +931,10 @@ function setGameStatus(status) {
 //#endregion
 
 //#region Menu functions
-document.body.onload = setupListeners;
+document.body.onload = function() {
+    setupListeners();
+    scoreElement = document.getElementById('score');
+};
 
 /**
  * Handles a menu button click event
