@@ -119,9 +119,10 @@ Here are the specific game features.
         ![Screenshot of Wikipedia's description for the original Nintendo scoring system for Tetris](documentation/screenshots/evidence/wikipedia-tetris-scoring-system.png)
 
         Resulting code:
+
         ```
-        let level = 0;
-        let currentScore = 0;
+        let level = 0; // incremented elsewhere
+        let currentScore = 0; // incremented elsewhere
         let baseScorePerLinesCleared = [40, 100, 300, 1200];
 
         function incrementScore(numOfLinesCleared) {
@@ -130,7 +131,33 @@ Here are the specific game features.
         }
         ```
 
-        *Note: I did not incorporate the extra points for the consequtive soft-dropping of blocks into spaces.*
+        In my haste, I completely forgot to incorporate a leveling system so I quickly put the following logic together:
+
+        * A user advances to the next level, everytime they clear x amount of lines
+            
+            ```
+            let totalNumOfLinesCleared = 0; // gets incremented every time a line is cleared
+
+            function meetsNextLevelCriteria() {
+                return totalNumOfLinesCleared === (level * 5 + 5);
+            }
+            ````
+
+        * The game speed also increases...
+
+            ```
+            let baseGameSpeed = 1000; // in ms
+
+            function getGameSpeedForCurrentLevel() {
+                let newSpeed = baseGameSpeed - (level * 50);
+
+                if (newSpeed < 0) {
+                    newSpeed = 0; // equivalent of sudden death (I image because I haven't actually managed to get that far!)
+                }
+
+                return newSpeed;
+            }
+            ```
 
 * Next shape preview
     * Like in classic Tetris, there is an area where users can preview the next shape to fall which gives them a chance to strategise while playing the game.
@@ -159,12 +186,17 @@ Here are the specific game features.
 * Difficulty modes
     * To set this game apart from the classic Tetris in some way, I would've used the usual difficulty (speed increase) coupled with something else such as, an ever-increasing or decreasing grid, the random appearance of unclearable blocks in the game, or some kind of sudden death type occurrence.
 
+    I made an attempt at this, as mentioned in 'Multiplier for consequtive row clearing' bullet point above but it needs work.
+
 * Stats for fallen pieces
     * When searching for design ideas for my Tetris game using Google Images, one retro [design](https://miro.medium.com/max/1838/1*6cPm3UhWEMBpYja5LFtkGg.png) caught my eye:
 
         ![Screenshot of retro-style Tetris with stats for fallen pieces](documentation/screenshots/evidence/future-feature-block-stats.png)
 
         I thought the in-game display of statistics for fallen pieces was really cool and would've been easy enough to implement but I decided to leave it out of this version.
+
+* Ability to floor/fast drop a Tetris block to the bottom of the grid
+    * This is a tetris classic! I left it for last, to be the cherry on top of the cake, but I didn't leave enough time for testing so this will have to be a future feature.
 
 ## Languages and technologies used
 
