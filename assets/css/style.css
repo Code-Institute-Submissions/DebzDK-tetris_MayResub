@@ -2,9 +2,9 @@
 
 @font-face {
     font-family: 'Tetris2';
-    src: url(../fonts/tetris2-vp0w.ttf) format('truetype'),
-         url(../fonts/tetris2-vp0w-webfont.woff2) format('woff2'),
-         url(../fonts/tetris2-vp0w-webfont.woff) format('woff');
+    src: url(../webfonts/tetris2-vp0w.ttf) format('truetype'),
+         url(../webfonts/tetris2-vp0w-webfont.woff2) format('woff2'),
+         url(../webfonts/tetris2-vp0w-webfont.woff) format('woff');
     font-weight: normal;
     font-style: normal;
     font-display: swap;
