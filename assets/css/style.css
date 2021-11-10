@@ -32,6 +32,9 @@ body {
     background-color: #000;
     color: #FFF;
     font-family: 'VT323', monospace;
+}
+
+main {
     display: flex;
     justify-content: space-between;
     padding: 20px 0;
@@ -87,13 +90,9 @@ section {
     font-size: 1.5rem;
 }
 
-.property {
-    margin-right: 10px;
-    flex: 1;
-}
-
 .value {
     flex: 1;
+    margin-left: 10px;
     text-align: end;
 }
 
