@@ -32,6 +32,9 @@ body {
     background-color: #000;
     color: #FFF;
     font-family: 'VT323', monospace;
+}
+
+main {
     display: flex;
     justify-content: space-between;
     padding: 20px 0;
@@ -87,13 +90,9 @@ section {
     font-size: 1.5rem;
 }
 
-.property {
-    margin-right: 10px;
-    flex: 1;
-}
-
 .value {
     flex: 1;
+    margin-left: 10px;
     text-align: end;
 }
 
@@ -199,7 +198,12 @@ button.menu-item {
     justify-content: flex-end;
 }
 
+#controls .control-btn {
+    font-family: 'VT323', monospace;
+}
+
 .control-btn {
+    font-size: 1rem;
     padding: 10px;
     width: 50px;
     height: 50px;
@@ -208,9 +212,18 @@ button.menu-item {
     cursor: pointer;
 }
 
+.control-btn.big {
+    width: 80px;
+    height: 60px;
+}
+
 .control-btn:hover {
     background-color: #FFF;
     color: #000;
+}
+
+.control-btn i {
+    margin-bottom: 5px;
 }
 /*#endregion*/
 
