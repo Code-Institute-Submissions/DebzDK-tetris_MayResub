@@ -172,6 +172,8 @@ Here are the specific game features.
     * [HTML5](https://en.wikipedia.org/wiki/HTML5) - used to create and structure webpages using semantic (meaningful) markup
     * [CSS3](https://en.wikipedia.org/wiki/CSS) - used Cascading Style Sheets to style HTML
         * [Flexbox](https://en.wikipedia.org/wiki/CSS_Flexible_Box_Layout) - used instead of `float` property for responsive web design
+    * [JavaScript](https://en.wikipedia.org/wiki/JavaScript) - used to make webpages interactive
+    
 * Technologies
     * [Autoprefixer](https://autoprefixer.github.io/) - used to automatically add vendor prefixes for browser compatibility
     * [Coolors](https://coolors.co/) - used to provide colour scheme for Tetris blocks
