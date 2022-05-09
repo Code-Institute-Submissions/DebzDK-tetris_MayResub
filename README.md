@@ -3,7 +3,9 @@
 This is a single page site that allows people to play yet another remake of the classic Tetris game.
 The site is targeted toward people who enjoy games, like Tetris. This site will be useful for people who are interested in having a taste of nostalgia or who have never played Tetris before and stumble across this version.
 
-![Screenshot of main menu of game](documentation/screenshots/website/am-i-responsive.png)
+*Note: Below image updated as of 9/5/22.*
+
+![Screenshot of main menu of game](documentation/screenshots/website/am-i-responsive-2.png)
 
 ## Design
 
@@ -78,33 +80,40 @@ A simple game of Tetris meets these requirements as follows:
 
 Here are the specific game features.
 
-### Existing features
+### Existing features (*Images updated as of 9/5/22*)
 
 * Main menu
     * Users able to see a main menu before starting the game.
 
-        ![GIF of main menu](documentation/screenshots/website/main-menu.gif)
+        ![GIF of main menu after changes](documentation/screenshots/website/main-menu-2.gif)
 
         From here, a user can start the game and view game controls, credits and the leaderboard.
 
+        *Previous main menu appearance can be found [here](documentation/screenshots/website/main-menu.gif).*
+
 * Game controls
-    * Users are able to use the arrow keys on their keyboard to control the movement of the Tetris blocks as follows:
+    * Users are able to use the arrow keys to control the movement of the Tetris blocks via keyboard or touch input as follows:
 
-        ![Screenshot of game controls](documentation/screenshots/website/controls.png)
+        ![Screenshot of game controls](documentation/screenshots/website/controls-2.png)
+        ![Screenshot of non-desktop controls](documentation/screenshots/website/touch-controls.png)
 
-        *For mobile gameplay, these controls will be displayed underneath the stats area.*
+        *Previous game controls appearance can be found [here](documentation/screenshots/website/controls.gif)*
 
 * Game credits
     * Users are able to see a small scrolling thank you note I included.
 
-        ![GIF of scrolling credits](documentation/screenshots/website/credits.gif)
+        ![GIF of scrolling credits](documentation/screenshots/website/credits-2.gif)
+
+        *Previous game credits appearance can be found [here](documentation/screenshots/website/credits.gif)*
 
 * Current game score counter and level indicator - 'Stats' area
     * Users are able to see their current game score and level while playing a game.
 
         Initially, this area contains dots as a placeholder until a game has begun.
 
-        ![GIF of stats area changing from initial state to game state](documentation/screenshots/website/stats.gif)
+        ![GIF of stats area changing from initial state to game state](documentation/screenshots/website/stats-2.gif)
+
+        *Previous game stats area appearance can be found [here](documentation/screenshots/website/stats.gif)*
 
 * Persisting highscore table/leaderboard
     * Users are able to view highscores that persist after closing the browser, or refreshing the webpage, and returning to the game.
@@ -112,6 +121,8 @@ Here are the specific game features.
         Ideally, this should've been implemented in a way where scores would persist between players on different computers but that would've gone beyong this scope of this project. Instead, scores are stored locally using `localStorage`.
 
         ![GIF of leaderboard persisting after refreshing the page](documentation/screenshots/website/persisting-leaderboard.gif)
+
+        *Did not update this image since the functionality and appearance is the same, minus the stats appearance as shown in the previous bullet point.*
 
 * Multiplier for consequtive row clearing
     * In order to stay true to Tetris, I googled 'Tetris scoring system' and chose to base my code on the description given for the '[Original Nintendo scoring system](https://tetris.wiki/Scoring#Original_Nintendo_scoring_system)' provided by [Wikipedia](https://en.wikipedia.org/wiki/Main_Page).
@@ -139,7 +150,7 @@ Here are the specific game features.
             let totalNumOfLinesCleared = 0; // gets incremented every time a line is cleared
 
             function meetsNextLevelCriteria() {
-                return totalNumOfLinesCleared === (level * 5 + 5);
+                return totalNumOfLinesCleared <= (level * 5 + 5);
             }
             ````
 
@@ -149,7 +160,7 @@ Here are the specific game features.
             let baseGameSpeed = 1000; // in ms
 
             function getGameSpeedForCurrentLevel() {
-                let newSpeed = baseGameSpeed - (level * 50);
+                let newSpeed = baseGameSpeed - (level * 100);
 
                 if (newSpeed < 0) {
                     newSpeed = 0; // equivalent of sudden death (I image because I haven't actually managed to get that far!)
@@ -162,7 +173,9 @@ Here are the specific game features.
 * Next shape preview
     * Like in classic Tetris, there is an area where users can preview the next shape to fall which gives them a chance to strategise while playing the game.
 
-        ![Screenshot of next shape preview](documentation/screenshots/website/next-shape-preview.png)
+        ![Screenshot of next shape preview](documentation/screenshots/website/next-shape-preview-2.png)
+
+        *Previous game stats area appearance can be found [here](documentation/screenshots/website/next-shape-preview.png)*
 
 * Shape rotation
     * Lastly, users are able to rotate falling shapes. Tetris simply wouldn't be Tetris without it.
@@ -172,6 +185,8 @@ Here are the specific game features.
         I made use of and sectioned the referenced code toward the bottom of my [block.js](https://github.com/DebzDK/tetris/blob/main/assets/js/block.js#L131) file and modified as appropriate.
         
         ![GIF of shape rotation in action](documentation/screenshots/website/shape-rotation.gif)
+
+        *Did not update this image since the functionality and appearance are the same.*
 
 ### Future features
 
@@ -217,7 +232,9 @@ Here are the specific game features.
     * [Gitpod](https://gitpod.io/) - used as online IDE for software development
         * The terminal was used to create branchs to work on before merging into the main branch. These branches have been preserved for the sake of the assessment, otherwise they would have been deleted after use.
 
-        ![Screenshot of all GitHub branches for project](documentation/screenshots/evidence/branches.png)
+        ![Screenshot of all GitHub branches for project](documentation/screenshots/evidence/branches-2.png)
+        
+        *Updated to show resubmission-fixes branch as of 9/5/22.*
 
 ## Testing
 

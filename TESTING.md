@@ -10,10 +10,12 @@
     * The warning and the errors were fixed, as shown below, and can be verified by clicking [here](https://validator.w3.org/nu/?doc=https%3A%2F%2Fdebzdk.github.io%2Ftetris%2F).
         ![Fixed HTML validator errors image](documentation/screenshots/testing/fixed-html-errors.png)
 
-* CSS
+        *Same result after retesting as of 9/5/22.*
+
+* CSS (*Updated as of 9/5/22*)
     * No errors were found after passing through the official (Jigsaw) validator.
     This can be verified by clicking [here](https://jigsaw.w3.org/css-validator/validator?uri=https%3A%2F%2Fdebzdk.github.io%2Ftetris&profile=css3svg&usermedium=all&warning=1&vextwarning=&lang=en).
-    * There are 72 warnings regarding the use of vendor extensions and imports. The properties referred to in these warnings are necessary for browser compatibility in Chrome, Safari, IE/Microsoft Edge, and Firefox.
+    * There are 75 warnings regarding the use of vendor extensions and imports. The properties referred to in these warnings are necessary for browser compatibility in Chrome, Safari, IE/Microsoft Edge, and Firefox.
     
 * JavaScript
     * [board.js](https://github.com/DebzDK/tetris/blob/main/assets/js/board.js)
@@ -45,12 +47,20 @@
 
             ![Screenshot of JSHint result after fixes for game.js](documentation/screenshots/testing/jshint-validation-fixes-for-gamejs.png)
 
+            *Result after retesting as of 9/5/22.*
+
+            ![Screenshot of JSHint result after fixes for game.js](documentation/screenshots/testing/jshint-validation-fixes-for-gamejs-2.png)
+
 * Accessibility
     * 4 error and 5 alerts were found and fixed after running the [WAVE Accessibility Evaluation tool](https://wave.webaim.org/report#/https://debzdk.github.io/tetris).
 
         ![WAVE accessibility evaluation tool report image 1](documentation/screenshots/testing/wave-accessibility-evaluation-tool-report-1.png)
         ![WAVE accessibility evaluation tool report image 2](documentation/screenshots/testing/wave-accessibility-evaluation-tool-report-2.png)
         ![WAVE accessibility evaluation tool report after fixes image](documentation/screenshots/testing/wave-accessibility-evaluation-tool-report-after-fixes.png)
+        
+        *Result after retesting as of 9/5/22.*
+
+        ![WAVE accessibility evaluation tool report after fixes image 2](documentation/screenshots/testing/wave-accessibility-evaluation-tool-report-after-fixes-2.png)
 
     * Manual foreground and background colour testing
         * Text
@@ -76,14 +86,14 @@
 
                 *Note: Mobile has the same accessibilty issues as shown for desktop*
     
-    * Secondary report
+    * Secondary report (*as of 9/5/22*)
         * Desktop
-            * index.html report can be found [here](https://htmlpreview.github.io/?https://github.com/DebzDK/tetris/blob/main/documentation/reports/secondary-lighthouse-desktop-report.html)
+            * index.html report can be found [here](https://htmlpreview.github.io/?https://github.com/DebzDK/tetris/blob/main/documentation/reports/secondary-lighthouse-desktop-report-2.html)
 
                 ![Screenshot of secondary Lighthouse desktop report for index.html](documentation/screenshots/testing/lighthouse-desktop-report-after-fixes.png)
         
         * Mobile
-            * index.html report can be found [here](https://htmlpreview.github.io/?https://github.com/DebzDK/pilates-your-guide-to-flexible-fun/blob/main/documentation/reports/secondary-lighthouse-mobile-report.html)
+            * index.html report can be found [here](https://htmlpreview.github.io/?https://github.com/DebzDK/pilates-your-guide-to-flexible-fun/blob/main/documentation/reports/secondary-lighthouse-mobile-report-2.html)
 
                 ![Screenshot of secondary Lighthouse mobile report for index.html](documentation/screenshots/testing/lighthouse-mobile-report-after-fixes.png)
 
@@ -94,13 +104,15 @@
 
             Autoprefixer was used on style.css to cater for the potential styling issues that typically arise across different browers.
 
-        * Mobile
+        * Mobile & Tablet (*as of 9/5/22*)
 
-            Sadly, the game was made entirely with medium to large desktops in mind as there wasn't enough time to fully test and ensure an enjoyable playthrough on mobile devices. It also isn't the best on smaller screens as the game doesn't scale well.
-            
-            I had attempted to do this, by using percentages to size elements but ran into the other issue of the fact that Canvas doesn't scale as lines drawn on it are rendered in pixels. I also tried scaling the canvases based on a factor found through calculations invovling the target device's width and height and the desired device width and height (larger screen dimensions).
+            The game no longer stretches Tetris pieces on very large screens and changes layout slightly for small mobile devices. The preview and on-screen key controls display on top of the game with low opacity backgrounds so that the player can still see the state of the game and have control on mobile devices.
 
-            Although it doesn't scale, the game is visible and can be scrolled into view on a medium to large-size device.
+            ![Screenshot of main menu on mobile view](documentation/screenshots/testing/mobile-view-1.png)
+            ![Screenshot of gameplay on mobile view](documentation/screenshots/testing/mobile-view-2.png)
+
+            ![Screenshot of main menu on tablet view](documentation/screenshots/testing/ipad-mini-1.png)
+            ![Screenshot of gameplay on tablet view](documentation/screenshots/testing/ipad-mini-2.png)
 
 ## Fixed bugs
 
@@ -122,3 +134,28 @@
 
     This issue was also discovered when testing rotation after fixing the 'hanging piece' bug.
     Sometimes, when rotating a block, it may overlap with an existing one.
+
+## Resubmission bugs (*as of 9/5/22*)
+
+No bugs were found after making the required changes following the assessment feedback.
+
+### Addressed issues
+
+* Responsiveness on mobile and tablet devices
+
+    As opposed to remaining large and having a very zoomed in view on smaller screens, the appearance of the game has been modified to remain a playable size on all screens. Also, the pieces no longer distort when viewed on very large screens.
+
+* Text constrast
+
+    The text in the game menus, i.e. 'Controls', 'Credits', and 'View Leaderboard', appeared grey rather than white on smaller devices due to the Tetris-style font that was used. This went unnoticed due to prior absence of testing on said devices. Now, the menu font has an increased weight to appear bolder and more visible.
+
+    * For example: 'Controls' menu before and after
+
+        ![Screenshot of game controls](documentation/screenshots/website/controls.png)
+        ![Screenshot of game controls after change](documentation/screenshots/website/controls-2.png)
+
+* The long Tetris block
+
+    It was noted that an odd design choice was made to have the long Tetris piece be 3 blocks long instead of the typical 4. However, this wasn't a design choice. It was the absence of a row within the array representing this piece and has now been updated.
+
+    ![Screenshot of long Tetris piece](documentation/screenshots/website/long-piece.png)
