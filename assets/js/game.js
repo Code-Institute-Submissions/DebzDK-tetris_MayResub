@@ -1168,6 +1168,7 @@ function hideSecondaryMenu() {
     hideSecondaryMenuContent('controls');
     hideSecondaryMenuContent('credits');
     hideSecondaryMenuContent('leaderboard');
+    hideSecondaryMenuContent('settings');
     addClassToElementClassList('exit-btn-blackout', 'hidden');
     setSecondaryMenuTitle('');
 
