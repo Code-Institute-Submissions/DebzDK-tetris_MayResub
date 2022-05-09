@@ -846,10 +846,8 @@ function moveLf() {
  */
 function softDropBlock() {
     let newSoftDropSpeed = getGameSpeedForCurrentLevel() / 10;
-    if (gameSpeed !== newSoftDropSpeed) {
-        if (gameSpeed >= 0) {
-            setGameSpeed(newSoftDropSpeed);
-        }
+    if (gameSpeed !== newSoftDropSpeed && gameSpeed >= 0) {
+        setGameSpeed(newSoftDropSpeed);
     }
     currentScore += 1;
     updateScore();
@@ -1095,6 +1093,10 @@ function gameStateButtonClickEventHandler() {
         }
     } else {
         clearInterval(holdTimer);
+        let expectedSpeed = getGameSpeedForCurrentLevel();
+        if ((e.type === 'touchend' || e.type === 'mouseup') && gameSpeed < expectedSpeed) {
+            setGameSpeed(expectedSpeed);
+        }
     }
 }
 
