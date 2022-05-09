@@ -353,6 +353,7 @@ button.menu-item {
     -webkit-transition: 1s ease-in all;
     -o-transition: 1s ease-in all;
     transition: 1s ease-in all;
+    font-weight: 600 !important;
 }
 
 #secondary-menu-title {
@@ -407,6 +408,7 @@ button.menu-item {
     position: absolute;
     z-index: 1;
     margin: -30px -40px;
+    font-weight: inherit;
 }
 
 #exit-btn-blackout {
