@@ -153,7 +153,7 @@ function initialiseStats(withPlaceholder) {
  * @returns boolean - true if integer values are equal
  */
 function meetsNextLevelCriteria() {
-    return totalNumOfLinesCleared === (level * 5 + 5);
+    return totalNumOfLinesCleared >= (level * 5 + 5);
 }
 
 /**
