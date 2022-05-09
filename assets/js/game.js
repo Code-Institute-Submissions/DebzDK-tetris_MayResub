@@ -168,7 +168,7 @@ function setGameSpeedForCurrentLevel() {
  * Gets game speed for current level
  */
 function getGameSpeedForCurrentLevel() {
-    let newSpeed = baseGameSpeed - (level * 50);
+    let newSpeed = baseGameSpeed - (level * 100);
 
     if (newSpeed < 0) {
         newSpeed = 0;
