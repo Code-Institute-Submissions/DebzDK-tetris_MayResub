@@ -76,7 +76,7 @@ document.addEventListener('keydown', function(e) {
                 updateScore();
         }
     } else if (e.key === 'ArrowDown') {
-        defaultButtonID = currentMenu === '#main-menu-options' ? 'game-play' : 'game-sounds'
+        defaultButtonID = currentMenu === '#main-menu-options' ? 'game-play' : 'game-sounds';
         cycleThroughMenu(currentMenu, defaultButtonID);
     } else if (e.key === 'ArrowUp') {
         defaultSettingsButtonID = isPlaying ? 'quit-game' : 'game-sounds';
