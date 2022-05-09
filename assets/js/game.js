@@ -1006,7 +1006,7 @@ function menuButtonClickEventHandler() {
  * Handles a menu button mouse over event
  */
 function menuButtonMouseOverHandler() {
-    removeClassFromAllElementsWithClass('#main-menu-options .active', 'active');
+    removeClassFromAllElementsWithClass(currentMenu + ' .active', 'active');
     addClassToElementClassList(this.id, 'active');
     this.focus();
 }
