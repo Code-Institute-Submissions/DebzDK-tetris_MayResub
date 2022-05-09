@@ -76,11 +76,11 @@ document.addEventListener('keydown', function(e) {
                 updateScore();
         }
     } else if (e.key === 'ArrowDown') {
-        defaultButtonID = currentMenu === '#main-menu-options' ? 'game-play' : 'game-sounds';
+        let defaultButtonID = currentMenu === '#main-menu-options' ? 'game-play' : 'game-sounds';
         cycleThroughMenu(currentMenu, defaultButtonID);
     } else if (e.key === 'ArrowUp') {
-        defaultSettingsButtonID = isPlaying ? 'quit-game' : 'game-sounds';
-        defaultButtonID = currentMenu === '#main-menu-options' ? 'game-credits' : defaultSettingsButtonID;
+        let defaultSettingsButtonID = isPlaying ? 'quit-game' : 'game-sounds';
+        let defaultButtonID = currentMenu === '#main-menu-options' ? 'game-credits' : defaultSettingsButtonID;
         cycleThroughMenu(currentMenu, defaultButtonID, true);
     } else if (e.key === 'Enter') {
         processMenuOption(e.target.id);
@@ -108,8 +108,8 @@ function initialiseBoard() {
  */
 function setGameBoardDimensions() {
     // Board dimensions setup
-    scale = window.innerWidth/window.innerHeight;
-    scaled_size = BLOCK_SIZE * window.devicePixelRatio * scale;
+    let scale = window.innerWidth/window.innerHeight;
+    let scaled_size = BLOCK_SIZE * window.devicePixelRatio * scale;
     TET_GRID.canvas.width = COLS * scaled_size;
     TET_GRID.canvas.height = ROWS * scaled_size;
     TET_GRID.scale(scaled_size, scaled_size);
@@ -127,8 +127,8 @@ function setGameBoardDimensions() {
  */
 function setNextBlockPreviewDimensions() {
     // Board dimensions setup
-    scale = window.innerWidth/window.innerHeight;
-    scaled_size = BLOCK_SIZE * window.devicePixelRatio * 2 * (scale < 1 ? 1.5 : scale);
+    let scale = window.innerWidth/window.innerHeight;
+    let scaled_size = BLOCK_SIZE * window.devicePixelRatio * 2 * (scale < 1 ? 1.5 : scale);
     PRE_TET_GRID.canvas.width = COLS * 20 * window.devicePixelRatio;
     PRE_TET_GRID.canvas.height = COLS * 15 * window.devicePixelRatio;
     PRE_TET_GRID.scale(scaled_size, scaled_size);
@@ -1402,12 +1402,13 @@ function audioTimeUpdateCallback() {
  * Toggles arrow key setting between 'ON' and 'OFF'
  */
  function toggleShowArrowKeysSetting() {
-    keycontrol = document.getElementById('non-keyboard-controls');
-    if (keycontrol.classList.contains('hidden')) {
+    let isShowingKeys = false;
+    let keyControl = document.getElementById('non-keyboard-controls');
+
+    if (keyControl.classList.contains('hidden')) {
         isShowingKeys = true;
         removeClassFromElementClassList('non-keyboard-controls', 'hidden');
     } else {
-        isShowingKeys = false;
         addClassToElementClassList('non-keyboard-controls', 'hidden');
     }
     
