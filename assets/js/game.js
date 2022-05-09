@@ -36,6 +36,8 @@ let totalNumOfLinesCleared = 0;
 let scoreKey = 'port-2-tet-highScores';
 let scoreElement;
 
+let currentMenu = '#main-menu-options';
+
 let isPlaying = false;
 let isPaused = false;
 let isGameOver = false;
@@ -73,9 +75,12 @@ document.addEventListener('keydown', function(e) {
                 updateScore();
         }
     } else if (e.key === 'ArrowDown') {
-        cycleThroughMenu('#main-menu-options', 'game-play');
+        defaultButtonID = currentMenu === '#main-menu-options' ? 'game-play' : 'game-sounds'
+        cycleThroughMenu(currentMenu, defaultButtonID);
     } else if (e.key === 'ArrowUp') {
-        cycleThroughMenu('#main-menu-options', 'game-credits', true);
+        defaultSettingsButtonID = isPlaying ? 'quit-game' : 'game-sounds';
+        defaultButtonID = currentMenu === '#main-menu-options' ? 'game-credits' : defaultSettingsButtonID;
+        cycleThroughMenu(currentMenu, defaultButtonID, true);
     } else if (e.key === 'Enter') {
         processMenuOption(e.target.id);
     }
@@ -886,7 +891,7 @@ function pauseGame() {
     pauseAudio();
     toggleMenuButtonVisibility('quit-game');
     clearInterval(timer);
-    isPaused = true;
+    isPaused = !!isPlaying;
 }
 
 /**
@@ -1126,6 +1131,7 @@ function setStyleOnElement(id, prop, value) {
  * Displays main menu
  */
 function showMainMenu() {
+    currentMenu = '#main-menu-options';
     setStyleOnElement('main-menu', 'visibility', 'visible');
 }
 
@@ -1133,6 +1139,7 @@ function showMainMenu() {
  * Hides main menu
  */
 function hideMainMenu() {
+    currentMenu = '';
     setStyleOnElement('main-menu', 'visibility', 'hidden');
 }
 
@@ -1163,6 +1170,7 @@ function showSecondaryMenu() {
  * Hides the secondary menu and the potential contents being displayed
  */
 function hideSecondaryMenu() {
+    currentMenu = '';
     addClassToElementClassList('secondary-menu', 'hidden');
     addClassToElementClassList('secondary-menu-title', 'hidden');
     hideSecondaryMenuContent('controls');
@@ -1178,7 +1186,7 @@ function hideSecondaryMenu() {
     } else if (isGameOver) {
         hideSecondaryMenuContent('status');
         showMainMenu();
-        cycleThroughMenu('#main-menu-options', 'game-play');
+        cycleThroughMenu(currentMenu, 'game-play');
         initialiseStats(true);
     } else if (!isPlaying) {
         showMainMenu();
@@ -1207,6 +1215,7 @@ function setSecondaryMenuContentClass(contentName, className) {
  * @param {string} contentName - The name of the content to be displayed
  */
 function showSecondaryMenuContent(contentName) {
+    currentMenu = '#secondary-menu-' + contentName + '-content';
     setSecondaryMenuContentClass(contentName, '');
 }
 
@@ -1216,6 +1225,7 @@ function showSecondaryMenuContent(contentName) {
  */
 function hideSecondaryMenuContent(contentName) {
     setSecondaryMenuContentClass(contentName, 'hidden');
+    removeClassFromElementClassList('exit-btn', 'active');
 }
 
 /**
@@ -1236,8 +1246,16 @@ function cycleThroughMenu(menuOptionsContainerID, defaultButtonID, reverseOrder)
             addClassToElementClassList(activeMenuItem[siblingPropertyName].id, 'active');
             activeMenuItem[siblingPropertyName].focus();
             hasSibling = true;
+        } else if (menuOptionsContainerID.startsWith('#secondary')) {
+            defaultButtonID = 'exit-btn';
         }
+    } else if (menuOptionsContainerID.endsWith('content') && menuOptionsContainerID.indexOf('settings') === -1) {
+        defaultButtonID = 'exit-btn';
+    } else {
+        activeMenuItem = 'exit-btn';
+        removeClassFromElementClassList('exit-btn', 'active');
     }
+
     if ((!activeMenuItem && !isPaused) || (activeMenuItem && !hasSibling)) {
         let nextMenuButton = document.getElementById(defaultButtonID);
         addClassToElementClassList(nextMenuButton.id, 'active');
