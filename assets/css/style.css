@@ -353,6 +353,7 @@ button.menu-item {
     height: 30px;
     width: 30px;
     border-radius: 20%;
+    background-color: transparent;
 }
 
 #up-arrow {

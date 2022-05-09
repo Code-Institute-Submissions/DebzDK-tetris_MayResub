@@ -51,14 +51,10 @@ document.addEventListener('keydown', function(e) {
     if (isPlaying && !isPaused) {
         switch (e.key) {
             case 'ArrowLeft':
-                if (blockX + block.currentBlock.xOffset > 0) {
-                    moveLf();
-                }
+                moveLf();
                 break;
             case 'ArrowRight':
-                if (blockX + block.currentBlock.xOffset + block.currentBlock.width < canvasWidth) {
-                    moveRg();
-                }
+                moveRg();
                 break;
             case 'ArrowUp':
                 drawBlock(true);
@@ -66,14 +62,7 @@ document.addEventListener('keydown', function(e) {
                 drawBlock();
                 break;
             case 'ArrowDown':
-                let newSoftDropSpeed = getGameSpeedForCurrentLevel() / 10;
-                if (gameSpeed !== newSoftDropSpeed) {
-                    if (gameSpeed >= 0) {
-                        setGameSpeed(newSoftDropSpeed);
-                    }
-                }
-                currentScore += 1;
-                updateScore();
+                softDropBlock();
         }
     } else if (e.key === 'ArrowDown') {
         let defaultButtonID = currentMenu === '#main-menu-options' ? 'game-play' : 'game-sounds';
@@ -610,18 +599,22 @@ function redrawBoard() {
  function redrawNextPreviewBlock() {
     clearPreviewCanvas();
     setCurrentNextBlockColour();
-    drawPreview();
+    if (isPlaying && !isPaused) {
+        drawPreview();
+    }
 }
 
 /**
  * Resizes canvas
  */
 function resizeBoard() {
-    setGameBoardDimensions();
-    setNextBlockPreviewDimensions();
-    
-    redrawBoard();
-    redrawNextPreviewBlock();
+    if (isPlaying) {
+        setGameBoardDimensions();
+        setNextBlockPreviewDimensions();
+        
+        redrawBoard();
+        redrawNextPreviewBlock();
+    }
 }
 
 /**
@@ -752,44 +745,46 @@ function moveDn() {
  * or the left side of the grid has been reached
  */ 
 function moveLf() {
-    // Used to indicate whether a block is on the left side of the current block
-    let isShapeLeft = false;
+    if (blockX + block.currentBlock.xOffset > 0) {
+        // Used to indicate whether a block is on the left side of the current block
+        let isShapeLeft = false;
 
-    /**
-     * Loops through the first bit of the each row of the current block and determines if the block's hit the left side of the board
-     * or checks if the current block has hit another block on the left side of it
-     */
-     for (let y = block.currentBlock.yOffset; y < block.currentBlock.shape.length - 1; y++) {
-        if (!isShapeLeft) {
-            // store the current row of block bits
-            let rowOfBlockBits = block.currentBlock.shape[y];
-            // get the value of the first bit in the row (if it exists, i.e. isn't 0, then we know it's a something we can collide with)
-            let firstBitInBlockRow = rowOfBlockBits[block.currentBlock.xOffset];
-            // get the board representation of the row matching with the row of the current block we're looking at
-            let rowOfBoardBitsLeftOfBlock = board.grid[blockY + y];
-            let bitInBoardRowLeftOfBlock;
+        /**
+         * Loops through the first bit of the each row of the current block and determines if the block's hit the left side of the board
+         * or checks if the current block has hit another block on the left side of it
+         */
+        for (let y = block.currentBlock.yOffset; y < block.currentBlock.shape.length - 1; y++) {
+            if (!isShapeLeft) {
+                // store the current row of block bits
+                let rowOfBlockBits = block.currentBlock.shape[y];
+                // get the value of the first bit in the row (if it exists, i.e. isn't 0, then we know it's a something we can collide with)
+                let firstBitInBlockRow = rowOfBlockBits[block.currentBlock.xOffset];
+                // get the board representation of the row matching with the row of the current block we're looking at
+                let rowOfBoardBitsLeftOfBlock = board.grid[blockY + y];
+                let bitInBoardRowLeftOfBlock;
 
-            // if there is a board column (is undefined once the left side of the board is reached)
-            if (rowOfBoardBitsLeftOfBlock) {
-                // then store the bit directly left of the one we're currently looking at
-                bitInBoardRowLeftOfBlock = rowOfBoardBitsLeftOfBlock[blockX + block.currentBlock.xOffset - 1];
-            }
+                // if there is a board column (is undefined once the left side of the board is reached)
+                if (rowOfBoardBitsLeftOfBlock) {
+                    // then store the bit directly left of the one we're currently looking at
+                    bitInBoardRowLeftOfBlock = rowOfBoardBitsLeftOfBlock[blockX + block.currentBlock.xOffset - 1];
+                }
 
-            // if there's no space to the left of the current block or collision detected
-            if (bitInBoardRowLeftOfBlock === undefined || (firstBitInBlockRow && bitInBoardRowLeftOfBlock)) {
-                // no wiggle room so act accordingly
-                isShapeLeft = true;
-                break;
+                // if there's no space to the left of the current block or collision detected
+                if (bitInBoardRowLeftOfBlock === undefined || (firstBitInBlockRow && bitInBoardRowLeftOfBlock)) {
+                    // no wiggle room so act accordingly
+                    isShapeLeft = true;
+                    break;
+                }
             }
         }
-    }
 
-    if (!isShapeLeft) {
-        drawBlock(true);
+        if (!isShapeLeft) {
+            drawBlock(true);
 
-        blockX -= 1;
+            blockX -= 1;
 
-        drawBlock();
+            drawBlock();
+        }
     }
 }
 
@@ -798,50 +793,66 @@ function moveLf() {
  * or the right side of the grid has been reached
  */ 
  function moveRg() {
-    // Holds the number of rows/cols in a block's array
-    let numOfRows = block.currentBlock.shape.length - 1;
+    if (blockX + block.currentBlock.xOffset + block.currentBlock.width < canvasWidth) {
+        // Holds the number of rows/cols in a block's array
+        let numOfRows = block.currentBlock.shape.length - 1;
 
-    // Used to indicate whether a block is on the right side of the current block
-    let isShapeRight = false;
+        // Used to indicate whether a block is on the right side of the current block
+        let isShapeRight = false;
 
-    /**
-     * Loops through the last bit of the each row of the current block and determines if the block's hit the right side of the board
-     * or checks if the current block has hit another block on the right side of it
-     */
-     for (let y = block.currentBlock.yOffset; y <= numOfRows; y++) {
-        if (!isShapeRight) {
-            // store the current row of block bits
-            let rowOfBlockBits = block.currentBlock.shape[y];
-            // get the value of the last bit in the row (if it exists, i.e. isn't 0, then we know it's a something we can collide with)
-            let lastBitInBlockRow = rowOfBlockBits[block.currentBlock.xOffset + block.currentBlock.width - 1];
+        /**
+         * Loops through the last bit of the each row of the current block and determines if the block's hit the right side of the board
+         * or checks if the current block has hit another block on the right side of it
+         */
+        for (let y = block.currentBlock.yOffset; y <= numOfRows; y++) {
+            if (!isShapeRight) {
+                // store the current row of block bits
+                let rowOfBlockBits = block.currentBlock.shape[y];
+                // get the value of the last bit in the row (if it exists, i.e. isn't 0, then we know it's a something we can collide with)
+                let lastBitInBlockRow = rowOfBlockBits[block.currentBlock.xOffset + block.currentBlock.width - 1];
 
-            // get the board representation of the row matching the row of the current block we're looking at
-            let rowOfBoardBitsRightOfBlock = board.grid[blockY + y];
+                // get the board representation of the row matching the row of the current block we're looking at
+                let rowOfBoardBitsRightOfBlock = board.grid[blockY + y];
 
-            let bitInBoardRowRightOfBlock;
+                let bitInBoardRowRightOfBlock;
 
-            // if there is a board column (is undefined once the right side of the board is reached)
-            if (rowOfBoardBitsRightOfBlock) {
-                // then store the bit directly right of the one we're currently looking at
-                bitInBoardRowRightOfBlock = rowOfBoardBitsRightOfBlock[blockX + block.currentBlock.xOffset + block.currentBlock.width];
-            }
-            
-            // if there's no space to the right of the current block or collision detected
-            if (bitInBoardRowRightOfBlock === undefined || (lastBitInBlockRow && bitInBoardRowRightOfBlock)) {
-                // no wiggle room so act accorrdingly
-                isShapeRight = true;
-                break;
+                // if there is a board column (is undefined once the right side of the board is reached)
+                if (rowOfBoardBitsRightOfBlock) {
+                    // then store the bit directly right of the one we're currently looking at
+                    bitInBoardRowRightOfBlock = rowOfBoardBitsRightOfBlock[blockX + block.currentBlock.xOffset + block.currentBlock.width];
+                }
+                
+                // if there's no space to the right of the current block or collision detected
+                if (bitInBoardRowRightOfBlock === undefined || (lastBitInBlockRow && bitInBoardRowRightOfBlock)) {
+                    // no wiggle room so act accorrdingly
+                    isShapeRight = true;
+                    break;
+                }
             }
         }
+
+        if (!isShapeRight) {
+            drawBlock(true);
+
+            blockX += 1;
+
+            drawBlock();
+        }
     }
+}
 
-    if (!isShapeRight) {
-        drawBlock(true);
-
-        blockX += 1;
-
-        drawBlock();
+/**
+ * Moves the current block down at a faster pace
+ */
+function softDropBlock() {
+    let newSoftDropSpeed = getGameSpeedForCurrentLevel() / 10;
+    if (gameSpeed !== newSoftDropSpeed) {
+        if (gameSpeed >= 0) {
+            setGameSpeed(newSoftDropSpeed);
+        }
     }
+    currentScore += 1;
+    updateScore();
 }
 
 /**
@@ -1077,7 +1088,7 @@ function gameStateButtonClickEventHandler() {
                 holdTimer = setInterval(moveRg, 100);
                 break;
             case 'down-arrow':
-                holdTimer = setInterval(moveDn, 100);
+                holdTimer = setInterval(softDropBlock, 100);
                 break;
             default:
                 return;
@@ -1277,6 +1288,7 @@ function hideSecondaryMenu() {
         showGame();
         resumeGame();
     } else if (isGameOver) {
+        clearGameCanvas();
         hideSecondaryMenuContent('status');
         showMainMenu();
         cycleThroughMenu(currentMenu, 'game-play');
