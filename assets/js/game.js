@@ -20,6 +20,7 @@ let blockX;
 let blockY;
 
 let timer;
+let holdTimer;
 let baseGameSpeed = 1000;
 let gameSpeed = 1000;
 let statPlaceholder = '.........';
@@ -100,28 +101,37 @@ document.addEventListener('keyup', function(e) {
  */
 function initialiseBoard() {
     board = new Board(TET_GRID);
+}
 
+/**
+ * Sets the dimensions and scale of the game board
+ */
+function setGameBoardDimensions() {
     // Board dimensions setup
-    TET_GRID.canvas.width = COLS * BLOCK_SIZE;
-    TET_GRID.canvas.height = ROWS * BLOCK_SIZE;
-    TET_GRID.scale(BLOCK_SIZE, BLOCK_SIZE);
+    scale = window.innerWidth/window.innerHeight;
+    scaled_size = BLOCK_SIZE * window.devicePixelRatio * scale;
+    TET_GRID.canvas.width = COLS * scaled_size;
+    TET_GRID.canvas.height = ROWS * scaled_size;
+    TET_GRID.scale(scaled_size, scaled_size);
+
+    canvasWidth = TET_GRID.canvas.clientWidth;
+    canvasHeight = TET_GRID.canvas.clientHeight;
 
     // Tetris block border setup
     TET_GRID.strokeStyle = 'white';
     TET_GRID.lineWidth = 0.2;
-
-    canvasWidth = TET_GRID.canvas.width;
-    canvasHeight = TET_GRID.canvas.height;
 }
 
 /**
- * Initialises the next block preview canvas
+ * Sets the dimensions and scale of the next block preview
  */
-function initialiseNextBlockPreview() {
+function setNextBlockPreviewDimensions() {
     // Board dimensions setup
-    PRE_TET_GRID.canvas.width = COLS * 5;
-    PRE_TET_GRID.canvas.height = COLS * 5;
-    PRE_TET_GRID.scale(BLOCK_SIZE, BLOCK_SIZE);
+    scale = window.innerWidth/window.innerHeight;
+    scaled_size = BLOCK_SIZE * window.devicePixelRatio * 2 * (scale < 1 ? 1.5 : scale);
+    PRE_TET_GRID.canvas.width = COLS * 20 * window.devicePixelRatio;
+    PRE_TET_GRID.canvas.height = COLS * 15 * window.devicePixelRatio;
+    PRE_TET_GRID.scale(scaled_size, scaled_size);
 
     // Tetris block border setup
     PRE_TET_GRID.strokeStyle = 'white';
@@ -379,7 +389,8 @@ function startGame() {
     showGameControls();
 
     initialiseBoard();
-    initialiseNextBlockPreview();
+    setGameBoardDimensions();
+    setNextBlockPreviewDimensions();
     initialiseStats();
 
     placeNewBlockOnBoard();
@@ -490,6 +501,13 @@ function setNextBlock() {
 function setCurrentBlockColour() {
     // Tetris block colour
     TET_GRID.fillStyle = block.currentColour;
+}
+
+/**
+ * Assigns canvas fill colour for the next block
+ */
+function setCurrentNextBlockColour() {
+    // TNext Tetris block colour
     PRE_TET_GRID.fillStyle = nextBlock.currentColour;
 }
 
@@ -505,7 +523,7 @@ function setNextBlockColour() {
  * Assigns values to the variables for the current block's (X,Y) pos
  */
 function setBlockStartPosition() {
-    blockX = (canvasWidth / (2 * BLOCK_SIZE)) - block.currentBlock.xOffset;
+    blockX = Math.round((canvasWidth / (2 * BLOCK_SIZE)) - block.currentBlock.xOffset);
     blockY = 0;
 }
 
@@ -534,7 +552,7 @@ function drawBlock(clear) {
             if (bitInBlock) {
                 if (clear) {
                     board.grid[blockY + y][blockX + x] = 0;
-                    TET_GRID.clearRect(blockX + x - 0.1, blockY + y - 0.1, 1.2, 1.2);
+                    TET_GRID.clearRect(blockX + x - 0.15, blockY + y - 0.15, 1.3, 1.3);
                     setCurrentBlockColour();
                 } else {
                     board.grid[blockY + y][blockX + x] = COLOURS.indexOf(block.currentColour) + 1;
@@ -558,7 +576,7 @@ function drawPreview(clear) {
             for (let x = 0; x < blockRow.length; x++) {
                 let bitInBlock = blockRow[x];
                 if (bitInBlock) {
-                    drawRect(PRE_TET_GRID, x + 1, y + 0.5, 1, 1);
+                    drawRect(PRE_TET_GRID, x + 2, y, 1, 1);
                 }
             }
         }
@@ -583,6 +601,26 @@ function redrawBoard() {
             }
         }
     }
+}
+
+/**
+ * Clears and redraws next block preview
+ */
+ function redrawNextPreviewBlock() {
+    clearPreviewCanvas();
+    setCurrentNextBlockColour();
+    drawPreview();
+}
+
+/**
+ * Resizes canvas
+ */
+function resizeBoard() {
+    setGameBoardDimensions();
+    setNextBlockPreviewDimensions();
+    
+    redrawBoard();
+    redrawNextPreviewBlock();
 }
 
 /**
@@ -861,6 +899,7 @@ function showPausedGameScreen() {
     removeClassFromElementClassList('resume-game', 'hidden');
     addClassToElementClassList('pause-game', 'hidden');
     addClassToElementClassList('game-sounds', 'hidden');
+    addClassToElementClassList('game-keys', 'hidden');
     addClassToElementClassList('exit-btn-blackout', 'hidden');
     removeClassFromElementClassList('menu', 'hidden');
     
@@ -880,6 +919,7 @@ function hidePausedGameScreen() {
     addClassToElementClassList('resume-game', 'hidden');
     removeClassFromElementClassList('pause-game', 'hidden');
     removeClassFromElementClassList('game-sounds', 'hidden');
+    removeClassFromElementClassList('game-keys', 'hidden');
     removeClassFromElementClassList('exit-btn', 'hidden');
     showGame();
 }
@@ -984,10 +1024,10 @@ function setupMenuButtonListeners() {
 }
 
 /**
- * Handles a game control button click event
+ * Handles a game state button click event
  * @returns nothing - stops execution if none of the expected buttons are clicked
  */
-function gameControlButtonClickEventHandler() {
+function gameStateButtonClickEventHandler() {
     switch (this.id) {
         case 'pause-game':
             pauseGame();
@@ -998,6 +1038,7 @@ function gameControlButtonClickEventHandler() {
             hidePausedGameScreen();
             break;
         case 'restart-game':
+            hidePausedGameScreen();
             clearGameCanvas();
             startGame();
             break;
@@ -1014,13 +1055,58 @@ function gameControlButtonClickEventHandler() {
 }
 
 /**
- * Sets click event listener for game control buttons
+ * Handles a game control button mousedown and mouseup events
+ * @returns nothing - stops execution if none of the expected buttons are clicked
+ */
+ function gameControlButtonClickEventHandler(e) {
+    if (e.type === 'mousedown' || e.type === 'touchstart') {
+        switch (this.id) {
+            case 'up-arrow':
+                holdTimer = setInterval(function() {
+                    drawBlock(true);
+                    block.rotateBlockClockwise();
+                    drawBlock();
+                }, 500);
+                break;
+            case 'left-arrow':
+                holdTimer = setInterval(moveLf, 100);
+                break;
+            case 'right-arrow':
+                holdTimer = setInterval(moveRg, 100);
+                break;
+            case 'down-arrow':
+                holdTimer = setInterval(moveDn, 100);
+                break;
+            default:
+                return;
+        }
+    } else {
+        clearInterval(holdTimer);
+    }
+}
+
+/**
+ * Sets click event listener for game state buttons
+ */
+function setupStateControlButtonListeners() {
+    let gameStateButtons = document.getElementsByClassName('state-control-btn');
+    
+    for (let i = 0; i < gameStateButtons.length; i++) {
+        gameStateButtons[i].addEventListener('click', gameStateButtonClickEventHandler);
+    }
+}
+
+/**
+ * Sets click event listener for gameplay control buttons
  */
 function setupGameControlButtonListeners() {
-    let gameControlButtons = document.getElementsByClassName('control-btn');
+    let gameControlButtons = document.getElementsByClassName('game-control-btn');
     
     for (let i = 0; i < gameControlButtons.length; i++) {
-        gameControlButtons[i].addEventListener('click', gameControlButtonClickEventHandler);
+        gameControlButtons[i].addEventListener('mousedown', gameControlButtonClickEventHandler);
+        gameControlButtons[i].addEventListener('touchstart', gameControlButtonClickEventHandler);
+        gameControlButtons[i].addEventListener('mouseup', gameControlButtonClickEventHandler);
+        gameControlButtons[i].addEventListener('touchend', gameControlButtonClickEventHandler);
     }
 }
 
@@ -1029,7 +1115,7 @@ function setupGameControlButtonListeners() {
  */
 function setupListeners() {
     setupMenuButtonListeners();
-
+    setupStateControlButtonListeners();
     setupGameControlButtonListeners();
 
     let highScoreEntryForm = document.getElementById('score-submission');
@@ -1037,6 +1123,8 @@ function setupListeners() {
     highScoreEntryForm.addEventListener('submit', function() {
         return storeHighScore();
     });
+
+    window.addEventListener('resize', resizeBoard);
 }
 
 /**
@@ -1068,6 +1156,9 @@ function processMenuOption(id) {
             break;
         case 'game-sounds':
             toggleSoundSetting();
+            break;
+        case 'game-keys':
+            toggleShowArrowKeysSetting();
             break;
         case 'quit-game':
             endGame();
@@ -1274,7 +1365,7 @@ function showGameControls() {
 /**
  * Hides game controls
  */
- function hideGameControls() {
+function hideGameControls() {
     addClassToElementClassList('pause-game', 'hidden');
     addClassToElementClassList('resume-game', 'hidden');
     addClassToElementClassList('restart-game', 'hidden');
@@ -1305,6 +1396,22 @@ function audioTimeUpdateCallback() {
         this.currentTime = 0;
         this.play();
     }
+}
+
+/**
+ * Toggles arrow key setting between 'ON' and 'OFF'
+ */
+ function toggleShowArrowKeysSetting() {
+    keycontrol = document.getElementById('non-keyboard-controls');
+    if (keycontrol.classList.contains('hidden')) {
+        isShowingKeys = true;
+        removeClassFromElementClassList('non-keyboard-controls', 'hidden');
+    } else {
+        isShowingKeys = false;
+        addClassToElementClassList('non-keyboard-controls', 'hidden');
+    }
+    
+    document.getElementById('key-setting').textContent = isShowingKeys ? 'ON' : 'OFF';
 }
 
 /**

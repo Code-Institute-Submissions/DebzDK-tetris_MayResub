@@ -18,27 +18,30 @@
     <body>
         <!-- Start of main content, i.e. the game components -->
         <main>
-            <!-- Left game area -->
-            <section id="left">
-                <!-- Stats area -->
-                <div id="stats">
-                    <h2 class="bordered-box-title">Stats</h2>
+            <!-- Textual game info -->
+            <div id="textual-game-info" class="bordered-box">
+                <div class="attribute">
+                    Score<span id="score" class="value">......</span>
+                </div>
+                <div class="attribute">
+                    Level<span id="level" class="value">......</span>
+                </div>
+                <div class="attribute">
+                    Lines<span id="lines" class="value">......</span>
+                </div>
+            </div>
+
+
+            <!-- Game area -->
+                <section id="center" class="bordered-box">
+                <!-- Next tetris block preview -->
+                <div id="preview">
                     <div class="bordered-box">
-                        <div class="attribute">
-                            Score<span id="score" class="value">.........</span>
-                        </div>
-                        <div class="attribute">
-                            Level<span id="level" class="value">.........</span>
-                        </div>
-                        <div class="attribute">
-                            Lines<span id="lines" class="value">.........</span>
-                        </div>
+                        <h2 class="bordered-box-title">Preview</h2>
+                        <canvas id="preview-block"></canvas>
                     </div>
                 </div>
-            </section>
 
-            <!-- Center game area -->
-            <section id="center" class="bordered-box">
                 <div id="block-entrance"></div>
                 <!-- Menus -->
                 <div id="menu">
@@ -113,13 +116,14 @@
                         <div id="secondary-menu-settings-content" class="hidden">
                             <br>
                             <button id="game-sounds" class="menu-item active" aria-label="Toggle game sound button">Sound: <span id="sound-setting">OFF</span></button>
+                            <button id="game-keys" class="menu-item" aria-label="Toggle on-screen game controls button">Show arrow keys: <span id="key-setting">OFF</span></button>
                             <button id="quit-game" class="menu-item hidden" aria-label="Quit game button">Quit</button>
                             <br>
                             <br>
                         </div>
 
                         <br>
-                        <button id="exit-btn" class="bordered-box control-btn">Exit</button>
+                        <button id="exit-btn" class="bordered-box state-control-btn">Exit</button>
                         <div id="exit-btn-blackout"></div>
                     </div>
                 </div>
@@ -128,38 +132,38 @@
                 <div id="game" class="full-height">
                     <canvas id="tetris"></canvas>
                 </div>
-            </section>
-
-            <!-- Right game area-->
-            <section id="right">
-                <!-- Next etris block preview -->
-                <div id="preview">
-                    <div class="bordered-box">
-                        <h2 class="bordered-box-title">Preview</h2>
-                        <canvas id="preview-block"></canvas>
+                
+                <!-- Gameplay controls -->
+                <div id="non-keyboard-controls" class="hidden bordered-box">
+                    <button id="up-arrow" class="finer-bordered-box game-control-btn">&#8593;</button>
+                    <div>
+                        <button id="left-arrow" class="finer-bordered-box game-control-btn">&#8592;</button>
+                        <button id="right-arrow" class="finer-bordered-box game-control-btn">&#8594;</button>
                     </div>
-                </div>
-
-                <!-- Game controls -->
-                <div id="controls">
-                    <button id="pause-game" class="bordered-box control-btn big hidden" aria-label="Pause game button">
-                        <i class="fas fa-pause"></i>
-                        <span>Pause</span>
-                    </button>
-                    <button id="resume-game" class="bordered-box control-btn big hidden" aria-label="Resume game button">
-                        <i class="fas fa-play"></i>
-                        <span>Resume</span>
-                    </button>
-                    <button id="restart-game" class="bordered-box control-btn big hidden" aria-label="Restart game button">
-                        <i class="fas fa-redo-alt"></i>
-                        <span>Restart</span>
-                    </button>
-                    <button id="settings" class="bordered-box control-btn big" aria-label="Game settings button">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </button>
+                    <button id="down-arrow" class="finer-bordered-box game-control-btn">&#8595;</button>
                 </div>
             </section>
+            
+            <!-- Game controls -->
+            <div id="controls">
+                <button id="pause-game" class="bordered-box state-control-btn big hidden" aria-label="Pause game button">
+                    <i class="fas fa-pause"></i>
+                    <span>Pause</span>
+                </button>
+                <button id="resume-game" class="bordered-box state-control-btn big hidden" aria-label="Resume game button">
+                    <i class="fas fa-play"></i>
+                    <span>Resume</span>
+                </button>
+                <button id="restart-game" class="bordered-box state-control-btn big hidden" aria-label="Restart game button">
+                    <i class="fas fa-redo-alt"></i>
+                    <span>Restart</span>
+                </button>
+                <button id="settings" class="bordered-box state-control-btn big" aria-label="Game settings button">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </button>
+            </div>
+        </section>
         </main>
 
         <script src="assets/js/board.js"></script>
