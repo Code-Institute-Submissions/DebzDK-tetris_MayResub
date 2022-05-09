@@ -1,7 +1,7 @@
 /*
 * Prefixed by https://autoprefixer.github.io
-* PostCSS: v8.3.6,
-* Autoprefixer: v10.3.1
+* PostCSS: v8.4.12,
+* Autoprefixer: v10.4.4
 * Browsers: last 4 version
 */
 
@@ -41,6 +41,7 @@ body {
     background-color: #000;
     color: #FFF;
     font-family: 'VT323', monospace;
+    height: 100vh;
 }
 
 main {
@@ -49,9 +50,15 @@ main {
     display: flex;
     -webkit-box-pack: justify;
         -ms-flex-pack: justify;
-            justify-content: space-between;
-    padding: 20px 0;
-    height: 90vh;
+            justify-content: center;
+    -ms-flex-item-align: center;
+        -ms-grid-row-align: center;
+        align-self: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    height: 100vh;
 }
 
 section {
@@ -74,8 +81,7 @@ button[type=submit] {
 .bordered-box-title {
     background-color: #000;
     padding: 0 5px;
-    position: absolute;
-    top: 0px;
+    position: relative;
 }
 
 .bordered-box {
@@ -84,9 +90,7 @@ button[type=submit] {
     margin-top: 10px;
 }
 
-#left,
-#center,
-#right {
+#center {
     position: relative;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -98,16 +102,13 @@ button[type=submit] {
     -webkit-box-flex: 1;
         -ms-flex: 1;
             flex: 1;
+    max-width: 330px;
+    -ms-flex-item-align: center;
+        -ms-grid-row-align: center;
+        align-self: center;
+    height: 100%;
 }
 
-
-#right {
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
-}
-
-#stats,
 #preview {
     -ms-flex-item-align: center;
         -ms-grid-row-align: center;
@@ -115,11 +116,7 @@ button[type=submit] {
 }
 /*#endregion*/
 
-/*#region Stats box*/
-#stats {
-    min-width: 175px;
-}
-
+/*#region Game info box*/
 .attribute {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -136,10 +133,21 @@ button[type=submit] {
     margin-left: 10px;
     text-align: end;
 }
+
+#preview .bordered-box {
+    border-width: 2px;
+    padding: 10px 5px;
+}
+
+#preview .bordered-box-title {
+    width: 70px;
+    top: -25px;
+}
 /*#endregion*/
 
 /*#region Game area*/
 #center {
+    max-height: 645px;
     padding: 1px 0 1px 0;
 }
 
@@ -191,15 +199,19 @@ button.menu-item {
             animation: blink 1s linear infinite;
 }
 
-.menu-item.active {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
+.menu-item.active,
+#exit-btn.active {
     background-color: white;
     color: #000;
     -webkit-box-align: center;
         -ms-flex-align: center;
             align-items: center;
+}
+
+.menu-item.active {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
 }
 
 #block-entrance {
@@ -221,14 +233,42 @@ button.menu-item {
     height: inherit;
 }
 
+#textual-game-info {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 10px;
+    border: 3px dashed white;
+    margin: 0 10px;
+    -ms-flex-item-align: center;
+        -ms-grid-row-align: center;
+        align-self: center;
+    min-width: 300px;
+}
+
+#textual-game-info .attribute {
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+#textual-game-info div:not(:first-child) {
+    margin-left: 10px;
+}
+
 #player {
     text-align: center;
     width: 75px;
 }
 
 #preview {
+    position: absolute;
+    left: -115px;
+    width: 100px;
     text-align: center;
-    min-width: 150px;
+    background-color: #000000AA;
 }
 
 #preview-block {
@@ -241,16 +281,25 @@ button.menu-item {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: end;
-        -ms-flex-pack: end;
-            justify-content: flex-end;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: space-evenly;
+    -webkit-box-align: end;
+        -ms-flex-align: end;
+            align-items: flex-end;
+    -ms-flex-item-align: center;
+        -ms-grid-row-align: center;
+        align-self: center;
+    -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
 }
 
-#controls .control-btn {
+#controls .state-control-btn {
     font-family: 'VT323', monospace;
 }
 
-.control-btn {
+.state-control-btn,
+.game-control-btn {
     font-size: 1rem;
     padding: 10px;
     width: 50px;
@@ -260,18 +309,60 @@ button.menu-item {
     cursor: pointer;
 }
 
-.control-btn.big {
+.state-control-btn.big,
+.game-control-btn.big {
     width: 80px;
     height: 60px;
 }
 
-.control-btn:hover {
+.state-control-btn:hover,
+.game-control-btn:hover {
     background-color: #FFF;
     color: #000;
 }
 
-.control-btn i {
+.state-control-btn i {
     margin-bottom: 5px;
+}
+
+#non-keyboard-controls {
+    margin-bottom: 5px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    position: absolute;
+    bottom: 0;
+    right: -100px;
+    background-color: #000000AA;
+    padding: 5px 0 5px 5px;
+    border-width: 2px;
+}
+
+#non-keyboard-controls button {
+    font-size: 0.7rem;
+    font-weight: 600;
+    border: 3px solid white;
+    height: 30px;
+    width: 30px;
+    border-radius: 20%;
+}
+
+#up-arrow {
+    margin-bottom: 5px;
+}
+
+#down-arrow {
+    margin-top: 5px;
 }
 /*#endregion*/
 
@@ -289,6 +380,7 @@ button.menu-item {
     -webkit-transition: 1s ease-in all;
     -o-transition: 1s ease-in all;
     transition: 1s ease-in all;
+    font-weight: 600 !important;
 }
 
 #secondary-menu-title {
@@ -343,6 +435,7 @@ button.menu-item {
     position: absolute;
     z-index: 1;
     margin: -30px -40px;
+    font-weight: inherit;
 }
 
 #exit-btn-blackout {
@@ -353,6 +446,24 @@ button.menu-item {
     bottom: 0;
 }
 /*#endregion*/
+
+/*#region Media queries */
+@media only screen and (orientation: landscape) {
+    body,
+    main {
+        height: 110vw;
+    }
+}
+
+@media screen and (max-width: 562px) {
+    #preview {
+        left: 5px;
+    }
+
+    #non-keyboard-controls {
+        right: 5px;
+    }
+}
 
 /*#region Animations*/
 @-webkit-keyframes blink {
@@ -385,6 +496,8 @@ button.menu-item {
 }
 /*#endregion*/
 
-.hidden {
+.hidden,
+button.menu-item.hidden,
+#non-keyboard-controls.hidden {
     display: none;
 }
