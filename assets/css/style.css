@@ -385,6 +385,7 @@ button.menu-item {
 }
 /*#endregion*/
 
-.hidden {
+.hidden,
+button.menu-item.hidden {
     display: none;
 }
