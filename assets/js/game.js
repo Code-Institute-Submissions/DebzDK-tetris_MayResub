@@ -414,6 +414,7 @@ function endGame() {
     }
     
     showSecondaryMenu();
+    hideGameControls();
 }
 
 /**
@@ -1249,6 +1250,15 @@ function cycleThroughMenu(menuOptionsContainerID, defaultButtonID, reverseOrder)
 function showGameControls() {
     removeClassFromElementClassList('pause-game', 'hidden');
     removeClassFromElementClassList('restart-game', 'hidden');
+}
+
+/**
+ * Hides game controls
+ */
+ function hideGameControls() {
+    addClassToElementClassList('pause-game', 'hidden');
+    addClassToElementClassList('resume-game', 'hidden');
+    addClassToElementClassList('restart-game', 'hidden');
 }
 
 /**
