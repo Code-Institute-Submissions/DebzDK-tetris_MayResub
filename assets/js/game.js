@@ -386,6 +386,7 @@ function startGame() {
     hideMenuAreas();
     hideMainMenu();
     hideSecondaryMenu();
+    showGameState();
     showGameControls();
 
     initialiseBoard();
@@ -982,6 +983,7 @@ function setGameStatus(status) {
 document.body.onload = function() {
     setupListeners();
     scoreElement = document.getElementById('score');
+    hideGameState();
 };
 
 /**
