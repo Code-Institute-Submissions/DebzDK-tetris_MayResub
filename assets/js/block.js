@@ -50,8 +50,9 @@ const BLOCK_TYPES = {
     I: {
         shape: [[1, 0, 0],
                 [1, 0, 0],
+                [1, 0, 0],
                 [1, 0, 0]],
-        height: 3,
+        height: 4,
         width: 1,
         xOffset: 0,
         yOffset: 0
