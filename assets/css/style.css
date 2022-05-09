@@ -42,15 +42,13 @@ body {
     color: #FFF;
     font-family: 'VT323', monospace;
     height: 100vh;
+    padding: 30px 0;
 }
 
 main {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: center;
     -ms-flex-item-align: center;
         -ms-grid-row-align: center;
         align-self: center;
@@ -451,7 +449,7 @@ button.menu-item {
 @media only screen and (orientation: landscape) {
     body,
     main {
-        height: 110vw;
+        height: 100vw;
     }
 }
 
