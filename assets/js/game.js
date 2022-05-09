@@ -48,8 +48,8 @@ let isSoundOn = false;
 //#region Game event listeners
 // Arrow key pressed
 document.addEventListener('keydown', function(e) {
-    e.preventDefault();
     if (isPlaying && !isPaused) {
+        e.preventDefault();
         switch (e.key) {
             case 'ArrowLeft':
                 moveLf();
@@ -66,14 +66,19 @@ document.addEventListener('keydown', function(e) {
                 softDropBlock();
         }
     } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
         let defaultButtonID = currentMenu === '#main-menu-options' ? 'game-play' : 'game-sounds';
         cycleThroughMenu(currentMenu, defaultButtonID);
     } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
         let defaultSettingsButtonID = isPlaying ? 'quit-game' : 'game-sounds';
         let defaultButtonID = currentMenu === '#main-menu-options' ? 'game-credits' : defaultSettingsButtonID;
         cycleThroughMenu(currentMenu, defaultButtonID, true);
     } else if (e.key === 'Enter') {
-        processMenuOption(e.target.id);
+        if (e.target.id !== 'exit-btn') {
+            e.preventDefault();
+            processMenuOption(e.target.id);
+        }
     }
 });
 
