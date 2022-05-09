@@ -48,6 +48,7 @@ let isSoundOn = false;
 //#region Game event listeners
 // Arrow key pressed
 document.addEventListener('keydown', function(e) {
+    e.preventDefault();
     if (isPlaying && !isPaused) {
         switch (e.key) {
             case 'ArrowLeft':
