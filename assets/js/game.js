@@ -1104,6 +1104,9 @@ function gameStateButtonClickEventHandler(e) {
                 displaySettings();
                 break;
             case 'exit-btn':
+                if (isGameOver) {
+                    hideHighScoreEntryForm();
+                }
                 hideSecondaryMenu();
                 break;
         }
