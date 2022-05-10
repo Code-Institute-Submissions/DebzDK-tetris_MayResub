@@ -170,10 +170,7 @@ function initialiseStats(withPlaceholder) {
         updateStat('level', statPlaceholder);
         updateStat('lines', statPlaceholder);
     } else {
-        currentScore = 0;
-        level = 0;
-        totalNumOfLinesCleared = 0;
-
+        resetStats();
         updateScore();
         updateStat('level', level);
         updateStat('lines', totalNumOfLinesCleared);
@@ -253,6 +250,15 @@ function incrementScore(numOfLinesCleared) {
     let baseScore = baseScorePerLinesCleared[numOfLinesCleared - 1] || baseScorePerLinesCleared[4];
 
     currentScore += baseScore * (level + 1);
+}
+
+/**
+ * Resets all variables used to determine score
+ */
+function resetStats() {
+    currentScore = 0;
+    level = 0;
+    totalNumOfLinesCleared = 0;
 }
 
 /**
@@ -1174,6 +1180,8 @@ function setupListeners() {
     let highScoreEntryForm = document.getElementById('score-submission');
 
     highScoreEntryForm.addEventListener('submit', function() {
+        hideHighScoreEntryForm();
+        resetStats();
         return storeHighScore();
     });
 
@@ -1412,8 +1420,8 @@ function cycleThroughMenu(menuOptionsContainerID, defaultButtonID, reverseOrder)
             } else {
                 defaultControlButtonID = defaultButtonID === 'exit-btn' ? null : 'resume-game';
             }
-        } else if (activeMenuItem === 'exit-btn'
-                    || !(activeMenuItem && isInSecondaryMenu) || (activeMenuItem && !isInSecondaryMenu)) {
+        } else if (activeMenuItem === 'exit-btn' ||
+                        !(activeMenuItem && isInSecondaryMenu) || (activeMenuItem && !isInSecondaryMenu)) {
             defaultControlButtonID = 'settings';
         }
         cycleThroughSettings(defaultControlButtonID, defaultButtonID, reverseOrder);
@@ -1439,6 +1447,7 @@ function cycleThroughMenu(menuOptionsContainerID, defaultButtonID, reverseOrder)
     if (activeGameStateControlItem) {
         removeClassFromElementClassList(activeGameStateControlItem.id, 'active');
         let menuItemToMakeActive = activeGameStateControlItem[siblingPropertyName];
+        let activeMenuItemClassName = "";
 
         if (menuItemToMakeActive) {
             activeMenuItemClassName = menuItemToMakeActive.className;
@@ -1602,6 +1611,14 @@ function resetAudio() {
 function showHighScoreEntryForm() {
     removeClassFromElementClassList('score-submission', 'hidden');
     addClassToElementClassList('exit-btn', 'hidden');
+}
+
+/**
+ * Hides form for highscore entry
+ */
+function hideHighScoreEntryForm() {
+    addClassToElementClassList('score-submission', 'hidden');
+    removeClassFromElementClassList('exit-btn', 'hidden');
 }
 
 /**
