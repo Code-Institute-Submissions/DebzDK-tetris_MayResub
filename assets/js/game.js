@@ -427,7 +427,7 @@ function startGame() {
     resetAudio();
     playAudio();
 
-    setGameSpeed(getGameSpeedForCurrentLevel());
+    gameSpeed = baseGameSpeed;
 
     timer = setInterval(progressGame, gameSpeed);
 }
@@ -487,7 +487,9 @@ function checkGameOver() {
  function setGameSpeed(amountInMs) {
     clearInterval(timer);
     gameSpeed = amountInMs;
-    timer = setInterval(progressGame, amountInMs);
+    if (!isGameOver) {
+        timer = setInterval(progressGame, amountInMs);
+    }
 }
 
 /**
@@ -1113,7 +1115,7 @@ function gameStateButtonClickEventHandler(e) {
  * @returns nothing - stops execution if none of the expected buttons are clicked
  */
  function gameControlButtonClickEventHandler(e) {
-    if (e.type === 'mousedown' || e.type === 'touchstart') {
+    if (isPlaying && !isPaused && (e.type === 'mousedown' || e.type === 'touchstart')) {
         switch (this.id) {
             case 'up-arrow':
                 holdTimer = setInterval(function() {
@@ -1129,7 +1131,11 @@ function gameStateButtonClickEventHandler(e) {
                 holdTimer = setInterval(moveRg, 100);
                 break;
             case 'down-arrow':
-                holdTimer = setInterval(softDropBlock, 100);
+                holdTimer = setInterval(function() {
+                    if (isPlaying && !isPaused) {
+                        softDropBlock();
+                    }
+                }, 100);
                 break;
             default:
                 return;
