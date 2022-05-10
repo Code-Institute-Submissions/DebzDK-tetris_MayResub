@@ -111,7 +111,7 @@ document.addEventListener('keydown', function(e) {
 
 // Arrow key released
 document.addEventListener('keyup', function(e) {
-    if (isPlaying) {
+    if (isPlaying && !isPaused) {
         if (e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') setGameSpeed(getGameSpeedForCurrentLevel());
     }
 });
@@ -1122,20 +1122,20 @@ function gameStateButtonClickEventHandler(e) {
                     drawBlock(true);
                     block.rotateBlockClockwise();
                     drawBlock();
-                }, 500);
+                }, 150);
                 break;
             case 'left-arrow':
-                holdTimer = setInterval(moveLf, 100);
+                holdTimer = setInterval(moveLf, 150);
                 break;
             case 'right-arrow':
-                holdTimer = setInterval(moveRg, 100);
+                holdTimer = setInterval(moveRg, 150);
                 break;
             case 'down-arrow':
                 holdTimer = setInterval(function() {
                     if (isPlaying && !isPaused) {
                         softDropBlock();
                     }
-                }, 100);
+                }, 150);
                 break;
             default:
                 return;
