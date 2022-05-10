@@ -198,6 +198,7 @@ button.menu-item {
 }
 
 .menu-item.active,
+.state-control-btn.active,
 #exit-btn.active {
     background-color: white;
     color: #000;
@@ -394,7 +395,7 @@ button.menu-item {
 #secondary-menu-controls-content {
     position: relative;
     padding: 10px 0;
-    height: 180px;
+    height: 290px;
 }
 
 #secondary-menu-credits-content {

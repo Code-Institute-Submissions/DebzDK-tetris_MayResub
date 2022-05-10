@@ -49,20 +49,38 @@ let isSoundOn = false;
 // Arrow key pressed
 document.addEventListener('keydown', function(e) {
     if (isPlaying && !isPaused) {
-        e.preventDefault();
         switch (e.key) {
+            case 'p':
+                pauseGame();
+                showPausedGameScreen();
+                break;
+            case 'r':
+                hidePausedGameScreen();
+                clearGameCanvas();
+                startGame();
+                break;
+            case 's':
+                pauseGame();
+                removeClassFromElementClassList('resume-game', 'hidden');
+                addClassToElementClassList('pause-game', 'hidden');
+                displaySettings();
+                break;
             case 'ArrowLeft':
+                e.preventDefault();
                 moveLf();
                 break;
             case 'ArrowRight':
+                e.preventDefault();
                 moveRg();
                 break;
             case 'ArrowUp':
+                e.preventDefault();
                 drawBlock(true);
                 block.rotateBlockClockwise();
                 drawBlock();
                 break;
             case 'ArrowDown':
+                e.preventDefault();
                 softDropBlock();
         }
     } else if (e.key === 'ArrowDown') {
@@ -75,10 +93,17 @@ document.addEventListener('keydown', function(e) {
         let defaultButtonID = currentMenu === '#main-menu-options' ? 'game-credits' : defaultSettingsButtonID;
         cycleThroughMenu(currentMenu, defaultButtonID, true);
     } else if (e.key === 'Enter') {
-        if (e.target.id !== 'exit-btn') {
+        if (e.target.id !== 'exit-btn' && e.target.parentElement.id !== 'controls') {
             e.preventDefault();
             processMenuOption(e.target.id);
         }
+    } else if (e.key === 's') {
+        hideSecondaryMenu();
+        pauseGame();
+        displaySettings();
+    } else if (isPaused && e.key === 'p') {
+        resumeGame();
+        hidePausedGameScreen();
     }
 });
 
@@ -393,6 +418,8 @@ function startGame() {
 
     resetAudio();
     playAudio();
+
+    setGameSpeed(getGameSpeedForCurrentLevel());
 
     timer = setInterval(progressGame, gameSpeed);
 }
@@ -1044,30 +1071,34 @@ function setupMenuButtonListeners() {
  * Handles a game state button click event
  * @returns nothing - stops execution if none of the expected buttons are clicked
  */
-function gameStateButtonClickEventHandler() {
-    switch (this.id) {
-        case 'pause-game':
-            pauseGame();
-            showPausedGameScreen();
-            break;
-        case 'resume-game':
-            resumeGame();
-            hidePausedGameScreen();
-            break;
-        case 'restart-game':
-            hidePausedGameScreen();
-            clearGameCanvas();
-            startGame();
-            break;
-        case 'settings':
-            pauseGame();
-            displaySettings();
-            break;
-        case 'exit-btn':
-            hideSecondaryMenu();
-            break;
-        default:
-            return;
+function gameStateButtonClickEventHandler(e) {
+    if (e.type === 'click' || e.key === 'Enter') {
+        switch (this.id) {
+            case 'pause-game':
+                pauseGame();
+                showPausedGameScreen();
+                break;
+            case 'resume-game':
+                resumeGame();
+                hidePausedGameScreen();
+                break;
+            case 'restart-game':
+                hidePausedGameScreen();
+                clearGameCanvas();
+                startGame();
+                break;
+            case 'settings':
+                pauseGame();
+                removeClassFromElementClassList('resume-game', 'hidden');
+                addClassToElementClassList('pause-game', 'hidden');
+                displaySettings();
+                break;
+            case 'exit-btn':
+                hideSecondaryMenu();
+                break;
+            default:
+                return;
+        }
     }
 }
 
@@ -1114,6 +1145,7 @@ function setupStateControlButtonListeners() {
     
     for (let i = 0; i < gameStateButtons.length; i++) {
         gameStateButtons[i].addEventListener('click', gameStateButtonClickEventHandler);
+        gameStateButtons[i].addEventListener('keydown', gameStateButtonClickEventHandler);
     }
 }
 
@@ -1299,7 +1331,8 @@ function hideSecondaryMenu() {
         clearGameCanvas();
         hideSecondaryMenuContent('status');
         showMainMenu();
-        cycleThroughMenu(currentMenu, 'game-play');
+        removeClassFromAllElementsWithClass('main-menu-options', 'active');
+        addClassToElementClassList('game-play', 'active');
         initialiseStats(true);
     } else if (!isPlaying) {
         showMainMenu();
@@ -1350,6 +1383,8 @@ function hideSecondaryMenuContent(contentName) {
 function cycleThroughMenu(menuOptionsContainerID, defaultButtonID, reverseOrder) {
     let activeMenuItem = document.querySelectorAll(menuOptionsContainerID + ' .active')[0];
     let siblingPropertyName = reverseOrder ? 'previousElementSibling' : 'nextElementSibling';
+    let isInSecondaryMenu = menuOptionsContainerID.endsWith('content');
+    let isInSettings = menuOptionsContainerID.indexOf('settings') > -1;
     let hasSibling = false;
 
     if (activeMenuItem) {
@@ -1359,18 +1394,102 @@ function cycleThroughMenu(menuOptionsContainerID, defaultButtonID, reverseOrder)
             addClassToElementClassList(activeMenuItem[siblingPropertyName].id, 'active');
             activeMenuItem[siblingPropertyName].focus();
             hasSibling = true;
-        } else if (menuOptionsContainerID.startsWith('#secondary')) {
-            defaultButtonID = 'exit-btn';
+        } else if (isInSecondaryMenu) {
+            defaultButtonID = reverseOrder ? null : 'exit-btn';
         }
-    } else if (menuOptionsContainerID.endsWith('content') && menuOptionsContainerID.indexOf('settings') === -1) {
-        defaultButtonID = 'exit-btn';
+    } else if (!(isInSecondaryMenu && isInSettings)) {
+        defaultButtonID = reverseOrder ? null : 'exit-btn';
     } else {
         activeMenuItem = 'exit-btn';
         removeClassFromElementClassList('exit-btn', 'active');
     }
 
+    let defaultControlButtonID = '';
     if ((!activeMenuItem && !isPaused) || (activeMenuItem && !hasSibling)) {
-        let nextMenuButton = document.getElementById(defaultButtonID);
+        if (isPlaying) {
+            if (!isPaused) {
+                defaultControlButtonID = 'pause-game';
+            } else {
+                defaultControlButtonID = defaultButtonID === 'exit-btn' ? null : 'resume-game';
+            }
+        } else if (activeMenuItem === 'exit-btn'
+                    || !(activeMenuItem && isInSecondaryMenu) || (activeMenuItem && !isInSecondaryMenu)) {
+            defaultControlButtonID = 'settings';
+        }
+        cycleThroughSettings(defaultControlButtonID, defaultButtonID, reverseOrder);
+    }
+}
+
+/**
+ * Manipulates DOM to give appearance of cycling through menu options
+ * @param {string} menuOptionsContainerID - id of element containing menu options
+ * @param {*} defaultControlButtonID - id of control button to default to if none are active or end of menu is reached
+ * @param {*} defaultButtonID - id of button to default to if none are active or end of menu is reached
+ * @param {*} reverseOrder - if menu should be traversed in reverse order
+ */
+ function cycleThroughSettings(defaultControlButtonID, defaultButtonID, reverseOrder) {
+    let activeMenuItem = '';
+    let activeGameStateControlItem = document.querySelectorAll('#controls button.active')[0];
+    let siblingPropertyName = reverseOrder ? 'previousElementSibling' : 'nextElementSibling';
+    let isInSecondaryMenu = currentMenu.endsWith('content');
+    let isInSettings = currentMenu.indexOf('settings') > -1;
+    let exitButton = document.getElementById('exit-btn');
+    let hasSibling = false;
+
+    if (activeGameStateControlItem) {
+        removeClassFromElementClassList(activeGameStateControlItem.id, 'active');
+        let menuItemToMakeActive = activeGameStateControlItem[siblingPropertyName];
+
+        if (menuItemToMakeActive) {
+            activeMenuItemClassName = menuItemToMakeActive.className;
+            let tempActiveMenuItem = activeGameStateControlItem;
+            while (menuItemToMakeActive && activeMenuItemClassName.indexOf('hidden') !== -1) {
+                menuItemToMakeActive = tempActiveMenuItem[siblingPropertyName];
+                if (menuItemToMakeActive) {
+                    activeMenuItemClassName = menuItemToMakeActive.className;
+                    tempActiveMenuItem = menuItemToMakeActive;
+                }
+            }
+        }
+
+        if (menuItemToMakeActive && activeMenuItemClassName.indexOf('active') === -1) {
+            addClassToElementClassList(activeGameStateControlItem[siblingPropertyName].id, 'active');
+            activeGameStateControlItem[siblingPropertyName].focus();
+            hasSibling = true;
+        } else {
+            activeMenuItem = 'settings';
+            if (activeGameStateControlItem && isInSecondaryMenu && isInSettings) {
+                defaultControlButtonID = reverseOrder ? 'exit-btn' : defaultButtonID;
+            } else if (!isInSecondaryMenu) {
+                let buttons = document.querySelectorAll(currentMenu + ' button');
+                defaultControlButtonID = buttons[reverseOrder ? buttons.length - 1 : 0].id;
+            } else {
+                defaultControlButtonID = null;
+                defaultButtonID = 'exit-btn';
+            }
+            removeClassFromElementClassList(activeMenuItem, 'active');
+        }
+    } else if (isInSecondaryMenu) {
+        if (isInSettings && reverseOrder) {
+            defaultControlButtonID = !defaultButtonID ? 'settings' : null;
+            if (isInSettings) {
+                if (!isPaused) {
+                    defaultButtonID = 'game-keys';
+                }
+            } else {
+                defaultButtonID = null;
+            }
+        } else {
+            if (!isInSettings && exitButton.className.indexOf('active') === -1) {
+                defaultControlButtonID = '';
+            }
+            activeMenuItem = 'exit-btn';
+            removeClassFromElementClassList(activeMenuItem, 'active');
+        }
+    }
+
+    if (!activeGameStateControlItem || (activeGameStateControlItem && !hasSibling)) {
+        let nextMenuButton = document.getElementById(defaultControlButtonID || defaultButtonID);
         addClassToElementClassList(nextMenuButton.id, 'active');
         nextMenuButton.focus();
     }
