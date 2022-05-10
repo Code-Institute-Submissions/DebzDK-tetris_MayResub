@@ -93,17 +93,19 @@ document.addEventListener('keydown', function(e) {
         let defaultButtonID = currentMenu === '#main-menu-options' ? 'game-credits' : defaultSettingsButtonID;
         cycleThroughMenu(currentMenu, defaultButtonID, true);
     } else if (e.key === 'Enter') {
-        if (e.target.id !== 'exit-btn' && e.target.parentElement.id !== 'controls') {
+        if (e.target.type !== 'submit' && e.target.id !== 'exit-btn' && e.target.parentElement.id !== 'controls') {
             e.preventDefault();
             processMenuOption(e.target.id);
         }
-    } else if (e.key === 's') {
-        hideSecondaryMenu();
-        pauseGame();
-        displaySettings();
-    } else if (isPaused && e.key === 'p') {
-        resumeGame();
-        hidePausedGameScreen();
+    } else if (!isGameOver) {
+        if (e.key === 's') {
+            hideSecondaryMenu();
+            pauseGame();
+            displaySettings();
+        } else if (isPaused && e.key === 'p') {
+            resumeGame();
+            hidePausedGameScreen();
+        }
     }
 });
 
@@ -1096,8 +1098,6 @@ function gameStateButtonClickEventHandler(e) {
             case 'exit-btn':
                 hideSecondaryMenu();
                 break;
-            default:
-                return;
         }
     }
 }
